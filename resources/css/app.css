@@ -1,0 +1,212 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* public/css/custom.css */
+
+/* ====== Table Wrapper ====== */
+.table-container {
+    background: #fff;
+    border-radius: 0.75rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    padding: 1rem;
+    margin-bottom: 2rem;
+    overflow-x: auto;
+}
+
+/* ====== Table ====== */
+.table-custom {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1.5rem;
+    font-size: 0.95rem;
+    background-color: #fff;
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+/* Header */
+.table-custom thead {
+    background-color: #f8fafc; /* light gray */
+    color: #374151;           /* gray-700 */
+    font-weight: 600;
+    text-align: left;
+}
+
+.table-custom th,
+.table-custom td {
+    border: 1px solid #e5e7eb; /* gray-200 */
+    padding: 0.75rem 1rem;
+}
+
+/* Hover rows */
+.table-custom tbody tr:hover {
+    background-color: #f1f5f9; /* gray-100 */
+    transition: background 0.2s ease;
+}
+
+/* ====== Action Buttons/Links ====== */
+.table-custom a {
+    text-decoration: none;
+    margin-right: 0.5rem;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.table-custom .btn-view {
+    color: #2563eb; /* blue */
+}
+
+.table-custom .btn-edit {
+    color: #d97706; /* amber */
+}
+
+.table-custom .btn-delete {
+    color: #dc2626; /* red */
+}
+
+.table-custom a:hover {
+    text-decoration: underline;
+}
+/* =========================
+   Custom Styles
+   ========================= */
+
+/* General page setup */
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f9fafb;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+/* Container styling */
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 1.5rem;
+}
+
+/* Headings */
+h1, h2, h3, h4 {
+    font-weight: 600;
+    color: #111827;
+}
+
+/* Form elements */
+form {
+    background: #ffffff;
+    padding: 1.5rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+    color: #374151;
+}
+
+input, select, textarea {
+    width: 100%;
+    border: 1px solid #d1d5db;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+    font-size: 1rem;
+}
+.logo-small {
+    height: 2px; /* very small height */
+    width: auto;  /* maintain aspect ratio */
+}
+.logo-medium {
+    height: 48px; /* medium height */
+    width: auto;  /* maintain aspect ratio */
+}
+.logo-large {
+    height: 2px; /* large height */
+    width: auto;  /* maintain aspect ratio */
+}                           
+
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.3);
+}
+/* Make logo small and proportional */
+.logo {
+    height: 4px;   /* small height */
+    width: auto;    /* maintain aspect ratio */
+    display: inline-block;
+    vertical-align: middle;
+}
+
+
+/* Buttons */
+.btn {
+    display: inline-block;
+    padding: 0.5rem 1.25rem;
+    border-radius: 0.5rem;
+    font-size: 0.95rem;
+    font-weight: 500;
+    text-align: center;
+    cursor: pointer;
+    transition: background 0.2s ease-in-out;
+    color: #fff;
+}
+
+.btn-primary {
+    background-color: #2563eb;
+}
+
+.btn-primary:hover {
+    background-color: #1e40af;
+}
+
+.btn-secondary {
+    background-color: #6b7280;
+}
+
+.btn-secondary:hover {
+    background-color: #4b5563;
+}
+
+/* Alerts */
+.alert {
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.alert-success {
+    background-color: #ecfdf5;
+    color: #065f46;
+    border: 1px solid #a7f3d0;
+}
+
+.alert-error {
+    background-color: #fef2f2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
+}
+/* Adjust logo for different screen sizes */
+.logo-responsive {
+    height: 32px;   /* default */
+    width: auto;
+}
+
+/* Smaller on mobile */
+@media (max-width: 768px) {
+    .logo-responsive {
+        height: 20px;
+    }
+}
+
+/* Larger on desktop */
+@media (min-width: 1024px) {
+    .logo-responsive {
+        height: 40px;
+    }
+}
