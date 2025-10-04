@@ -4,6 +4,7 @@
     <div class="p-4 text-lg font-bold border-b border-gray-700">
         BuildMate
     </div>
+@vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <nav class="flex-1 px-2 py-4 space-y-2">
         <!-- Dashboard -->

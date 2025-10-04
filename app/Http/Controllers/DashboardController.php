@@ -1,104 +1,105 @@
-<?php
-
-namespace App\Http\Controllers;
-
-use Illuminate\Http\Request;
 use Carbon\Carbon;
-use App\Models\Employee;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
+use App\Models\Worker;
 use App\Models\Payment;
+use App\Models\Transaction;
+use App\Models\Income;
 use App\Models\Expense;
-use App\Models\Transaction; // change name if you use a different model name
+use App\Models\Project;
 
-class DashboardController extends Controller
+public function index()
 {
-    public function __construct()
-    {
-        $this->middleware('auth'); // change/add role middleware if needed
+    $today = Carbon::today();
+    $startOfMonth = $today->copy()->startOfMonth();
+
+    // Workers
+    $totalWorkers = Schema::hasTable('workers') ? Worker::count() : 0;
+    $activeWorkers = Schema::hasTable('workers') && Schema::hasColumn('workers', 'status')
+        ? Worker::where('status','active')->count()
+        : $totalWorkers;
+    $recentWorkers = Schema::hasTable('workers') ? Worker::latest()->limit(6)->get() : collect();
+
+    // Payments
+    $paymentsTotal = Schema::hasTable('payments') && Schema::hasColumn('payments','amount')
+        ? Payment::sum('amount')
+        : 0;
+    $paymentsThisMonth = Schema::hasTable('payments') && Schema::hasColumn('payments','amount')
+        ? Payment::whereBetween('created_at', [$startOfMonth, $today->endOfDay()])->sum('amount')
+        : 0;
+    $recentPayments = Schema::hasTable('payments') ? Payment::latest()->limit(7)->get() : collect();
+
+    // Transactions
+    $recentTransactions = Schema::hasTable('transactions') ? Transaction::latest()->limit(7)->get() : collect();
+    $transactionsThisMonth = Schema::hasTable('transactions') && Schema::hasColumn('transactions','amount')
+        ? Transaction::whereBetween('created_at', [$startOfMonth, $today->endOfDay()])->sum('amount')
+        : 0;
+
+    // Incomes
+    $incomesTotal = Schema::hasTable('incomes') && Schema::hasColumn('incomes','amount_received')
+        ? Income::sum('amount_received')
+        : 0;
+    $incomesThisMonth = Schema::hasTable('incomes') && Schema::hasColumn('incomes','amount_received')
+        ? Income::whereBetween('received_at', [$startOfMonth, $today->endOfDay()])->sum('amount_received')
+        : 0;
+    $recentIncomes = Schema::hasTable('incomes') ? Income::latest()->limit(7)->get() : collect();
+
+    // Expenses
+    $expensesTotal = Schema::hasTable('expenses') && Schema::hasColumn('expenses','amount')
+        ? Expense::sum('amount')
+        : 0;
+    $expensesThisMonth = Schema::hasTable('expenses') && Schema::hasColumn('expenses','amount')
+        ? Expense::whereBetween('created_at', [$startOfMonth, $today->endOfDay()])->sum('amount')
+        : 0;
+    $recentExpenses = Schema::hasTable('expenses') ? Expense::latest()->limit(7)->get() : collect();
+
+    // Projects
+    $projectsCount = Schema::hasTable('projects') ? Project::count() : 0;
+    $projectsThisMonth = Schema::hasTable('projects') ? Project::whereBetween('created_at', [$startOfMonth, $today->endOfDay()])->count() : 0;
+    $projectsTotal = Schema::hasTable('projects') && Schema::hasColumn('projects','contract_value')
+        ? Project::sum('contract_value')
+        : null;
+    $recentProjects = Schema::hasTable('projects') ? Project::latest()->limit(7)->get() : collect();
+
+    // Project Stats — important to avoid undefined variable
+    $projectStats = collect();
+    if(Schema::hasTable('projects') && Schema::hasTable('incomes')) {
+        $projectStats = DB::table('projects')
+            ->leftJoin('incomes', 'projects.id', '=', 'incomes.project_id')
+            ->select(
+                'projects.name as project_name',
+                DB::raw('COALESCE(SUM(incomes.amount_received),0) as amount_paid'),
+                DB::raw('projects.contract_value as total_amount'),
+                DB::raw('(projects.contract_value - COALESCE(SUM(incomes.amount_received),0)) as amount_remaining')
+            )
+            ->groupBy('projects.id', 'projects.name', 'projects.contract_value')
+            ->get();
     }
 
-    public function index(Request $request)
-    {
-        // Date helpers
-        $today = Carbon::today();
-        $startOfMonth = $today->copy()->startOfMonth();
-        $startOfYear = $today->copy()->startOfYear();
+    // Monthly series for last 6 months
+    $months = [];
+    $paymentsMonthly = [];
+    $expensesMonthly = [];
+    $incomeMonthly = [];
+    for ($i = 5; $i >= 0; $i--) {
+        $dt = Carbon::now()->subMonths($i);
+        $months[] = $dt->format('M Y');
 
-        // Basic totals / counts
-        $totalEmployees = Employee::count();
-        $activeEmployees = Employee::where('status', 'active')->count(); // optional: depends on your schema
+        $mStart = $dt->copy()->startOfMonth();
+        $mEnd = $dt->copy()->endOfMonth();
 
-        // Payments & sums
-        $paymentsTotal = (float) Payment::sum('amount');
-        $paymentsThisMonth = (float) Payment::whereBetween('created_at', [$startOfMonth, $today->endOfDay()])->sum('amount');
-        $paymentsThisYear = (float) Payment::whereBetween('created_at', [$startOfYear, $today->endOfDay()])->sum('amount');
-
-        // Expenses & sums
-        $expensesTotal = (float) Expense::sum('amount');
-        $expensesThisMonth = (float) Expense::whereBetween('created_at', [$startOfMonth, $today->endOfDay()])->sum('amount');
-
-        // Transactions (count + sums if have amount)
-        $transactionsCount = Transaction::count();
-        $transactionsThisMonth = Transaction::whereBetween('created_at', [$startOfMonth, $today->endOfDay()])->count();
-        // If Transaction has 'amount' column:
-        $transactionsTotal = schema_has_column('transactions', 'amount')
-            ? (float) Transaction::sum('amount')
-            : null;
-
-        // Monthly series for the last 6 months (for simple charts)
-        $months = [];
-        $paymentsMonthly = [];
-        $expensesMonthly = [];
-        for ($i = 5; $i >= 0; $i--) {
-            $dt = Carbon::now()->subMonths($i);
-            $label = $dt->format('M Y');
-            $months[] = $label;
-
-            $mStart = $dt->copy()->startOfMonth();
-            $mEnd = $dt->copy()->endOfMonth();
-
-            $paymentsMonthly[] = (float) Payment::whereBetween('created_at', [$mStart, $mEnd])->sum('amount');
-            $expensesMonthly[] = (float) Expense::whereBetween('created_at', [$mStart, $mEnd])->sum('amount');
-        }
-
-        // Recent lists
-        $recentEmployees = Employee::latest()->limit(5)->get();
-        $recentPayments  = Payment::latest()->limit(7)->get();
-        $recentExpenses  = Expense::latest()->limit(7)->get();
-        $recentTransactions = Transaction::latest()->limit(7)->get();
-
-        return view('dashboard', compact(
-            'totalEmployees',
-            'activeEmployees',
-            'paymentsTotal',
-            'paymentsThisMonth',
-            'paymentsThisYear',
-            'expensesTotal',
-            'expensesThisMonth',
-            'transactionsCount',
-            'transactionsThisMonth',
-            'transactionsTotal',
-            'months',
-            'paymentsMonthly',
-            'expensesMonthly',
-            'recentEmployees',
-            'recentPayments',
-            'recentExpenses',
-            'recentTransactions'
-        ));
+        $paymentsMonthly[] = Schema::hasTable('payments') ? Payment::whereBetween('created_at', [$mStart, $mEnd])->sum('amount') : 0;
+        $expensesMonthly[] = Schema::hasTable('expenses') ? Expense::whereBetween('created_at', [$mStart, $mEnd])->sum('amount') : 0;
+        $incomeMonthly[] = Schema::hasTable('incomes') ? Income::whereBetween('received_at', [$mStart, $mEnd])->sum('amount_received') : 0;
     }
-}
 
-/**
- * helper: cheap runtime check for column existence to avoid migration errors.
- * (If you prefer, delete this helper and assume columns exist.)
- */
-if (! function_exists('schema_has_column')) {
-    function schema_has_column(string $table, string $column): bool
-    {
-        try {
-            return \Illuminate\Support\Facades\Schema::hasColumn($table, $column);
-        } catch (\Throwable $e) {
-            return false;
-        }
-    }
+    return view('dashboard', compact(
+        'totalWorkers','activeWorkers','recentWorkers',
+        'paymentsTotal','paymentsThisMonth','recentPayments',
+        'recentTransactions','transactionsThisMonth',
+        'incomesTotal','incomesThisMonth','recentIncomes',
+        'expensesTotal','expensesThisMonth','recentExpenses',
+        'projectsCount','projectsThisMonth','projectsTotal','recentProjects',
+        'projectStats','months','paymentsMonthly','expensesMonthly','incomeMonthly'
+    ));
 }

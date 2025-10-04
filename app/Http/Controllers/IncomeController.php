@@ -2,33 +2,38 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\DB;
 use App\Models\Income;
 use App\Models\Project;
 use Illuminate\Http\Request;
 
 class IncomeController extends Controller
 {
-    /**
-     * Display a listing of income records.
-     */
     public function index()
     {
+        // Fetch project stats
+        $projectStats = Income::select(
+            'project_id',
+            DB::raw('SUM(amount_received) as total_paid'),
+            DB::raw("SUM(CASE WHEN payment_status!='paid' THEN amount_remaining ELSE 0 END) as total_remaining"),
+            DB::raw('SUM(amount_received) as total_amount') // You can adjust this to include expenses if needed
+        )
+        ->groupBy('project_id')
+        ->with('project')
+        ->get();
+
+        // Fetch incomes (paginated)
         $incomes = Income::with('project')->latest()->paginate(10);
-        return view('incomes.index', compact('incomes'));
+
+        return view('incomes.index', compact('projectStats', 'incomes'));
     }
 
-    /**
-     * Show the form for creating a new income record.
-     */
     public function create()
     {
         $projects = Project::all(); // For project dropdown
         return view('incomes.create', compact('projects'));
     }
 
-    /**
-     * Store a newly created income record in storage.
-     */
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -47,27 +52,18 @@ class IncomeController extends Controller
                          ->with('success', 'Income record created successfully.');
     }
 
-    /**
-     * Display the specified income record.
-     */
     public function show(Income $income)
     {
         $income->load('project');
         return view('incomes.show', compact('income'));
     }
 
-    /**
-     * Show the form for editing the specified income record.
-     */
     public function edit(Income $income)
     {
         $projects = Project::all();
         return view('incomes.edit', compact('income', 'projects'));
     }
 
-    /**
-     * Update the specified income record in storage.
-     */
     public function update(Request $request, Income $income)
     {
         $validated = $request->validate([
@@ -86,9 +82,6 @@ class IncomeController extends Controller
                          ->with('success', 'Income record updated successfully.');
     }
 
-    /**
-     * Remove the specified income record from storage.
-     */
     public function destroy(Income $income)
     {
         $income->delete();

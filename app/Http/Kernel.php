@@ -5,10 +5,8 @@ namespace App\Http;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 use Spatie\Permission\Middlewares\RoleMiddleware;
 use Spatie\Permission\Middlewares\PermissionMiddleware;
-use Spatie\Permission\Middlewares\RoleOrPermissionMiddleware;   
-use App\Http\Middleware\RoleMiddleware; // if you have a custom one
+use Spatie\Permission\Middlewares\RoleOrPermissionMiddleware;
 use App\Http\Middleware\CustomMiddleware; // if you have other custom middleware
-use
 
 class Kernel extends HttpKernel
 {

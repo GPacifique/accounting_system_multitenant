@@ -29,6 +29,29 @@ use App\Http\Controllers\WorkerController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;   
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\Auth\PasswordResetController;
+use App\Http\Controllers\Auth\NewPasswordController;
+use App\Http\Controllers\Auth\VerifyEmailController;
+use App\Http\Controllers\Auth\EmailVerificationNotificationController;
+use App\Http\Controllers\Auth\PasswordController;
+use App\Http\Controllers\Auth\ConfirmablePasswordController;
+use App\Http\Controllers\Auth\PasswordResetLinkController;
+use App\Http\Controllers\Auth\EmailVerificationPromptController;
+Route::get('/reports/create', [ReportController::class, 'create']);
+
+// Only authenticated users with specific roles
+    // Example protected resources
+    Route::resource('projects', ProjectController::class);
+    Route::resource('expenses', ExpenseController::class);
+    Route::resource('payments', PaymentController::class);
+    Route::resource('orders', OrderController::class);
+    Route::resource('incomes', IncomeController::class);
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
+    Route::post('/profile', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
+});
+Route::resource('reports', App\Http\Controllers\ReportController::class)->middleware('auth');
 
 // Clients resource routes
 Route::resource('clients', ClientController::class);
@@ -44,10 +67,6 @@ Route::middleware(['role:admin'])->group(function () {
 
 Route::resource('roles', RoleController::class);
 
-
-Route::get('/dashboard', [DashboardController::class, 'index'])
-    ->name('dashboard')
-    ->middleware(['auth']); // adjust middleware as needed
 
 Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
 Route::post('/settings', [SettingController::class, 'update'])->name('settings.update');

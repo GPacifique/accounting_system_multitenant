@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('title', 'Client Details')
+@vite(['resources/css/app.css', 'resources/js/app.js'])
 
 @section('content')
 <div class="max-w-3xl mx-auto p-6">

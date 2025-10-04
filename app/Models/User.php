@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models;
+
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
@@ -11,15 +12,24 @@ class User extends Authenticatable
     use HasFactory, Notifiable, HasRoles;
 
     /**
-     * The attributes that are mass assignable.
+     * If you use a guard other than 'web', set it here. Otherwise 'web' is used by default.
      *
-     * @var array<int,string>
+     * @var string
      */
+    protected $guard_name = 'web';
+
     protected $fillable = [
         'name',
         'email',
         'password',
     ];
 
-    // hidden, casts, etc...
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+    ];
 }

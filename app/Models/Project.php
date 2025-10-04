@@ -17,12 +17,18 @@ class Project extends Model
         'start_date',
         'end_date',
         'contract_value',
+        'amount_paid',
+        'amount_remaining',
+        'status',
+        'notes',
     ];
 
     protected $casts = [
         'start_date' => 'date',
         'end_date' => 'date',
-        'budget' => 'decimal:2',
+        'contract_value' => 'decimal:2',
+        'amount_paid' => 'decimal:2',
+        'amount_remaining' => 'decimal:2',
     ];
 public function client()
     {

@@ -1,4 +1,5 @@
 @extends('layouts.app')
+@vite(['resources/css/app.css', 'resources/js/app.js'])
 
 @section('content')
 <div class="container mx-auto px-4 py-6">

@@ -15,6 +15,10 @@ return new class extends Migration
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
             $table->decimal('contract_value', 14, 2)->default(0);
+            $table->decimal('amount_paid', 14, 2)->default(0);
+            $table->decimal('amount_remaining', 14, 2)->default(0);
+            $table->string('status')->nullable();
+            $table->text('notes')->nullable();
             $table->timestamps();
         });
     }

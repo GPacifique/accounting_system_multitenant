@@ -1,68 +1,43 @@
 <?php
 
-
 namespace App\Models;
 
-
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-
+use Illuminate\Database\Eloquent\Model;
 
 class Worker extends Model
 {
-use HasFactory, SoftDeletes;
+    use HasFactory;
 
-public function index()
-{
-    $workers = Worker::orderBy('last_name')->paginate(15);
+    // Fillable fields for mass assignment
+    protected $fillable = [
+        'name',
+        'role',
+    ];
 
-    // total across DB
-    $totalWorkers = Worker::count();
+    /**
+     * A worker can have many tasks.
+     */
+    public function tasks()
+    {
+        return $this->hasMany(Task::class);
+    }
 
-    return view('workers.index', compact('workers', 'totalWorkers'));
-}
+    /**
+     * Get the total wages for this worker.
+     */
+    public function totalWages()
+    {
+        return $this->tasks()->sum('daily_wage');
+    }
 
-
-protected $table = 'workers';
-
-
-protected $fillable = [
-'first_name',
-'last_name',
-'email',
-'phone',
-'position',
-'salary_cents',
-'currency',
-'hired_at',
-'status',
-'notes',
-];
-
-
-protected $casts = [
-'salary_cents' => 'integer',
-'hired_at' => 'datetime',
-];
-
-
-// Accessor to get salary as decimal
-public function getSalaryAttribute()
-{
-return $this->salary_cents !== null ? ($this->salary_cents / 100) : null;
-}
-
-
-public function setSalaryAttribute($value)
-{
-// Accept either decimal (e.g. 1234.56) or integer cents
-$this->attributes['salary_cents'] = is_numeric($value) ? (int) round($value * 100) : null;
-}
-
-
-public function getFullNameAttribute()
-{
-return trim("{$this->first_name} {$this->last_name}");
-}
+    /**
+     * Get wages for a specific date.
+     */
+    public function wagesByDate($date)
+    {
+        return $this->tasks()
+                    ->where('date', $date)
+                    ->sum('daily_wage');
+    }
 }

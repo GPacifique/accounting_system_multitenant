@@ -3,175 +3,171 @@
 namespace App\Http\Controllers;
 
 use App\Models\Expense;
+use App\Models\Project;
+use App\Models\Client;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\StreamedResponse;
+use Illuminate\Support\Facades\DB;
 
 class ExpenseController extends Controller
 {
-    // Uncomment to require authentication:
-    // public function __construct() { $this->middleware('auth'); }
+    /**
+     * Items per page for pagination.
+     */
+    protected int $perPage = 15;
 
     /**
-     * Display a listing of the resource with simple filters.
+     * Display a listing of the expenses.
+     *
+     * Also prepares a minimal daily-by-category stats structure:
+     *  - $categories: array of distinct categories
+     *  - $dailyTotals: [ 'YYYY-MM-DD' => [ 'Category' => total, ... ], ... ]
+     *
+     * @return \Illuminate\View\View
      */
-    public function index(Request $request)
+    public function index()
     {
-        $query = Expense::query();
+        // Paginated list for the table (eager load relationships)
+        $expenses = Expense::with(['project', 'client', 'user'])
+                    ->latest()
+                    ->paginate($this->perPage);
 
-        if ($request->filled('q')) {
-            $q = $request->input('q');
-            $query->where(function($b) use ($q) {
-                $b->where('title', 'like', "%{$q}%")
-                  ->orWhere('description', 'like', "%{$q}%")
-                  ->orWhere('category', 'like', "%{$q}%");
-            });
+        // Get distinct category list (so we can build columns in the stats table)
+        $categories = Expense::select('category')
+                        ->distinct()
+                        ->orderBy('category')
+                        ->pluck('category')
+                        ->toArray();
+
+        // Group by date (day only) and category, summing amounts.
+        // Use DATE(`date`) to ensure grouping by date only if date is a datetime column.
+        $rows = Expense::selectRaw('DATE(`date`) as day, category, SUM(amount) as total')
+                ->groupBy('day', 'category')
+                ->orderBy('day', 'desc')
+                ->get();
+
+        // Transform into [ 'YYYY-MM-DD' => [ 'Category' => total, ... ], ... ]
+        $dailyTotals = [];
+        foreach ($rows as $r) {
+            $day = (string) $r->day; // YYYY-MM-DD
+            // ensure an array exists for the day
+            if (! isset($dailyTotals[$day])) {
+                $dailyTotals[$day] = [];
+            }
+            $dailyTotals[$day][ $r->category ] = (float) $r->total;
         }
 
-        if ($request->filled('category')) {
-            $query->where('category', $request->category);
-        }
-
-        if ($request->filled('from')) {
-            $query->whereDate('expense_date', '>=', $request->from);
-        }
-        if ($request->filled('to')) {
-            $query->whereDate('expense_date', '<=', $request->to);
-        }
-
-        $expenses = $query->orderBy('expense_date', 'desc')
-                          ->orderBy('created_at', 'desc')
-                          ->paginate(15)
-                          ->withQueryString();
-
-        return view('expenses.index', compact('expenses'));
+        return view('expenses.index', compact('expenses', 'categories', 'dailyTotals'));
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show the form for creating a new expense.
+     *
+     * @return \Illuminate\View\View
      */
     public function create()
     {
-        return view('expenses.create');
+        $projects = Project::orderBy('name')->pluck('name', 'id');
+        $clients  = Client::orderBy('name')->pluck('name', 'id');
+
+        return view('expenses.create', compact('projects', 'clients'));
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created expense in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
     {
-        $data = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'amount' => 'required|numeric|min:0',
-            'expense_date' => 'nullable|date',
-            'category' => 'nullable|string|max:100',
-        ]);
+        $data = $this->validateExpense($request);
 
         Expense::create($data);
 
-        return redirect()->route('expenses.index')->with('success', 'Expense added.');
+        return redirect()
+            ->route('expenses.index')
+            ->with('success', 'Expense created successfully.');
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified expense.
+     *
+     * @param  \App\Models\Expense  $expense
+     * @return \Illuminate\View\View
      */
     public function show(Expense $expense)
     {
+        // If you want to ensure project/client/user are loaded:
+        $expense->load(['project', 'client', 'user']);
+
         return view('expenses.show', compact('expense'));
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Show the form for editing the specified expense.
+     *
+     * @param  \App\Models\Expense  $expense
+     * @return \Illuminate\View\View
      */
     public function edit(Expense $expense)
     {
-        return view('expenses.edit', compact('expense'));
+        $projects = Project::orderBy('name')->pluck('name', 'id');
+        $clients  = Client::orderBy('name')->pluck('name', 'id');
+
+        return view('expenses.edit', compact('expense', 'projects', 'clients'));
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified expense in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Expense  $expense
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, Expense $expense)
     {
-        $data = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'amount' => 'required|numeric|min:0',
-            'expense_date' => 'nullable|date',
-            'category' => 'nullable|string|max:100',
-        ]);
+        $data = $this->validateExpense($request);
 
         $expense->update($data);
 
-        return redirect()->route('expenses.show', $expense)->with('success', 'Expense updated.');
+        return redirect()
+            ->route('expenses.show', $expense)
+            ->with('success', 'Expense updated successfully.');
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified expense from storage.
+     *
+     * @param  \App\Models\Expense  $expense
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(Expense $expense)
     {
         $expense->delete();
-        return redirect()->route('expenses.index')->with('success', 'Expense deleted.');
+
+        return redirect()
+            ->route('expenses.index')
+            ->with('success', 'Expense deleted successfully.');
     }
 
     /**
-     * Export filtered expenses as CSV.
-     * Example route: GET /expenses/export
+     * Validate expense request data (shared between store & update).
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return array
      */
-    public function export(Request $request): StreamedResponse
+    protected function validateExpense(Request $request): array
     {
-        $fileName = 'expenses_' . now()->format('Ymd_His') . '.csv';
-
-        $query = Expense::query();
-
-        if ($request->filled('from')) {
-            $query->whereDate('expense_date', '>=', $request->from);
-        }
-        if ($request->filled('to')) {
-            $query->whereDate('expense_date', '<=', $request->to);
-        }
-        if ($request->filled('category')) {
-            $query->where('category', $request->category);
-        }
-
-        $expenses = $query->orderBy('expense_date', 'desc')->get([
-            'expense_date',
-            'title',
-            'category',
-            'amount',
-            'description',
-            'created_at',
+        return $request->validate([
+            'date'        => 'required|date',
+            'category'    => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'project_id'  => 'nullable|exists:projects,id',
+            'client_id'   => 'nullable|exists:clients,id',
+            'amount'      => 'required|numeric',
+            'method'      => 'nullable|string|max:255',
+            'status'      => 'nullable|string|max:255',
+            'user_id'     => 'nullable|exists:users,id',
         ]);
-
-        $headers = [
-            'Content-Type' => 'text/csv; charset=UTF-8',
-            'Content-Disposition' => "attachment; filename=\"$fileName\"",
-        ];
-
-        $callback = function() use ($expenses) {
-            $handle = fopen('php://output', 'w');
-
-            // BOM for Excel to detect UTF-8
-            fprintf($handle, chr(0xEF).chr(0xBB).chr(0xBF));
-
-            // Header row
-            fputcsv($handle, ['Date', 'Title', 'Category', 'Amount', 'Description', 'Created At']);
-
-            foreach ($expenses as $e) {
-                fputcsv($handle, [
-                    $e->expense_date?->format('Y-m-d') ?? '',
-                    $e->title,
-                    $e->category ?? '',
-                    $e->amount,
-                    $e->description ?? '',
-                    $e->created_at?->format('Y-m-d H:i:s') ?? '',
-                ]);
-            }
-
-            fclose($handle);
-        };
-
-        return response()->stream($callback, 200, $headers);
     }
 }

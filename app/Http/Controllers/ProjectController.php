@@ -31,6 +31,10 @@ class ProjectController extends Controller
             'start_date'     => 'nullable|date',
             'end_date'       => 'nullable|date|after_or_equal:start_date',
             'contract_value' => 'nullable|numeric|min:0',
+            'amount_paid'    => 'nullable|numeric|min:0',
+            'amount_remaining' => 'nullable|numeric|min:0',
+            'status'         => 'nullable|string|in:planned,active,completed,on-hold',
+            'notes'          => 'nullable|string|max:1000',
         ]);
 
         Project::create($validated);
@@ -62,6 +66,9 @@ class ProjectController extends Controller
             'start_date'     => 'nullable|date',
             'end_date'       => 'nullable|date|after_or_equal:start_date',
             'contract_value' => 'nullable|numeric|min:0',
+            'amount_paid'    => 'nullable|numeric|min:0',
+            'amount_remaining' => 'nullable|numeric|min:0',
+            'notes'          => 'nullable|string|max:1000',
             'status'         => 'nullable|string|in:planned,active,completed,on-hold',
         ]);
 

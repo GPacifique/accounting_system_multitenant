@@ -49,7 +49,7 @@
         }
         .sidebar a.active,
         .sidebar a:hover {
-            background: #495057;
+            background: #75899c;
             color: #fff;
         }
         .sidebar .brand {
@@ -62,9 +62,9 @@
             margin-bottom: 1rem;
         }
         footer {
-            background: #020f1b;
-            font-size: large;
-            color: white;
+            background: #7f858b;
+            font-size: xx-large;
+            color: rgba(9, 2, 2, 0.031);
             padding: 1rem;
             text-align: center; 
         }
@@ -84,8 +84,44 @@
         }
         .stat-sub {
             color: #6c757d;
-        }           
+        }
+        
     </style>
+<!-- DataTables CSS -->
+<link rel="stylesheet" href="https://cdn.datatables.net/2.0.7/css/dataTables.dataTables.min.css">
+<!-- jQuery (required for DataTables) -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+<!-- DataTables JS -->
+<script src="https://cdn.datatables.net/2.0.7/js/dataTables.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#myTable').DataTable({
+            pageLength: 5,
+            responsive: true,
+        });
+    });
+</script>
+<!-- CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-datatables@9.0.0/dist/style.css">
+
+<!-- JS -->
+<script src="https://cdn.jsdelivr.net/npm/simple-datatables@9.0.0" defer></script>
+@vite(['resources/css/app.css', 'resources/js/app.js'])
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const table = document.querySelector("#myTable");
+    if (table) {
+        new simpleDatatables.DataTable(table, {
+            searchable: true,
+            fixedHeight: true,
+            perPage: 5
+        });
+    }
+});
+</script>
+
 
     @stack('styles')
 </head>
@@ -119,8 +155,8 @@
             <a href="{{ route('incomes.index') }}" class="{{ request()->routeIs('transactions.*') ? 'active' : '' }}">
                 <i class="fa-solid fa-arrow-right-arrow-left me-2"></i> Revenues
             </a>
-              <a href="{{ route('transactions.index') }}" class="{{ request()->routeIs('transactions.*') ? 'active' : '' }}">
-                <i class="fa-solid fa-arrow-right-arrow-left me-2"></i> Transactions
+              <a href="{{ route('reports.index') }}" class="{{ request()->routeIs('transactions.*') ? 'active' : '' }}">
+                <i class="fa-solid fa-arrow-right-arrow-left me-2"></i> Reports
             </a>
              <a href="{{ route('roles.index') }}" class="{{ request()->routeIs('roles.*') ? 'active' : '' }}">
                 <i class="fa-solid fa-user-shield me-2"></i> Roles
@@ -147,7 +183,7 @@
 </div>
 
 <footer class="text-center py-3 mt-auto">
-    <small class="text-muted">&copy; {{ date('Y') }} {{ config('app.name', 'My App') }}</small>
+  <img src="{{ asset('images/logo.png') }}" alt="Logo" class="logo logo-responsive">  <small class="text-muted">&copy; {{ date('Y') }} {{ config('app.name', 'My App') }}</small>
 </footer>
 
 <!-- Bootstrap JS -->

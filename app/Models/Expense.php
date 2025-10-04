@@ -2,23 +2,56 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Expense extends Model
 {
-    use HasFactory;
-
     protected $fillable = [
-        'title',
-        'description',
-        'amount',
-        'expense_date',
+        'date',
         'category',
+        'description',
+        'project_id',
+        'client_id',
+        'amount',
+        'method',
+        'status',
+        'user_id',
     ];
 
-    protected $casts = [
-        'expense_date' => 'date',
-        'amount' => 'decimal:2',
+    // Optional: centralised categories
+    public const CATEGORIES = [
+        'Materials',
+        'Labor',
+        'Equipment',
+        'Subcontractor',
+        'Transport',
+        'Utilities',
+        'Permits',
+        'Miscellaneous',
     ];
+
+    /**
+     * Expense belongs to a Project.
+     */
+    public function project(): BelongsTo
+    {
+        return $this->belongsTo(Project::class, 'project_id', 'id');
+    }
+
+    /**
+     * Expense belongs to a Client (vendor / supplier / worker).
+     */
+    public function client(): BelongsTo
+    {
+        return $this->belongsTo(Client::class, 'client_id', 'id');
+    }
+
+    /**
+     * Expense belongs to a User (registered by).
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(\App\Models\User::class, 'user_id', 'id');
+    }
 }
