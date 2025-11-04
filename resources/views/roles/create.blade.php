@@ -13,6 +13,18 @@
 
     <div class="card shadow-sm">
         <div class="card-body">
+            @if ($errors->any())
+                <div class="alert alert-danger alert-dismissible fade show mb-3" role="alert">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    <strong>Please fix the following errors:</strong>
+                    <ul class="mb-0 mt-2">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            @endif
             <form action="{{ route('roles.store') }}" method="POST">
                 @csrf
 
@@ -44,7 +56,7 @@
                 </div>
 
                 <div class="d-flex gap-2">
-                    <button class="btn btn-success" type="submit">Create</button>
+                    <button class="btn btn-success" type="submit" data-loading-text="Creating...">Create</button>
                     <a href="{{ route('roles.index') }}" class="btn btn-outline-secondary">Cancel</a>
                 </div>
             </form>

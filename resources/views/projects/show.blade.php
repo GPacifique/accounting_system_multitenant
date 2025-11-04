@@ -1,24 +1,62 @@
 @extends('layouts.app')
+@section('title', 'Project Details')
 
 @section('content')
-<div class="container mx-auto p-6 max-w-3xl">
-    <div class="flex items-center justify-between mb-4">
-        <h1 class="text-2xl font-semibold">{{ $project->name }}</h1>
-        <div>
-            <a href="{{ route('projects.edit', $project) }}" class="px-3 py-1 border rounded mr-2">Edit</a>
-            <a href="{{ route('projects.index') }}" class="px-3 py-1 border rounded">Back</a>
+<div class="container mx-auto px-4 py-8">
+    <div class="max-w-5xl mx-auto">
+        <!-- Header -->
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
+            <div>
+                <h1 class="text-3xl font-bold theme-aware-text leading-tight">{{ $project->name }}</h1>
+                <p class="text-sm theme-aware-text-muted mt-1">Status: <span class="font-medium text-gray-700">{{ ucfirst($project->status ?? '—') }}</span></p>
+            </div>
+            <div class="flex items-center gap-2 mt-4 sm:mt-0">
+                <a href="{{ route('projects.edit', $project) }}" class="btn-primary">
+                    <i class="fas fa-edit mr-2"></i>Edit
+                </a>
+                <a href="{{ route('projects.index') }}" class="btn-secondary">
+                    <i class="fas fa-arrow-left mr-2"></i>Back to Projects
+                </a>
+            </div>
         </div>
-    </div>
 
-    <div class="bg-white rounded-lg shadow p-6">
-        <p class="mb-4">{{ $project->description ?? '—' }}</p>
+        <!-- Details Card -->
+        <div class="theme-aware-bg-card rounded-xl shadow-lg overflow-hidden">
+            <div class="p-6 sm:p-8">
+                @if(!empty($project->description))
+                    <div class="mb-6">
+                        <h3 class="text-sm font-medium theme-aware-text-muted">Description</h3>
+                        <p class="mt-1 theme-aware-text">{{ $project->description }}</p>
+                    </div>
+                @endif
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-gray-700">
-            <div><strong>Status:</strong> {{ ucfirst($project->status) }}</div>
-            <div><strong>Start:</strong> {{ $project->start_date?->format('Y-m-d') ?? '-' }}</div>
-            <div><strong>End:</strong> {{ $project->end_date?->format('Y-m-d') ?? '-' }}</div>
-            <div class="md:col-span-3"><strong>Budget:</strong> {{ number_format($project->budget ?? 0, 2) }}</div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 theme-aware-text">
+                    <div>
+                        <h4 class="text-sm font-medium theme-aware-text-muted">Start Date</h4>
+                        <p class="mt-1">{{ optional($project->start_date)->format('Y-m-d') ?? '—' }}</p>
+                    </div>
+                    <div>
+                        <h4 class="text-sm font-medium theme-aware-text-muted">End Date</h4>
+                        <p class="mt-1">{{ optional($project->end_date)->format('Y-m-d') ?? '—' }}</p>
+                    </div>
+                    <div>
+                        <h4 class="text-sm font-medium theme-aware-text-muted">Budget</h4>
+                        <p class="mt-1">{{ number_format($project->budget ?? 0, 2) }}</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 @endsection
+
+@push('styles')
+<style>
+    .btn-primary {
+        @apply inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 active:bg-indigo-900 focus:outline-none focus:border-indigo-900 focus:ring ring-indigo-300 disabled:opacity-25 transition ease-in-out duration-150;
+    }
+    .btn-secondary {
+        @apply inline-flex items-center px-4 py-2 bg-gray-200 border border-gray-300 rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest hover:bg-gray-300 active:bg-gray-400 focus:outline-none focus:border-gray-400 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150;
+    }
+</style>
+@endpush

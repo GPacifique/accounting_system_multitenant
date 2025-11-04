@@ -1,4 +1,9 @@
+<?php
+
+namespace App\Http\Controllers;
+
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use App\Models\Worker;
@@ -7,99 +12,312 @@ use App\Models\Transaction;
 use App\Models\Income;
 use App\Models\Expense;
 use App\Models\Project;
+use App\Services\DashboardStatsService;
 
-public function index()
+class DashboardController extends Controller
 {
-    $today = Carbon::today();
-    $startOfMonth = $today->copy()->startOfMonth();
+    protected $statsService;
 
-    // Workers
-    $totalWorkers = Schema::hasTable('workers') ? Worker::count() : 0;
-    $activeWorkers = Schema::hasTable('workers') && Schema::hasColumn('workers', 'status')
-        ? Worker::where('status','active')->count()
-        : $totalWorkers;
-    $recentWorkers = Schema::hasTable('workers') ? Worker::latest()->limit(6)->get() : collect();
-
-    // Payments
-    $paymentsTotal = Schema::hasTable('payments') && Schema::hasColumn('payments','amount')
-        ? Payment::sum('amount')
-        : 0;
-    $paymentsThisMonth = Schema::hasTable('payments') && Schema::hasColumn('payments','amount')
-        ? Payment::whereBetween('created_at', [$startOfMonth, $today->endOfDay()])->sum('amount')
-        : 0;
-    $recentPayments = Schema::hasTable('payments') ? Payment::latest()->limit(7)->get() : collect();
-
-    // Transactions
-    $recentTransactions = Schema::hasTable('transactions') ? Transaction::latest()->limit(7)->get() : collect();
-    $transactionsThisMonth = Schema::hasTable('transactions') && Schema::hasColumn('transactions','amount')
-        ? Transaction::whereBetween('created_at', [$startOfMonth, $today->endOfDay()])->sum('amount')
-        : 0;
-
-    // Incomes
-    $incomesTotal = Schema::hasTable('incomes') && Schema::hasColumn('incomes','amount_received')
-        ? Income::sum('amount_received')
-        : 0;
-    $incomesThisMonth = Schema::hasTable('incomes') && Schema::hasColumn('incomes','amount_received')
-        ? Income::whereBetween('received_at', [$startOfMonth, $today->endOfDay()])->sum('amount_received')
-        : 0;
-    $recentIncomes = Schema::hasTable('incomes') ? Income::latest()->limit(7)->get() : collect();
-
-    // Expenses
-    $expensesTotal = Schema::hasTable('expenses') && Schema::hasColumn('expenses','amount')
-        ? Expense::sum('amount')
-        : 0;
-    $expensesThisMonth = Schema::hasTable('expenses') && Schema::hasColumn('expenses','amount')
-        ? Expense::whereBetween('created_at', [$startOfMonth, $today->endOfDay()])->sum('amount')
-        : 0;
-    $recentExpenses = Schema::hasTable('expenses') ? Expense::latest()->limit(7)->get() : collect();
-
-    // Projects
-    $projectsCount = Schema::hasTable('projects') ? Project::count() : 0;
-    $projectsThisMonth = Schema::hasTable('projects') ? Project::whereBetween('created_at', [$startOfMonth, $today->endOfDay()])->count() : 0;
-    $projectsTotal = Schema::hasTable('projects') && Schema::hasColumn('projects','contract_value')
-        ? Project::sum('contract_value')
-        : null;
-    $recentProjects = Schema::hasTable('projects') ? Project::latest()->limit(7)->get() : collect();
-
-    // Project Stats — important to avoid undefined variable
-    $projectStats = collect();
-    if(Schema::hasTable('projects') && Schema::hasTable('incomes')) {
-        $projectStats = DB::table('projects')
-            ->leftJoin('incomes', 'projects.id', '=', 'incomes.project_id')
-            ->select(
-                'projects.name as project_name',
-                DB::raw('COALESCE(SUM(incomes.amount_received),0) as amount_paid'),
-                DB::raw('projects.contract_value as total_amount'),
-                DB::raw('(projects.contract_value - COALESCE(SUM(incomes.amount_received),0)) as amount_remaining')
-            )
-            ->groupBy('projects.id', 'projects.name', 'projects.contract_value')
-            ->get();
+    public function __construct(DashboardStatsService $statsService)
+    {
+        $this->statsService = $statsService;
     }
 
-    // Monthly series for last 6 months
-    $months = [];
-    $paymentsMonthly = [];
-    $expensesMonthly = [];
-    $incomeMonthly = [];
-    for ($i = 5; $i >= 0; $i--) {
-        $dt = Carbon::now()->subMonths($i);
-        $months[] = $dt->format('M Y');
-
-        $mStart = $dt->copy()->startOfMonth();
-        $mEnd = $dt->copy()->endOfMonth();
-
-        $paymentsMonthly[] = Schema::hasTable('payments') ? Payment::whereBetween('created_at', [$mStart, $mEnd])->sum('amount') : 0;
-        $expensesMonthly[] = Schema::hasTable('expenses') ? Expense::whereBetween('created_at', [$mStart, $mEnd])->sum('amount') : 0;
-        $incomeMonthly[] = Schema::hasTable('incomes') ? Income::whereBetween('received_at', [$mStart, $mEnd])->sum('amount_received') : 0;
+    public function index()
+    {
+        $user = Auth::user();
+        
+        // Route to appropriate dashboard based on role
+        if ($user->hasRole('admin')) {
+            return $this->adminDashboard();
+        } elseif ($user->hasRole('accountant')) {
+            return $this->accountantDashboard();
+        } elseif ($user->hasRole('manager')) {
+            return $this->managerDashboard();
+        }
+        
+        return $this->userDashboard();
     }
 
-    return view('dashboard', compact(
-        'totalWorkers','activeWorkers','recentWorkers',
-        'paymentsTotal','paymentsThisMonth','recentPayments',
-        'recentTransactions','transactionsThisMonth',
-        'incomesTotal','incomesThisMonth','recentIncomes',
-        'expensesTotal','expensesThisMonth','recentExpenses',
-        'projectsCount','projectsThisMonth','projectsTotal','recentProjects',
-        'projectStats','months','paymentsMonthly','expensesMonthly','incomeMonthly'
-    ));
+    /**
+     * Admin sees all data and statistics with enhanced analytics
+     */
+    private function adminDashboard()
+    {
+        $today = Carbon::today();
+        $startOfMonth = $today->copy()->startOfMonth();
+        $endOfToday = $today->endOfDay();
+
+        $has = function (string $table, ?string $column = null): bool {
+            if (! Schema::hasTable($table)) {
+                return false;
+            }
+            return $column ? Schema::hasColumn($table, $column) : true;
+        };
+
+        // Get enhanced stats from service
+        $financialSummary = $this->statsService->getFinancialSummary();
+        $quickStats = $this->statsService->getQuickStats();
+        $dailyStats = $this->statsService->getDailyStats(30);
+        $weeklyStats = $this->statsService->getWeeklyStats(12);
+        $cashFlowAnalysis = $this->statsService->getCashFlowAnalysis(6);
+        $topProjects = $this->statsService->getTopProjects(5);
+        $incomeByCategory = $this->statsService->getIncomeByCategory();
+        $expenseByCategory = $this->statsService->getExpenseByCategory();
+        $expenseByMethod = $this->statsService->getExpenseByMethod();
+        $paymentStatusBreakdown = $this->statsService->getPaymentStatusBreakdown();
+        $outstandingReceivables = $this->statsService->getOutstandingReceivables();
+        
+        // Additional stats for admin dashboard
+        $dailyTotals = [];
+        $categories = [];
+
+        // Workers
+        $totalWorkers = $has('workers') ? Worker::count() : 0;
+        $activeWorkers = $has('workers', 'status')
+            ? Worker::where('status', 'active')->count()
+            : $totalWorkers;
+        $recentWorkers = $has('workers') ? Worker::latest()->limit(6)->get() : collect();
+
+        // Payments
+        $paymentsTotal = $has('payments', 'amount') ? Payment::sum('amount') : 0;
+        $paymentsThisMonth = $has('payments', 'amount')
+            ? Payment::whereBetween('created_at', [$startOfMonth, $endOfToday])->sum('amount')
+            : 0;
+        $recentPayments = $has('payments') ? Payment::latest()->limit(7)->get() : collect();
+
+        // Transactions
+        $recentTransactions = $has('transactions') ? Transaction::latest()->limit(7)->get() : collect();
+        $transactionsThisMonth = $has('transactions', 'amount')
+            ? Transaction::whereBetween('created_at', [$startOfMonth, $endOfToday])->sum('amount')
+            : 0;
+
+        // Incomes
+        $incomesTotal = $has('incomes', 'amount_received') ? Income::sum('amount_received') : 0;
+        $incomesThisMonth = $has('incomes', 'amount_received')
+            ? Income::whereBetween('received_at', [$startOfMonth, $endOfToday])->sum('amount_received')
+            : 0;
+        $recentIncomes = $has('incomes') ? Income::latest()->limit(7)->get() : collect();
+
+        // Expenses
+        $expensesTotal = $has('expenses', 'amount') ? Expense::sum('amount') : 0;
+        $expensesThisMonth = $has('expenses', 'amount')
+            ? Expense::whereBetween('created_at', [$startOfMonth, $endOfToday])->sum('amount')
+            : 0;
+        $recentExpenses = $has('expenses') ? Expense::latest()->limit(7)->get() : collect();
+
+        // Projects
+        $projectsCount = $has('projects') ? Project::count() : 0;
+        $projectsThisMonth = $has('projects')
+            ? Project::whereBetween('created_at', [$startOfMonth, $endOfToday])->count()
+            : 0;
+        $projectsTotal = $has('projects', 'contract_value') ? Project::sum('contract_value') : 0;
+        $recentProjects = $has('projects') ? Project::latest()->limit(7)->get() : collect();
+
+        // Project Stats
+        $projectStats = collect();
+        if ($has('projects') && $has('incomes', 'amount_received')) {
+            $projectStats = DB::table('projects')
+                ->leftJoin('incomes', 'projects.id', '=', 'incomes.project_id')
+                ->select(
+                    'projects.id',
+                    'projects.name as project_name',
+                    DB::raw('COALESCE(SUM(incomes.amount_received), 0) as amount_paid'),
+                    DB::raw('COALESCE(projects.contract_value, 0) as total_amount'),
+                    DB::raw('(COALESCE(projects.contract_value, 0) - COALESCE(SUM(incomes.amount_received), 0)) as amount_remaining')
+                )
+                ->groupBy('projects.id', 'projects.name', 'projects.contract_value')
+                ->get();
+        }
+
+        // Monthly series
+        $months = [];
+        $paymentsMonthly = [];
+        $expensesMonthly = [];
+        $incomeMonthly = [];
+
+        for ($i = 5; $i >= 0; $i--) {
+            $dt = Carbon::now()->subMonths($i);
+            $months[] = $dt->format('M Y');
+
+            $mStart = $dt->copy()->startOfMonth();
+            $mEnd = $dt->copy()->endOfMonth();
+
+            $paymentsMonthly[] = $has('payments', 'amount')
+                ? Payment::whereBetween('created_at', [$mStart, $mEnd])->sum('amount')
+                : 0;
+
+            $expensesMonthly[] = $has('expenses', 'amount')
+                ? Expense::whereBetween('created_at', [$mStart, $mEnd])->sum('amount')
+                : 0;
+
+            $incomeMonthly[] = $has('incomes', 'amount_received')
+                ? Income::whereBetween('received_at', [$mStart, $mEnd])->sum('amount_received')
+                : 0;
+        }
+
+        return view('dashboard.admin', compact(
+            'financialSummary', 'quickStats', 'dailyStats', 'weeklyStats', 'cashFlowAnalysis',
+            'incomeByCategory', 'expenseByCategory', 'expenseByMethod', 'topProjects',
+            'paymentStatusBreakdown', 'outstandingReceivables', 'dailyTotals', 'categories',
+            'totalWorkers', 'activeWorkers', 'recentWorkers',
+            'paymentsTotal', 'paymentsThisMonth', 'recentPayments',
+            'recentTransactions', 'transactionsThisMonth',
+            'incomesTotal', 'incomesThisMonth', 'recentIncomes',
+            'expensesTotal', 'expensesThisMonth', 'recentExpenses',
+            'projectsCount', 'projectsThisMonth', 'projectsTotal', 'recentProjects',
+            'projectStats', 'months', 'paymentsMonthly', 'expensesMonthly', 'incomeMonthly'
+        ));
+    }
+
+    /**
+     * Accountant sees only financial data with enhanced analytics
+     */
+    private function accountantDashboard()
+    {
+        // Get comprehensive financial summary
+        $financialSummary = $this->statsService->getFinancialSummary();
+        $quickStats = $this->statsService->getQuickStats();
+        
+        // Get daily, weekly, and monthly trends
+        $dailyStats = $this->statsService->getDailyStats(30);
+        $weeklyStats = $this->statsService->getWeeklyStats(12);
+        $cashFlowAnalysis = $this->statsService->getCashFlowAnalysis(6);
+        
+        // Category breakdowns
+        $incomeByCategory = $this->statsService->getIncomeByCategory();
+        $expenseByCategory = $this->statsService->getExpenseByCategory();
+        $expenseByMethod = $this->statsService->getExpenseByMethod();
+    $transactionsByCategory = $this->statsService->getTransactionsByCategory();
+        
+        // Payment analysis
+        $paymentStatusBreakdown = $this->statsService->getPaymentStatusBreakdown();
+        $outstandingReceivables = $this->statsService->getOutstandingReceivables();
+        
+        // Recent transactions
+        $has = function (string $table, ?string $column = null): bool {
+            if (! Schema::hasTable($table)) {
+                return false;
+            }
+            return $column ? Schema::hasColumn($table, $column) : true;
+        };
+
+        $recentPayments = $has('payments') ? Payment::latest()->limit(10)->get() : collect();
+        $recentIncomes = $has('incomes') ? Income::latest()->limit(10)->get() : collect();
+        $recentExpenses = $has('expenses') ? Expense::latest()->limit(10)->get() : collect();
+
+        return view('dashboard.accountant', compact(
+            'financialSummary', 'quickStats',
+            'dailyStats', 'weeklyStats', 'cashFlowAnalysis',
+            'incomeByCategory', 'expenseByCategory', 'expenseByMethod', 'transactionsByCategory',
+            'paymentStatusBreakdown', 'outstandingReceivables',
+            'recentPayments', 'recentIncomes', 'recentExpenses'
+        ));
+    }
+
+    /**
+     * Manager sees project and employee data with analytics
+     */
+    private function managerDashboard()
+    {
+        $today = Carbon::today();
+        $startOfMonth = $today->copy()->startOfMonth();
+        $endOfToday = $today->endOfDay();
+
+        $has = function (string $table, ?string $column = null): bool {
+            if (! Schema::hasTable($table)) {
+                return false;
+            }
+            return $column ? Schema::hasColumn($table, $column) : true;
+        };
+
+        // Get financial summary and top projects from service
+        $financialSummary = $this->statsService->getFinancialSummary();
+        $topProjects = $this->statsService->getTopProjects(8);
+        $weeklyStats = $this->statsService->getWeeklyStats(12);
+        $incomeByCategory = $this->statsService->getIncomeByCategory();
+
+        // Workers/Employees
+        $totalWorkers = $has('workers') ? Worker::count() : 0;
+        $activeWorkers = $has('workers', 'status')
+            ? Worker::where('status', 'active')->count()
+            : $totalWorkers;
+        $recentWorkers = $has('workers') ? Worker::latest()->limit(10)->get() : collect();
+
+        // Projects
+        $projectsCount = $has('projects') ? Project::count() : 0;
+        $projectsThisMonth = $has('projects')
+            ? Project::whereBetween('created_at', [$startOfMonth, $endOfToday])->count()
+            : 0;
+        $projectsTotal = $has('projects', 'contract_value') ? Project::sum('contract_value') : 0;
+        $recentProjects = $has('projects') ? Project::latest()->limit(10)->get() : collect();
+
+        // Project Stats with payments
+        $projectStats = collect();
+        if ($has('projects') && $has('incomes', 'amount_received')) {
+            $projectStats = DB::table('projects')
+                ->leftJoin('incomes', 'projects.id', '=', 'incomes.project_id')
+                ->select(
+                    'projects.id',
+                    'projects.name as project_name',
+                    DB::raw('COALESCE(SUM(incomes.amount_received), 0) as amount_paid'),
+                    DB::raw('COALESCE(projects.contract_value, 0) as total_amount'),
+                    DB::raw('(COALESCE(projects.contract_value, 0) - COALESCE(SUM(incomes.amount_received), 0)) as amount_remaining')
+                )
+                ->groupBy('projects.id', 'projects.name', 'projects.contract_value')
+                ->limit(10)
+                ->get();
+        }
+
+        // Monthly project data
+        $months = [];
+        $projectsMonthly = [];
+
+        for ($i = 5; $i >= 0; $i--) {
+            $dt = Carbon::now()->subMonths($i);
+            $months[] = $dt->format('M Y');
+
+            $mStart = $dt->copy()->startOfMonth();
+            $mEnd = $dt->copy()->endOfMonth();
+
+            $projectsMonthly[] = $has('projects', 'contract_value')
+                ? Project::whereBetween('created_at', [$mStart, $mEnd])->sum('contract_value')
+                : 0;
+        }
+
+        return view('dashboard.manager', compact(
+            'financialSummary', 'topProjects', 'weeklyStats', 'incomeByCategory',
+            'totalWorkers', 'activeWorkers', 'recentWorkers',
+            'projectsCount', 'projectsThisMonth', 'projectsTotal', 'recentProjects',
+            'projectStats', 'months', 'projectsMonthly'
+        ));
+    }
+
+    /**
+     * Regular user sees limited overview
+     */
+    private function userDashboard()
+    {
+        $today = Carbon::today();
+        $startOfMonth = $today->copy()->startOfMonth();
+        $endOfToday = $today->endOfDay();
+
+        $has = function (string $table, ?string $column = null): bool {
+            if (! Schema::hasTable($table)) {
+                return false;
+            }
+            return $column ? Schema::hasColumn($table, $column) : true;
+        };
+
+        // Limited project view
+        $projectsCount = $has('projects') ? Project::count() : 0;
+        $projectsThisMonth = $has('projects')
+            ? Project::whereBetween('created_at', [$startOfMonth, $endOfToday])->count()
+            : 0;
+        $recentProjects = $has('projects') ? Project::latest()->limit(5)->get() : collect();
+
+        return view('dashboard.user', compact(
+            'projectsCount', 'projectsThisMonth', 'recentProjects'
+        ));
+    }
 }

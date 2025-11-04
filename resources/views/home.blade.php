@@ -95,7 +95,7 @@ for ($i = 5; $i >= 0; $i--) {
     <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
         <div>
             <h1 class="text-2xl md:text-3xl font-semibold leading-tight">Dashboard</h1>
-            <p class="text-sm text-gray-500 mt-1">Overview of activity, finances and projects</p>
+            <p class="text-sm theme-aware-text-muted mt-1">Overview of activity, finances and projects</p>
         </div>
 
         <div class="flex items-center gap-3">
@@ -104,13 +104,13 @@ for ($i = 5; $i >= 0; $i--) {
                 <div class="relative">
                     <input id="q" name="q" type="search" value="{{ request('q') ?? '' }}"
                         placeholder="Search workers, payments, projects..."
-                        class="pl-10 pr-4 py-2 rounded-lg border bg-white shadow-sm focus:ring-2 focus:ring-indigo-200 focus:outline-none w-56"
+                        class="pl-10 pr-4 py-2 rounded-lg border theme-aware-bg-card shadow-sm focus:ring-2 focus:ring-indigo-200 focus:outline-none w-56"
                         autocomplete="off" aria-label="Search dashboard">
-                    <svg class="w-4 h-4 absolute left-3 top-2.5 text-gray-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M11 19a8 8 0 1 1 0-16 8 8 0 0 1 0 16z"/></svg>
+                    <svg class="w-4 h-4 absolute left-3 top-2.5 theme-aware-text-muted pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M11 19a8 8 0 1 1 0-16 8 8 0 0 1 0 16z"/></svg>
                 </div>
 
                 <button type="submit" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg shadow-sm">Search</button>
-                <a href="{{ route('dashboard') }}" class="px-3 py-2 border rounded-lg text-gray-600 hover:bg-gray-50">Reset</a>
+                <a href="{{ route('dashboard') }}" class="px-3 py-2 border rounded-lg theme-aware-text-secondary hover:bg-gray-50">Reset</a>
             </form>
 
             <a href="{{ route('projects.create') ?? '#' }}" class="inline-flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg shadow">
@@ -122,12 +122,12 @@ for ($i = 5; $i >= 0; $i--) {
 
     {{-- KPI cards --}}
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <div class="bg-white rounded-lg shadow-sm p-4 border overflow-hidden transform hover:-translate-y-1 transition">
+        <div class="theme-aware-bg-card rounded-lg shadow-sm p-4 border overflow-hidden transform hover:-translate-y-1 transition">
             <div class="flex items-center justify-between">
                 <div>
-                    <div class="text-sm text-gray-500">Total Workers</div>
+                    <div class="text-sm theme-aware-text-muted">Total Workers</div>
                     <div class="text-2xl font-bold mt-1">{{ number_format($totalWorkers) }}</div>
-                    <div class="text-xs text-gray-400 mt-1">Active: {{ number_format($activeWorkers) }}</div>
+                    <div class="text-xs theme-aware-text-muted mt-1">Active: {{ number_format($activeWorkers) }}</div>
                 </div>
                 <div class="flex-shrink-0 text-indigo-600 bg-indigo-50 rounded-full p-3">
                     <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/></svg>
@@ -135,12 +135,12 @@ for ($i = 5; $i >= 0; $i--) {
             </div>
         </div>
 
-        <div class="bg-white rounded-lg shadow-sm p-4 border overflow-hidden transform hover:-translate-y-1 transition">
+        <div class="theme-aware-bg-card rounded-lg shadow-sm p-4 border overflow-hidden transform hover:-translate-y-1 transition">
             <div class="flex items-center justify-between">
                 <div>
-                    <div class="text-sm text-gray-500">Incomes (total)</div>
+                    <div class="text-sm theme-aware-text-muted">Incomes (total)</div>
                     <div class="text-2xl font-bold mt-1">{{ number_format($incomesTotal, 2) }}</div>
-                    <div class="text-xs text-gray-400 mt-1">This month: {{ number_format($incomesThisMonth, 2) }}</div>
+                    <div class="text-xs theme-aware-text-muted mt-1">This month: {{ number_format($incomesThisMonth, 2) }}</div>
                 </div>
                 <div class="flex-shrink-0 text-green-600 bg-green-50 rounded-full p-3">
                     <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2"/></svg>
@@ -148,12 +148,12 @@ for ($i = 5; $i >= 0; $i--) {
             </div>
         </div>
 
-        <div class="bg-white rounded-lg shadow-sm p-4 border overflow-hidden transform hover:-translate-y-1 transition">
+        <div class="theme-aware-bg-card rounded-lg shadow-sm p-4 border overflow-hidden transform hover:-translate-y-1 transition">
             <div class="flex items-center justify-between">
                 <div>
-                    <div class="text-sm text-gray-500">Expenses (total)</div>
+                    <div class="text-sm theme-aware-text-muted">Expenses (total)</div>
                     <div class="text-2xl font-bold mt-1">{{ number_format($expensesTotal, 2) }}</div>
-                    <div class="text-xs text-gray-400 mt-1">This month: {{ number_format($expensesThisMonth, 2) }}</div>
+                    <div class="text-xs theme-aware-text-muted mt-1">This month: {{ number_format($expensesThisMonth, 2) }}</div>
                 </div>
                 <div class="flex-shrink-0 text-red-600 bg-red-50 rounded-full p-3">
                     <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 10h18M6 6h12M6 14h12M6 18h12"/></svg>
@@ -161,14 +161,14 @@ for ($i = 5; $i >= 0; $i--) {
             </div>
         </div>
 
-        <div class="bg-white rounded-lg shadow-sm p-4 border overflow-hidden transform hover:-translate-y-1 transition">
+        <div class="theme-aware-bg-card rounded-lg shadow-sm p-4 border overflow-hidden transform hover:-translate-y-1 transition">
             <div class="flex items-center justify-between">
                 <div>
-                    <div class="text-sm text-gray-500">Projects</div>
+                    <div class="text-sm theme-aware-text-muted">Projects</div>
                     <div class="text-2xl font-bold mt-1">{{ number_format($projectsCount) }}</div>
-                    <div class="text-xs text-gray-400 mt-1">This month: {{ number_format($projectsThisMonth) }}</div>
+                    <div class="text-xs theme-aware-text-muted mt-1">This month: {{ number_format($projectsThisMonth) }}</div>
                     @if(!is_null($projectsTotal))
-                        <div class="text-xs text-gray-400 mt-2">Budget: {{ number_format($projectsTotal, 2) }}</div>
+                        <div class="text-xs theme-aware-text-muted mt-2">Budget: {{ number_format($projectsTotal, 2) }}</div>
                     @endif
                 </div>
                 <div class="flex-shrink-0 text-yellow-600 bg-yellow-50 rounded-full p-3">
@@ -178,21 +178,21 @@ for ($i = 5; $i >= 0; $i--) {
         </div>
     </div>
     {{-- Daily category stats --}}
-    <div class="mb-6 bg-white rounded-lg shadow p-4">
+    <div class="mb-6 theme-aware-bg-card rounded-lg shadow p-4">
         <h2 class="text-lg font-semibold mb-3">Daily totals by category</h2>
 
         @if(empty($dailyTotals))
-            <p class="text-sm text-gray-500">No stats available.</p>
+            <p class="text-sm theme-aware-text-muted">No stats available.</p>
         @else
             <div class="overflow-x-auto">
                 <table class="w-full text-left border">
                     <thead class="bg-gray-50">
                         <tr>
-                            <th class="py-2 px-3 border-r text-sm text-gray-600">Date</th>
+                            <th class="py-2 px-3 border-r text-sm theme-aware-text-secondary">Date</th>
                             @foreach($categories as $cat)
-                                <th class="py-2 px-3 border-r text-sm text-gray-600">{{ $cat }}</th>
+                                <th class="py-2 px-3 border-r text-sm theme-aware-text-secondary">{{ $cat }}</th>
                             @endforeach
-                            <th class="py-2 px-3 text-sm text-gray-600">Daily Total</th>
+                            <th class="py-2 px-3 text-sm theme-aware-text-secondary">Daily Total</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -229,28 +229,28 @@ for ($i = 5; $i >= 0; $i--) {
         @endif
     </div>
     {{-- Project Stats Section --}}
-<div class="mb-6 bg-white rounded-lg shadow p-4">
+<div class="mb-6 theme-aware-bg-card rounded-lg shadow p-4">
     <h2 class="text-lg font-semibold mb-3">Project Payment Summary</h2>
 
     @if ($projectStats->isEmpty())
-        <p class="text-sm text-gray-500">No project stats available.</p>
+        <p class="text-sm theme-aware-text-muted">No project stats available.</p>
     @else
         <div class="overflow-x-auto">
             <table class="w-full text-left border">
                 <thead class="bg-gray-50">
                     <tr>
-                        <th class="py-2 px-3 border-r text-sm text-gray-600">#</th>
-                        <th class="py-2 px-3 border-r text-sm text-gray-600">Project Name</th>
-                        <th class="py-2 px-3 border-r text-sm text-gray-600">Total Amount</th>
-                        <th class="py-2 px-3 border-r text-sm text-gray-600">Amount Paid</th>
-                        <th class="py-2 px-3 text-sm text-gray-600">Amount Remaining</th>
+                        <th class="py-2 px-3 border-r text-sm theme-aware-text-secondary">#</th>
+                        <th class="py-2 px-3 border-r text-sm theme-aware-text-secondary">Project Name</th>
+                        <th class="py-2 px-3 border-r text-sm theme-aware-text-secondary">Total Amount</th>
+                        <th class="py-2 px-3 border-r text-sm theme-aware-text-secondary">Amount Paid</th>
+                        <th class="py-2 px-3 text-sm theme-aware-text-secondary">Amount Remaining</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($projectStats as $index => $proj)
                         <tr class="border-t hover:bg-gray-50">
-                            <td class="py-2 px-3 text-sm text-gray-500">{{ $index + 1 }}</td>
-                            <td class="py-2 px-3 font-medium text-gray-800">{{ $proj->project_name }}</td>
+                            <td class="py-2 px-3 text-sm theme-aware-text-muted">{{ $index + 1 }}</td>
+                            <td class="py-2 px-3 font-medium theme-aware-text">{{ $proj->project_name }}</td>
                             <td class="py-2 px-3 text-sm text-gray-700">
                                 <span class="inline-block px-2 py-1 rounded bg-gray-100 font-semibold">
                                     RWF {{ number_format($proj->total_amount, 2) }}
@@ -276,21 +276,21 @@ for ($i = 5; $i >= 0; $i--) {
 
     {{-- Charts --}}
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
-        <div class="bg-white rounded-lg shadow-sm p-4 border min-h-[260px] flex flex-col">
+        <div class="theme-aware-bg-card rounded-lg shadow-sm p-4 border min-h-[260px] flex flex-col">
             <h3 class="text-sm font-medium text-gray-700 mb-2">Income — Last 6 months</h3>
             <div class="flex-1">
                 <canvas id="incomeChart" class="w-full h-48"></canvas>
             </div>
         </div>
 
-        <div class="bg-white rounded-lg shadow-sm p-4 border min-h-[260px] flex flex-col">
+        <div class="theme-aware-bg-card rounded-lg shadow-sm p-4 border min-h-[260px] flex flex-col">
             <h3 class="text-sm font-medium text-gray-700 mb-2">Payments — Last 6 months</h3>
             <div class="flex-1">
                 <canvas id="paymentsChart" class="w-full h-48"></canvas>
             </div>
         </div>
 
-        <div class="bg-white rounded-lg shadow-sm p-4 border min-h-[260px] flex flex-col">
+        <div class="theme-aware-bg-card rounded-lg shadow-sm p-4 border min-h-[260px] flex flex-col">
             <h3 class="text-sm font-medium text-gray-700 mb-2">Expenses — Last 6 months</h3>
             <div class="flex-1">
                 <canvas id="expensesChart" class="w-full h-48"></canvas>
@@ -300,9 +300,9 @@ for ($i = 5; $i >= 0; $i--) {
 
     {{-- Recent lists --}}
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <div class="bg-white rounded-lg shadow-sm p-4 border">
+        <div class="theme-aware-bg-card rounded-lg shadow-sm p-4 border">
             <div class="flex items-center justify-between mb-3">
-                <h4 class="font-semibold text-gray-700">Recent Employees</h4>
+                <h4 class="font-semibold text-gray-700">Recent Workers</h4>
                 <a href="{{ route('workers.index') }}" class="text-indigo-600 text-sm">View all</a>
             </div>
 
@@ -311,19 +311,19 @@ for ($i = 5; $i >= 0; $i--) {
                     <li class="py-3 flex items-center justify-between">
                         <div>
                             <div class="font-medium">{{ $work->full_name ?? ($work->name ?? '—') }}</div>
-                            <div class="text-xs text-gray-400">{{ optional($work->created_at)->format('Y-m-d') ?? '—' }}</div>
+                            <div class="text-xs theme-aware-text-muted">{{ optional($work->created_at)->format('Y-m-d') ?? '—' }}</div>
                         </div>
-                        <div class="text-xs px-3 py-1 rounded-full {{ ($work->status ?? '') === 'active' ? 'bg-green-50 text-green-700' : 'bg-gray-100 text-gray-600' }}">
+                        <div class="text-xs px-3 py-1 rounded-full {{ ($work->status ?? '') === 'active' ? 'bg-green-50 text-green-700' : 'bg-gray-100 theme-aware-text-secondary' }}">
                             {{ ucfirst($work->status ?? '—') }}
                         </div>
                     </li>
                 @empty
-                    <li class="py-6 text-center text-gray-500">No employees found.</li>
+                    <li class="py-6 text-center theme-aware-text-muted">No workers found.</li>
                 @endforelse
             </ul>
         </div>
 
-        <div class="bg-white rounded-lg shadow-sm p-4 border">
+        <div class="theme-aware-bg-card rounded-lg shadow-sm p-4 border">
             <div class="flex items-center justify-between mb-3">
                 <h4 class="font-semibold text-gray-700">Recent Transactions</h4>
                 <a href="{{ route('transactions.index') ?? '#' }}" class="text-indigo-600 text-sm">View all</a>
@@ -334,17 +334,17 @@ for ($i = 5; $i >= 0; $i--) {
                     <li class="py-3 flex items-center justify-between">
                         <div>
                             <div class="font-medium">{{ $t->type ?? ('#' . ($t->id ?? '—')) }}</div>
-                            <div class="text-xs text-gray-400">{{ isset($t->amount) ? number_format($t->amount,2) : '' }} • {{ optional($t->created_at)->diffForHumans() ?? '—' }}</div>
+                            <div class="text-xs theme-aware-text-muted">{{ isset($t->amount) ? number_format($t->amount,2) : '' }} • {{ optional($t->created_at)->diffForHumans() ?? '—' }}</div>
                         </div>
-                        <div class="text-xs text-gray-500">{{ $t->status ?? '—' }}</div>
+                        <div class="text-xs theme-aware-text-muted">{{ $t->status ?? '—' }}</div>
                     </li>
                 @empty
-                    <li class="py-6 text-center text-gray-500">No transactions found.</li>
+                    <li class="py-6 text-center theme-aware-text-muted">No transactions found.</li>
                 @endforelse
             </ul>
         </div>
 
-        <div class="bg-white rounded-lg shadow-sm p-4 border">
+        <div class="theme-aware-bg-card rounded-lg shadow-sm p-4 border">
             <div class="flex items-center justify-between mb-3">
                 <h4 class="font-semibold text-gray-700">Recent Payments</h4>
                 <a href="{{ route('payments.index') ?? '#' }}" class="text-indigo-600 text-sm">View all</a>
@@ -355,17 +355,17 @@ for ($i = 5; $i >= 0; $i--) {
                     <li class="py-3 flex items-center justify-between">
                         <div>
                             <div class="font-medium">{{ number_format($p->amount ?? 0, 2) }}</div>
-                            <div class="text-xs text-gray-400">{{ $p->method ?? '—' }} • {{ optional($p->created_at)->format('Y-m-d') ?? '—' }}</div>
+                            <div class="text-xs theme-aware-text-muted">{{ $p->method ?? '—' }} • {{ optional($p->created_at)->format('Y-m-d') ?? '—' }}</div>
                         </div>
-                        <div class="text-xs text-gray-500">{{ $p->reference ?? '—' }}</div>
+                        <div class="text-xs theme-aware-text-muted">{{ $p->reference ?? '—' }}</div>
                     </li>
                 @empty
-                    <li class="py-6 text-center text-gray-500">No payments found.</li>
+                    <li class="py-6 text-center theme-aware-text-muted">No payments found.</li>
                 @endforelse
             </ul>
         </div>
 
-        <div class="bg-white rounded-lg shadow-sm p-4 border">
+        <div class="theme-aware-bg-card rounded-lg shadow-sm p-4 border">
             <div class="flex items-center justify-between mb-3">
                 <h4 class="font-semibold text-gray-700">Recent Expenses</h4>
                 <a href="{{ route('expenses.index') ?? '#' }}" class="text-indigo-600 text-sm">View all</a>
@@ -376,18 +376,18 @@ for ($i = 5; $i >= 0; $i--) {
                     <li class="py-3 flex items-center justify-between">
                         <div>
                             <div class="font-medium">{{ number_format($e->amount ?? 0, 2) }}</div>
-                            <div class="text-xs text-gray-400">{{ $e->category ?? '' }} • {{ optional($e->created_at)->format('Y-m-d') ?? '—' }}</div>
+                            <div class="text-xs theme-aware-text-muted">{{ $e->category ?? '' }} • {{ optional($e->created_at)->format('Y-m-d') ?? '—' }}</div>
                         </div>
-                        <div class="text-xs text-gray-500">{{ $e->vendor ?? '—' }}</div>
+                        <div class="text-xs theme-aware-text-muted">{{ $e->vendor ?? '—' }}</div>
                     </li>
                 @empty
-                    <li class="py-6 text-center text-gray-500">No expenses found.</li>
+                    <li class="py-6 text-center theme-aware-text-muted">No expenses found.</li>
                 @endforelse
             </ul>
         </div>
     </div>
 
-    <div class="mt-6 text-sm text-gray-500">© {{ date('Y') }} {{ config('app.name', 'MyApp') }}</div>
+    <div class="mt-6 text-sm theme-aware-text-muted">© {{ date('Y') }} {{ config('app.name', 'MyApp') }}</div>
 </div>
 @endsection
 
@@ -475,7 +475,7 @@ document.addEventListener('DOMContentLoaded', function () {
     createChart('expensesChart', 'Expenses', expensesData, 'rgba(239,68,68,1)', 'rgba(239,68,68,0.06)');
 
     // Small UI nicety: fade-in cards
-    document.querySelectorAll('.bg-white.rounded-lg').forEach((el, i) => {
+    document.querySelectorAll('.theme-aware-bg-card.rounded-lg').forEach((el, i) => {
         el.style.opacity = 0;
         el.style.transform = 'translateY(6px)';
         setTimeout(() => {

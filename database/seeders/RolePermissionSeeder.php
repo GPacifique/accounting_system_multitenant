@@ -16,40 +16,105 @@ class RolePermissionSeeder extends Seeder
         // Reset cached roles and permissions
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
-        // Define permissions
+        // Define all permissions
         $permissions = [
+            // User Management
             'users.view',
             'users.create',
             'users.edit',
             'users.delete',
+            
+            // Project Management
             'projects.view',
             'projects.create',
             'projects.edit',
             'projects.delete',
+            
+            // Expense Management
             'expenses.view',
             'expenses.create',
             'expenses.edit',
             'expenses.delete',
+            
+            // Income Management
+            'incomes.view',
+            'incomes.create',
+            'incomes.edit',
+            'incomes.delete',
+            
+            // Payment Management
+            'payments.view',
+            'payments.create',
+            'payments.edit',
+            'payments.delete',
+            
+            // Report Management
             'reports.view',
             'reports.generate',
+            'reports.export',
+            
+            // Employee/Worker Management
+            'employees.view',
+            'employees.create',
+            'employees.edit',
+            'employees.delete',
+            'workers.view',
+            'workers.create',
+            'workers.edit',
+            'workers.delete',
+            
+            // Order Management
+            'orders.view',
+            'orders.create',
+            'orders.edit',
+            'orders.delete',
+            
+            // Settings
+            'settings.view',
+            'settings.edit',
         ];
 
         foreach ($permissions as $permission) {
             Permission::firstOrCreate(['name' => $permission]);
         }
 
-        // Define roles
+        // Define role permissions matrix
         $roles = [
-            'admin' => $permissions, // admin has all permissions
+            'admin' => $permissions, // Admin has all permissions
+            
             'manager' => [
                 'projects.view',
                 'projects.create',
                 'projects.edit',
-                'expenses.view',
-                'expenses.create',
+                'employees.view',
+                'employees.create',
+                'employees.edit',
+                'workers.view',
+                'workers.create',
+                'workers.edit',
+                'orders.view',
+                'orders.create',
+                'orders.edit',
                 'reports.view',
                 'reports.generate',
             ],
+            
+            'accountant' => [
+                'payments.view',
+                'payments.create',
+                'payments.edit',
+                'incomes.view',
+                'incomes.create',
+                'incomes.edit',
+                'expenses.view',
+                'expenses.create',
+                'expenses.edit',
+                'reports.view',
+                'reports.generate',
+                'reports.export',
+                'projects.view', // Can view but not edit projects
+            ],
+            
             'user' => [
                 'projects.view',
                 'expenses.view',

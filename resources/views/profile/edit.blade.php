@@ -12,7 +12,7 @@
         </div>
     @endif
 
-    <form action="{{ route('profile.update') }}" method="POST" class="bg-white p-6 rounded shadow">
+    <form action="{{ route('profile.update') }}" method="POST" class="theme-aware-bg-card p-6 rounded shadow">
         @csrf
 
         <div class="mb-4">

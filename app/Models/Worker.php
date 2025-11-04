@@ -11,8 +11,12 @@ class Worker extends Model
 
     // Fillable fields for mass assignment
     protected $fillable = [
-        'name',
-        'role',
+        // base identity fields (actual controller uses these extensively)
+        'first_name','last_name','email','phone','position','status','notes',
+        // monetary fields (stored as cents + currency)
+        'salary_cents','currency',
+        // metadata
+        'hired_at',
     ];
 
     /**
@@ -24,10 +28,23 @@ class Worker extends Model
     }
 
     /**
+     * A worker can have many daily payments.
+     */
+    public function payments()
+    {
+        return $this->hasMany(WorkerPayment::class);
+    }
+
+    /**
      * Get the total wages for this worker.
      */
     public function totalWages()
     {
+        // Prefer payments if present; fall back to tasks daily_wage when used
+        $payments = (float) $this->payments()->sum('amount');
+        if ($payments > 0) {
+            return $payments;
+        }
         return $this->tasks()->sum('daily_wage');
     }
 
@@ -36,6 +53,10 @@ class Worker extends Model
      */
     public function wagesByDate($date)
     {
+        $byPayments = (float) $this->payments()->whereDate('paid_on', $date)->sum('amount');
+        if ($byPayments > 0) {
+            return $byPayments;
+        }
         return $this->tasks()
                     ->where('date', $date)
                     ->sum('daily_wage');

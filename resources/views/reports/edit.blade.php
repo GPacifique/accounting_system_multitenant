@@ -9,7 +9,7 @@
         <a href="{{ route('reports.index') }}" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">Back to Reports</a>
     </div>
 
-    <form action="{{ route('reports.update', $report) }}" method="POST" class="bg-white p-6 rounded shadow">
+    <form action="{{ route('reports.update', $report) }}" method="POST" class="theme-aware-bg-card p-6 rounded shadow">
         @csrf
         @method('PUT')
 
@@ -39,7 +39,7 @@
         <div class="mb-4">
             <label class="block text-gray-700 mb-1">Report Data (JSON)</label>
             <textarea name="data" rows="4" class="w-full border rounded px-3 py-2">{{ old('data', json_encode($report->data ?? [], JSON_PRETTY_PRINT)) }}</textarea>
-            <p class="text-sm text-gray-400 mt-1">Optional: Provide a JSON object for chart data, e.g. <code>{"Jan":100,"Feb":150}</code></p>
+            <p class="text-sm theme-aware-text-muted mt-1">Optional: Provide a JSON object for chart data, e.g. <code>{"Jan":100,"Feb":150}</code></p>
         </div>
 
         <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700">Update Report</button>

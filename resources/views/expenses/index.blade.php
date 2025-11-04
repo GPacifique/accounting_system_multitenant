@@ -1,12 +1,34 @@
 @extends('layouts.app')
 
-@section('title', 'Expenses')
+@section('title', 'Expense Management - Track All Construction Costs | SiteLedger')
+@section('meta_description', 'Comprehensive expense management for construction companies. Track materials, labor, equipment, and overhead costs. Monitor project expenses, manage vendor payments, and analyze cost patterns.')
+@section('meta_keywords', 'expense management, construction costs, material expenses, labor costs, equipment expenses, vendor payments, cost tracking, construction accounting')
 
 @section('content')
 <div class="container mx-auto px-4 py-6">
+    {{-- Role Check: Admin or Accountant Only --}}
+    @unless(auth()->user()->hasAnyRole(['admin', 'accountant']))
+        <div class="p-4 mb-4 bg-red-50 border border-red-200 rounded text-red-800">
+            <i class="fas fa-exclamation-triangle"></i> You do not have permission to access this page.
+        </div>
+        @php
+            abort(403, 'Unauthorized access');
+        @endphp
+    @endunless
+
     <div class="flex items-center justify-between mb-6">
         <h1 class="text-2xl font-semibold">Expenses</h1>
-        <a href="{{ route('expenses.create') }}" class="px-4 py-2 bg-indigo-600 text-white rounded">+ New Expense</a>
+        <div class="flex gap-2">
+            {{-- Download Buttons --}}
+            <x-download-buttons 
+                route="expenses.export" 
+                filename="expenses" 
+                size="sm" />
+            
+            @if(auth()->user()->hasAnyRole(['admin', 'accountant']))
+                <a href="{{ route('expenses.create') }}" class="px-4 py-2 bg-indigo-600 text-white rounded">+ New Expense</a>
+            @endif
+        </div>
     </div>
 
     @if(session('success'))
@@ -17,21 +39,21 @@
     @endif
 
     {{-- Daily category stats --}}
-    <div class="mb-6 bg-white rounded-lg shadow p-4">
+    <div class="mb-6 theme-aware-bg-card rounded-lg shadow p-4">
         <h2 class="text-lg font-semibold mb-3">Daily totals by category</h2>
 
         @if(empty($dailyTotals))
-            <p class="text-sm text-gray-500">No stats available.</p>
+            <p class="text-sm theme-aware-text-muted">No stats available.</p>
         @else
             <div class="overflow-x-auto">
                 <table class="w-full text-left border">
                     <thead class="bg-gray-50">
                         <tr>
-                            <th class="py-2 px-3 border-r text-sm text-gray-600">Date</th>
+                            <th class="py-2 px-3 border-r text-sm theme-aware-text-secondary">Date</th>
                             @foreach($categories as $cat)
-                                <th class="py-2 px-3 border-r text-sm text-gray-600">{{ $cat }}</th>
+                                <th class="py-2 px-3 border-r text-sm theme-aware-text-secondary">{{ $cat }}</th>
                             @endforeach
-                            <th class="py-2 px-3 text-sm text-gray-600">Daily Total</th>
+                            <th class="py-2 px-3 text-sm theme-aware-text-secondary">Daily Total</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -68,19 +90,19 @@
         @endif
     </div>
 
-    <div class="bg-white rounded-lg shadow overflow-x-auto">
+    <div class="theme-aware-bg-card rounded-lg shadow overflow-x-auto">
         <table class="w-full text-left">
             <thead class="bg-gray-50 border-b">
                 <tr>
-                    <th class="py-3 px-4 text-sm text-gray-600">#</th>
-                     <th class="py-3 px-4 text-sm text-gray-600">Date</th>
-                    <th class="py-3 px-4 text-sm text-gray-600">Category</th>
-                    <th class="py-3 px-4 text-sm text-gray-600">Description</th>
-                    <th class="py-3 px-4 text-sm text-gray-600">Amount</th>
-                    <th class="py-3 px-4 text-sm text-gray-600">Project</th>
-                    <th class="py-3 px-4 text-sm text-gray-600">Client</th>
-                    <th class="py-3 px-4 text-sm text-gray-600">Method</th>
-                    <th class="py-3 px-4 text-sm text-gray-600 text-right">Actions</th>
+                    <th class="py-3 px-4 text-sm theme-aware-text-secondary">#</th>
+                     <th class="py-3 px-4 text-sm theme-aware-text-secondary">Date</th>
+                    <th class="py-3 px-4 text-sm theme-aware-text-secondary">Category</th>
+                    <th class="py-3 px-4 text-sm theme-aware-text-secondary">Description</th>
+                    <th class="py-3 px-4 text-sm theme-aware-text-secondary">Amount</th>
+                    <th class="py-3 px-4 text-sm theme-aware-text-secondary">Project</th>
+                    <th class="py-3 px-4 text-sm theme-aware-text-secondary">Client</th>
+                    <th class="py-3 px-4 text-sm theme-aware-text-secondary">Method</th>
+                    <th class="py-3 px-4 text-sm theme-aware-text-secondary text-right">Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -104,7 +126,7 @@
                         </td>
                     </tr>
                 @empty
-                    <tr><td colspan="6" class="py-4 px-4 text-center text-gray-500">No expenses found.</td></tr>
+                    <tr><td colspan="6" class="py-4 px-4 text-center theme-aware-text-muted">No expenses found.</td></tr>
                 @endforelse
             </tbody>
         </table>

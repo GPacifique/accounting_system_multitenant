@@ -4,12 +4,24 @@
 
 @section('content')
 <div class="container-fluid py-4">
+    {{-- Role Check: Admin or Manager Only --}}
+    @unless(auth()->user()->hasAnyRole(['admin', 'manager']))
+        <div class="alert alert-danger">
+            <i class="fas fa-exclamation-triangle"></i> You do not have permission to access this page.
+        </div>
+        @php
+            abort(403, 'Unauthorized access');
+        @endphp
+    @endunless
+
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2><i class="fa-solid fa-boxes-stacked me-2"></i> Orders</h2>
         <div class="d-flex gap-2">
-            <a href="{{ route('orders.create') }}" class="btn btn-primary">
-                <i class="fa-solid fa-plus me-1"></i> New Order
-            </a>
+            @if(auth()->user()->hasAnyRole(['admin', 'manager']))
+                <a href="{{ route('orders.create') }}" class="btn btn-primary">
+                    <i class="fa-solid fa-plus me-1"></i> New Order
+                </a>
+            @endif
             <a href="{{ route('orders.index') }}" class="btn btn-outline-secondary" title="Reset filters">
                 <i class="fa-solid fa-arrows-rotate"></i>
             </a>
@@ -82,7 +94,7 @@
                                 <small class="text-muted">{{ $order->customer_email ?? '' }}</small>
                             </td>
                             <td>
-                                <span class="badge bg-light text-dark">{{ $order->items_count ?? $order->items->count() ?? 0 }}</span>
+                                <span class="badge bg-light text-success">{{ $order->items_count ?? $order->items->count() ?? 0 }}</span>
                             </td>
                             <td>{{ number_format($order->total ?? ($order->items->sum('line_total') ?? 0), 2) }}</td>
                             <td>

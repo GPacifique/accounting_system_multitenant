@@ -5,17 +5,47 @@ namespace App\Http\Controllers;
 
 
 use App\Models\Worker;
+use App\Traits\Downloadable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
 
 
 class WorkerController extends Controller
 {
+    use Downloadable;
+
 // Display a listing of workers
-public function index()
+public function index(Request $request)
 {
-$workers = Worker::orderBy('last_name')->paginate(15);
-return view('workers.index', compact('workers'));
+	$q = trim((string) $request->get('q'));
+
+	$workersQuery = Worker::query();
+	if ($q !== '') {
+		$workersQuery->where(function ($w) use ($q) {
+			$w->where('first_name', 'like', "%{$q}%")
+			  ->orWhere('last_name', 'like', "%{$q}%")
+			  ->orWhere('email', 'like', "%{$q}%")
+			  ->orWhere('phone', 'like', "%{$q}%")
+			  ->orWhere('position', 'like', "%{$q}%");
+		});
+	}
+	$workers = $workersQuery->orderBy('last_name')->paginate(15)->appends($request->query());
+
+	// Daily payments history from first payment date to today
+	$firstPaymentDate = \App\Models\WorkerPayment::min('paid_on');
+	$payments = \App\Models\WorkerPayment::with('worker')
+		->when($q !== '', function ($pq) use ($q) {
+			$pq->whereHas('worker', function ($w) use ($q) {
+				$w->where('first_name', 'like', "%{$q}%")
+				  ->orWhere('last_name', 'like', "%{$q}%");
+			});
+		})
+		->orderByDesc('paid_on')
+		->orderByDesc('id')
+		->paginate(25)
+		->appends($request->query());
+
+	return view('workers.index', compact('workers', 'payments', 'firstPaymentDate'));
 }
 
 
@@ -57,7 +87,9 @@ return redirect()->route('workers.show', $worker)->with('success', 'Worker creat
 // Display the specified worker
 public function show(Worker $worker)
 {
-return view('workers.show', compact('worker'));
+	// eager load recent payments
+	$worker->load(['payments' => function($q){ $q->orderByDesc('paid_on')->limit(30); }]);
+	return view('workers.show', compact('worker'));
 }
 
 
@@ -65,6 +97,47 @@ return view('workers.show', compact('worker'));
 public function edit(Worker $worker)
 {
 return view('workers.edit', compact('worker'));
+}
+
+// BULK store daily payments for selected workers
+public function bulkStorePayments(Request $request)
+{
+	$data = $request->validate([
+		'paid_on' => 'required|date',
+		'worker_ids' => 'required|array',
+		'worker_ids.*' => 'exists:workers,id',
+		'amounts' => 'required|array',
+	]);
+
+	$paidOn = $data['paid_on'];
+	$workerIds = $data['worker_ids'];
+	$amounts = $request->input('amounts', []);
+
+	$created = 0; $updated = 0;
+	foreach ($workerIds as $wid) {
+		$amount = (float) ($amounts[$wid] ?? 0);
+		if ($amount <= 0) { continue; }
+
+		// upsert by (worker_id, paid_on)
+		$existing = \App\Models\WorkerPayment::where('worker_id', $wid)
+			->whereDate('paid_on', $paidOn)
+			->first();
+
+		if ($existing) {
+			$existing->update(['amount' => $amount]);
+			$updated++;
+		} else {
+			\App\Models\WorkerPayment::create([
+				'worker_id' => $wid,
+				'paid_on' => $paidOn,
+				'amount' => $amount,
+			]);
+			$created++;
+		}
+	}
+
+	return redirect()->route('workers.index')
+		->with('success', "Payments saved: {$created} new, {$updated} updated.");
 }
 // Update the specified worker
 public function update(Request $request, Worker $worker)
@@ -101,6 +174,60 @@ public function destroy(Worker $worker)
 {
 $worker->delete();
 return redirect()->route('workers.index')->with('success', 'Worker deleted.');
+}
+
+/**
+ * Export workers as CSV
+ */
+public function exportCsv(Request $request)
+{
+    $filename = $request->get('filename', 'workers');
+    
+    $workers = Worker::latest()->get();
+    
+    $headers = [
+        'id' => 'ID',
+        'name' => 'Name',
+        'position' => 'Position',
+        'contact' => 'Contact',
+        'status' => 'Status',
+        'daily_rate' => 'Daily Rate (RWF)',
+        'created_at' => 'Hired Date'
+    ];
+    
+    // Transform data for CSV
+    $csvData = $workers->map(function ($worker) {
+        return [
+            'id' => $worker->id,
+            'name' => $worker->name ?? 'N/A',
+            'position' => $worker->position ?? 'N/A',
+            'contact' => $worker->contact ?? 'N/A',
+            'status' => ucfirst($worker->status ?? 'active'),
+            'daily_rate' => $worker->daily_rate ?? 0,
+            'created_at' => $worker->created_at->format('Y-m-d H:i:s')
+        ];
+    });
+    
+    return $this->downloadCsv($csvData, $filename, array_keys($headers));
+}
+
+/**
+ * Export workers as PDF
+ */
+public function exportPdf(Request $request)
+{
+    $filename = $request->get('filename', 'workers');
+    
+    $workers = Worker::latest()->get();
+    
+    $html = $this->generatePdfHtml('exports.workers-pdf', [
+        'data' => $workers,
+        'title' => 'Workers Report',
+        'subtitle' => 'Complete list of all workers',
+        'totalRecords' => $workers->count()
+    ]);
+    
+    return $this->downloadPdf($html, $filename);
 }
 }
 

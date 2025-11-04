@@ -1,8 +1,8 @@
-<nav class="bg-white border-b border-gray-200">
+<nav class="theme-aware-bg-card border-b border-gray-200">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
             <div class="flex">
-                <a href="{{ url('/') }}" class="flex items-center text-lg font-semibold text-gray-800">
+                <a href="{{ url('/') }}" class="flex items-center text-lg font-semibold theme-aware-text">
                     {{ config('app.name', 'Laravel') }}
                 </a>
             </div>

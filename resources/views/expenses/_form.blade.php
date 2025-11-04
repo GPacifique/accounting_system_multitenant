@@ -23,7 +23,7 @@
             @endforeach
         </datalist>
         @error('category') <p class="text-red-600 text-sm mt-1">{{ $message }}</p> @enderror
-        <p class="text-gray-400 text-xs mt-1">Select a common category or type a custom one.</p>
+        <p class="theme-aware-text-muted text-xs mt-1">Select a common category or type a custom one.</p>
     </div>
 
     <!-- Description -->

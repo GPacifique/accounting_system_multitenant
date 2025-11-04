@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Str;
+use Carbon\Carbon;
 
 class Income extends Model
 {
@@ -37,11 +39,37 @@ class Income extends Model
      */
     public const PAYMENT_STATUSES = [
         'Pending',
-        'Partial',
+        'partially paid',
         'Paid',
         'Overdue',
     ];
  
+    /**
+     * Automatically set invoice number on create if not provided.
+     */
+    protected static function booted(): void
+    {
+        static::creating(function (Income $income) {
+            if (empty($income->invoice_number)) {
+                $income->invoice_number = static::generateInvoiceNumber();
+            }
+        });
+    }
+
+    /**
+     * Generate a unique invoice number.
+     * Format: INV-YYYYMMDD-XXXX (alphanumeric suffix)
+     */
+    public static function generateInvoiceNumber(int $suffixLength = 4): string
+    {
+        $date = Carbon::now()->format('Ymd');
+        do {
+            $suffix = strtoupper(Str::random($suffixLength));
+            $candidate = "INV-{$date}-{$suffix}";
+        } while (static::where('invoice_number', $candidate)->exists());
+
+        return $candidate;
+    }
 
     /**
      * Expense belongs to a Client (vendor / supplier / worker).

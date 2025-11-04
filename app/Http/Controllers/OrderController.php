@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Payment;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
 {
@@ -19,9 +21,34 @@ class OrderController extends Controller
     /**
      * Display a listing of orders.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $orders = Order::withCount('items')->latest()->paginate(15);
+        $q = trim((string) $request->get('q'));
+        $status = $request->get('status');
+        $from = $request->get('from');
+        $to = $request->get('to');
+
+        $ordersQuery = Order::withCount('items');
+        if ($q !== '') {
+            $ordersQuery->where(function ($o) use ($q) {
+                $o->where('customer_name', 'like', "%{$q}%")
+                  ->orWhere('customer_email', 'like', "%{$q}%")
+                  ->orWhere('id', $q);
+            })->orWhereHas('items', function ($i) use ($q) {
+                $i->where('product_name', 'like', "%{$q}%");
+            });
+        }
+        if (!empty($status)) {
+            $ordersQuery->where('status', $status);
+        }
+        if (!empty($from)) {
+            $ordersQuery->whereDate('created_at', '>=', $from);
+        }
+        if (!empty($to)) {
+            $ordersQuery->whereDate('created_at', '<=', $to);
+        }
+
+        $orders = $ordersQuery->latest()->paginate(15)->appends($request->query());
         return view('orders.index', compact('orders'));
     }
 
@@ -30,8 +57,8 @@ class OrderController extends Controller
      */
     public function create()
     {
-        // You may pass customers/products lists here
-        return view('orders.create');
+        $products = Product::all();
+        return view('orders.create', compact('products'));
     }
 
     /**
@@ -42,38 +69,32 @@ class OrderController extends Controller
         $validated = $request->validate([
             'customer_name' => 'required|string|max:255',
             'customer_email' => 'nullable|email|max:255',
-            'status' => 'required|string|in:pending,processing,completed,cancelled',
             'notes' => 'nullable|string',
-            // Optional: items[] with product_id, qty, price
-            'items' => 'nullable|array',
-            'items.*.product_name' => 'required_with:items|string|max:255',
-            'items.*.quantity' => 'required_with:items|integer|min:1',
-            'items.*.unit_price' => 'required_with:items|numeric|min:0',
+            'items' => 'required|array|min:1',
+            'items.*.product_id' => 'required|exists:products,id',
+            'items.*.quantity' => 'required|integer|min:1',
+            'items.*.price' => 'required|numeric|min:0',
         ]);
 
-        DB::transaction(function () use ($validated, $request, &$order) {
+        DB::transaction(function () use ($validated, &$order) {
             $order = Order::create([
                 'customer_name' => $validated['customer_name'],
                 'customer_email' => $validated['customer_email'] ?? null,
-                'status' => $validated['status'],
+                'status' => 'pending',
                 'notes' => $validated['notes'] ?? null,
                 'total' => 0,
             ]);
 
             $total = 0;
-            if ($request->filled('items')) {
-                foreach ($request->input('items') as $item) {
-                    $lineTotal = $item['quantity'] * $item['unit_price'];
-                    $order->items()->create([
-                        'product_name' => $item['product_name'],
-                        'quantity' => $item['quantity'],
-                        'unit_price' => $item['unit_price'],
-                        'line_total' => $lineTotal,
-                    ]);
-                    $total += $lineTotal;
-                }
+            foreach ($validated['items'] as $item) {
+                $lineTotal = $item['quantity'] * $item['price'];
+                $order->items()->create([
+                    'product_id' => $item['product_id'],
+                    'quantity' => $item['quantity'],
+                    'price' => $item['price'],
+                ]);
+                $total += $lineTotal;
             }
-
             $order->update(['total' => $total]);
         });
 
@@ -187,7 +208,7 @@ class OrderController extends Controller
                 'amount' => $validated['amount'],
                 'method' => $validated['method'],
                 'reference' => $validated['reference'] ?? null,
-                'user_id' => auth()->id(),
+                'user_id' => Auth::id(),
                 'order_id' => $order->id,
             ]);
 

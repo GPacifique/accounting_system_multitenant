@@ -10,10 +10,24 @@ class Payment extends Model
     use HasFactory;
 
     protected $fillable = [
+        'employee_id',
         'amount',
         'method',
         'reference',
+        'status',
     ];
+
+    protected $casts = [
+        'amount' => 'decimal:2',
+    ];
+
+    /**
+     * Employee relationship
+     */
+    public function employee()
+    {
+        return $this->belongsTo(Employee::class);
+    }
 
     /**
      * Example: if payments belong to a user

@@ -1,6 +1,4 @@
 @extends('layouts.app')
-@vite(['resources/css/app.css', 'resources/js/app.js'])
-@vite(['resources/css/app.css', 'resources/js/app.js'])
 @section('content')
 <div class="container mx-auto p-4">
     <h1 class="text-2xl font-bold mb-4">Edit Income Record</h1>
@@ -15,7 +13,7 @@
         </div>
     @endif
 
-    <form action="{{ route('incomes.update', $income->id) }}" method="POST" class="bg-white p-6 rounded shadow-md">
+    <form action="{{ route('incomes.update', $income->id) }}" method="POST" class="theme-aware-bg-card p-6 rounded shadow-md">
         @csrf
         @method('PUT')
 
@@ -33,7 +31,11 @@
 
         <div class="mb-4">
             <label class="block font-semibold mb-1">Invoice Number</label>
-            <input type="text" name="invoice_number" value="{{ old('invoice_number', $income->invoice_number) }}" class="w-full border p-2 rounded" required>
+            <div class="flex gap-2">
+                <input id="invoice_number" type="text" name="invoice_number" value="{{ old('invoice_number', $income->invoice_number) }}" class="flex-1 border p-2 rounded" required>
+                <button type="button" id="btn-generate-invoice" class="bg-gray-100 theme-aware-text px-3 py-2 rounded border">Generate</button>
+            </div>
+            <p class="text-xs theme-aware-text-muted mt-1">Click Generate to replace with a new auto-generated number.</p>
         </div>
 
         <div class="mb-4">
@@ -43,12 +45,12 @@
 
         <div class="mb-4">
             <label class="block font-semibold mb-1">Payment Status</label>
-            <select name="payment_status" class="w-full border p-2 rounded" required>
-                <option value="Paid" {{ old('payment_status', $income->payment_status) == 'Paid' ? 'selected' : '' }}>Paid</option>
-                <option value="Pending" {{ old('payment_status', $income->payment_status) == 'Pending' ? 'selected' : '' }}>Pending</option>
-                <option value="partially paid" {{ old('payment_status', $income->payment_status) == 'partially paid' ? 'selected' : '' }}>Partially Paid</option>
-                <option value="Overdue" {{ old('payment_status', $income->payment_status) == 'Overdue' ? 'selected' : '' }}>Overdue</option>
-            </select>
+                <select name="payment_status" class="w-full border p-2 rounded" required>
+                    <option value="Paid" {{ old('payment_status', $income->payment_status) == 'Paid' ? 'selected' : '' }}>Paid</option>
+                    <option value="Pending" {{ old('payment_status', $income->payment_status) == 'Pending' ? 'selected' : '' }}>Pending</option>
+                    <option value="partially paid" {{ old('payment_status', $income->payment_status) == 'partially paid' ? 'selected' : '' }}>Partially Paid</option>
+                    <option value="Overdue" {{ old('payment_status', $income->payment_status) == 'Overdue' ? 'selected' : '' }}>Overdue</option>
+                </select>
         </div>
 
         <div class="mb-4">
@@ -67,7 +69,24 @@
         </div>
 
         <button type="submit" class="bg-yellow-500 text-white px-4 py-2 rounded">Update Income</button>
-        <a href="{{ route('incomes.index') }}" class="ml-2 text-gray-600 hover:underline">Cancel</a>
+        <a href="{{ route('incomes.index') }}" class="ml-2 theme-aware-text-secondary hover:underline">Cancel</a>
     </form>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const btn = document.getElementById('btn-generate-invoice');
+            const input = document.getElementById('invoice_number');
+            if (btn && input) {
+                btn.addEventListener('click', function() {
+                    const pad = (n) => n.toString().padStart(2, '0');
+                    const d = new Date();
+                    const date = d.getFullYear().toString() + pad(d.getMonth()+1) + pad(d.getDate());
+                    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+                    let suffix = '';
+                    for (let i = 0; i < 4; i++) suffix += chars[Math.floor(Math.random()*chars.length)];
+                    input.value = `INV-${date}-${suffix}`;
+                });
+            }
+        });
+    </script>
 </div>
 @endsection

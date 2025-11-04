@@ -1,14 +1,36 @@
 @extends('layouts.app')
 
-@section('title', 'Payments')
+@section('title', 'Payment Tracking System - Worker & Vendor Payments | SiteLedger')
+@section('meta_description', 'Comprehensive payment management system for construction companies. Track worker payments, vendor payments, manage payroll, and monitor all outgoing payments with detailed records and reporting.')
+@section('meta_keywords', 'payment tracking, worker payments, vendor payments, construction payroll, payment management, outgoing payments, payment records')
 
 @section('content')
 <div class="container-fluid py-4">
+    {{-- Role Check: Admin or Accountant Only --}}
+    @unless(auth()->user()->hasAnyRole(['admin', 'accountant']))
+        <div class="alert alert-danger">
+            <i class="fas fa-exclamation-triangle"></i> You do not have permission to access this page.
+        </div>
+        @php
+            abort(403, 'Unauthorized access');
+        @endphp
+    @endunless
+
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2><i class="fa-solid fa-money-bill me-2"></i> Payments</h2>
-        <a href="{{ route('payments.create') }}" class="btn btn-primary">
-            <i class="fa fa-plus me-1"></i> New Payment
-        </a>
+        <div class="d-flex gap-2">
+            {{-- Download Buttons --}}
+            <x-download-buttons 
+                route="payments.export" 
+                filename="payments" 
+                size="sm" />
+            
+            @if(auth()->user()->hasAnyRole(['admin', 'accountant']))
+                <a href="{{ route('payments.create') }}" class="btn btn-primary">
+                    <i class="fa fa-plus me-1"></i> New Payment
+                </a>
+            @endif
+        </div>
     </div>
 
     <!-- Flash messages -->
@@ -37,13 +59,19 @@
                         <tr>
                             <td>{{ $payment->id }}</td>
                             <td>{{ $payment->reference ?? '—' }}</td>
-                            <td>{{ $payment->employee->name ?? 'N/A' }}</td>
+                            <td>
+                                @if($payment->employee)
+                                    {{ $payment->employee->full_name }}
+                                @else
+                                    <span class="text-muted">N/A</span>
+                                @endif
+                            </td>
                             <td>{{ ucfirst($payment->method) }}</td>
-                            <td>{{ number_format($payment->amount, 2) }}</td>
+                            <td>RWF {{ number_format($payment->amount, 2) }}</td>
                             <td>{{ optional($payment->created_at)->format('Y-m-d') }}</td>
                             <td>
                                 <span class="badge bg-{{ $payment->status === 'completed' ? 'success' : 'secondary' }}">
-                                    {{ ucfirst($payment->status) }}
+                                    {{ ucfirst($payment->status ?? 'pending') }}
                                 </span>
                             </td>
                             <td class="text-end">

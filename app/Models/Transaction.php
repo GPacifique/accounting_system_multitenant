@@ -18,6 +18,7 @@ class Transaction extends Model
      * The attributes that are mass assignable.
      */
     protected $fillable = [
+        'reference',
         'date',
         'type',      // e.g. 'revenue' | 'expense' | 'payroll'
         'category',  // e.g. 'subscriptions', 'rent', 'salaries'

@@ -2,6 +2,16 @@
 
 @section('content')
 <div class="container">
+    {{-- Role Check: Admin Only --}}
+    @unless(auth()->user()->hasRole('admin'))
+        <div class="alert alert-danger">
+            <i class="fas fa-exclamation-triangle"></i> You do not have permission to access this page.
+        </div>
+        @php
+            abort(403, 'Unauthorized access');
+        @endphp
+    @endunless
+
     <h2 class="mb-4">Application Settings</h2>
 
     @if(session('success'))

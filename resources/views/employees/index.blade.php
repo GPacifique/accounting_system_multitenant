@@ -6,13 +6,25 @@
 
 @section('content')
 <div class="container mx-auto px-4">
+    {{-- Role Check: Admin or Manager Only --}}
+    @unless(auth()->user()->hasAnyRole(['admin', 'manager']))
+        <div class="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded mb-4">
+            <i class="fas fa-exclamation-triangle"></i> You do not have permission to access this page.
+        </div>
+        @php
+            abort(403, 'Unauthorized access');
+        @endphp
+    @endunless
+
     <h1 class="text-2xl font-bold mb-4">Employees</h1>
     <p class="mb-4">Manage your employees efficiently.</p>
 
     <div class="mb-4">
-        <a href="{{ route('employees.create') }}" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded">
-            Add Employee
-        </a>
+        @if(auth()->user()->hasAnyRole(['admin', 'manager']))
+            <a href="{{ route('employees.create') }}" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded">
+                Add Employee
+            </a>
+        @endif
     </div>
 
     @if(session('success'))
@@ -72,7 +84,7 @@
                 @empty
                 <tr>
                     {{-- There are 12 columns above, so colspan=12 --}}
-                    <td colspan="12" class="py-4 px-4 text-center text-gray-500">
+                    <td colspan="12" class="py-4 px-4 text-center theme-aware-text-muted">
                         No employees found.
                     </td>
                 </tr>

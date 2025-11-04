@@ -3,7 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome | BuilMate</title>
+    <title>SiteLedger - Construction Finance Management System | Sign In</title>
+    <meta name="description" content="Sign in to SiteLedger to manage construction finances: track projects, incomes, expenses, worker payments, and comprehensive reports. Professional construction finance management software for Rwanda.">
+    <meta name="keywords" content="siteledger, sign in, construction finance, projects, expenses, incomes, worker payments, accounting, Rwanda construction management">
+    <link rel="canonical" href="{{ url()->current() }}">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="SiteLedger - Construction Finance Management System">
+    <meta property="og:description" content="Manage your construction company's finances with SiteLedger: projects, invoices, expenses, and worker payments in one place.">
+    <meta property="og:image" content="{{ asset('images/logo/siteledger-logo.svg') }}">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ url()->current() }}">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="SiteLedger - Construction Finance Management">
+    <meta name="twitter:description" content="Professional construction finance management software for tracking projects, expenses, and worker payments.">
+    
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <style>
         body, html {

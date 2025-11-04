@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -12,17 +11,65 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Call role & permission seeder
+        $this->command->info('🌱 Starting database seeding...');
+        $this->command->newLine();
+
+        // Step 1: Roles and Permissions
+        $this->command->info('1️⃣  Seeding Roles & Permissions...');
         $this->call(RolePermissionSeeder::class);
+        $this->command->newLine();
 
-        // Create a test user
-        $user = User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-            'password' => bcrypt('password'), // don't forget password
-        ]);
+        // Step 2: Users
+        $this->command->info('2️⃣  Seeding Users...');
+        $this->call(UserSeeder::class);
+        $this->command->newLine();
 
-        // Give test user the admin role
-        $user->assignRole('admin');
+        // Step 3: Clients
+        $this->command->info('3️⃣  Seeding Clients...');
+        $this->call(ClientSeeder::class);
+        $this->command->newLine();
+
+        // Step 4: Projects
+        $this->command->info('4️⃣  Seeding Projects...');
+        $this->call(ProjectSeeder::class);
+        $this->command->newLine();
+
+        // Step 5: Incomes
+        $this->command->info('5️⃣  Seeding Incomes...');
+        $this->call(IncomeSeeder::class);
+        $this->command->newLine();
+
+        // Step 6: Expenses
+        $this->command->info('6️⃣  Seeding Expenses...');
+        $this->call(ExpenseSeeder::class);
+        $this->command->newLine();
+
+        // Step 7: Workers
+        $this->command->info('7️⃣  Seeding Workers...');
+        $this->call(WorkerSeeder::class);
+        $this->command->newLine();
+
+        // Step 8: Employees
+        $this->command->info('8️⃣  Seeding Employees...');
+        $this->call(EmployeeSeeder::class);
+        $this->command->newLine();
+
+        $this->command->info('✅ Database seeding completed successfully!');
+        $this->command->newLine();
+        
+        if (!app()->environment('production')) {
+            $this->command->info('🔐 Development Login Credentials:');
+            $this->command->table(
+                ['Role', 'Email', 'Password'],
+                [
+                    ['Admin', 'admin@siteledger.com', 'SecureAdmin123!'],
+                    ['Manager', 'manager@siteledger.com', 'SecureManager123!'],
+                    ['Accountant', 'accountant@siteledger.com', 'SecureAccountant123!'],
+                    ['User', 'user@siteledger.com', 'SecureUser123!'],
+                ]
+            );
+        } else {
+            $this->command->info('🔒 Production environment detected - no test users created.');
+        }
     }
 }

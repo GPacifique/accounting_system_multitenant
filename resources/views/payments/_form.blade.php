@@ -19,10 +19,10 @@
         <label for="employee_id" class="form-label">Employee</label>
         <select id="employee_id" name="employee_id" class="form-select @error('employee_id') is-invalid @enderror">
             <option value="">— None —</option>
-            @foreach($wor ?? \App\Models\Worker::limit(100)->get() as $work)
-                <option value="{{ $work->id }}"
-                    {{ old('worker_id', $payment->worker_id ?? '') == $work->id ? 'selected' : '' }}>
-                    {{ $work->name ?? ($work->full_name ?? '—') }}
+            @foreach(\App\Models\Employee::orderBy('first_name')->get() as $employee)
+                <option value="{{ $employee->id }}"
+                    {{ old('employee_id', $payment->employee_id ?? '') == $employee->id ? 'selected' : '' }}>
+                    {{ $employee->full_name }}
                 </option>
             @endforeach
         </select>

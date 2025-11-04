@@ -4,7 +4,9 @@
 @extends('layouts.app')
 @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-@section('title', 'Dashboard')
+@section('title', 'Financial Dashboard - Construction Project Management & Analytics | SiteLedger')
+@section('meta_description', 'Comprehensive construction finance dashboard with real-time analytics. Track project income, expenses, worker payments, and generate detailed financial reports for your construction business.')
+@section('meta_keywords', 'construction finance dashboard, project management analytics, construction financial reports, real-time project tracking, construction business intelligence, financial overview')
 
 @php
 use Carbon\Carbon;
@@ -12,56 +14,260 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 $today = Carbon::today();
+$yesterday = $today->copy()->subDay();
+$startOfWeek = $today->copy()->startOfWeek();
+$endOfWeek = $today->copy()->endOfWeek();
 $startOfMonth = $today->copy()->startOfMonth();
 $startOfYear = $today->copy()->startOfYear();
 
+// Helper function
+$has = function(string $table, ?string $column = null): bool {
+    if (!Schema::hasTable($table)) return false;
+    return $column ? Schema::hasColumn($table, $column) : true;
+};
+
+// TODAY'S STATS
+$todayPayments = $has('payments', 'amount') 
+    ? DB::table('payments')->whereBetween('created_at', [$today, $today->endOfDay()])->sum('amount') 
+    : 0;
+$todayExpenses = $has('expenses', 'amount')
+    ? DB::table('expenses')->whereBetween('created_at', [$today, $today->endOfDay()])->sum('amount')
+    : 0;
+$todayIncomes = $has('incomes', 'amount_received')
+    ? DB::table('incomes')->whereBetween('received_at', [$today, $today->endOfDay()])->sum('amount_received')
+    : 0;
+
+// WEEK'S STATS
+$weekPayments = $has('payments', 'amount')
+    ? DB::table('payments')->whereBetween('created_at', [$startOfWeek, $endOfWeek->endOfDay()])->sum('amount')
+    : 0;
+$weekExpenses = $has('expenses', 'amount')
+    ? DB::table('expenses')->whereBetween('created_at', [$startOfWeek, $endOfWeek->endOfDay()])->sum('amount')
+    : 0;
+$weekIncomes = $has('incomes', 'amount_received')
+    ? DB::table('incomes')->whereBetween('received_at', [$startOfWeek, $endOfWeek->endOfDay()])->sum('amount_received')
+    : 0;
+
+// PAYMENT STATUS
+$paidPayments = $has('incomes', 'amount_received')
+    ? DB::table('incomes')->sum('amount_received')
+    : 0;
+$totalPaymentsDue = $has('projects', 'contract_value')
+    ? DB::table('projects')->sum('contract_value')
+    : 0;
+$remainingPayments = max(0, $totalPaymentsDue - $paidPayments);
+
+// PAYMENT TYPES
+$advancePayments = $has('incomes') && Schema::hasColumn('incomes', 'type')
+    ? DB::table('incomes')->where('type', 'advance')->sum('amount_received')
+    : 0;
+$regularPayments = $paidPayments - $advancePayments;
+
+// CATEGORY TOTALS
+$incomeByCategory = $has('incomes') && Schema::hasColumn('incomes', 'category')
+    ? DB::table('incomes')->select('category', DB::raw('SUM(amount_received) as total'))->groupBy('category')->get()
+    : collect();
+
+$expenseByCategory = $has('expenses') && Schema::hasColumn('expenses', 'category')
+    ? DB::table('expenses')->select('category', DB::raw('SUM(amount) as total'))->groupBy('category')->get()
+    : collect();
+
 // Workers
-$totalWorkers = Schema::hasTable('workers') ? \App\Models\Worker::count() : 0;
-$activeWorkers = Schema::hasTable('workers') && Schema::hasColumn('workers', 'status')
+$totalWorkers = $has('workers') ? \App\Models\Worker::count() : 0;
+$activeWorkers = $has('workers', 'status')
     ? \App\Models\Worker::where('status','active')->count()
     : $totalWorkers;
-$recentWorkers = Schema::hasTable('workers') ? \App\Models\Worker::latest()->limit(6)->get() : collect();
+$recentWorkers = $has('workers') ? \App\Models\Worker::latest()->limit(6)->get() : collect();
 
-// Payments
-$paymentsTotal = Schema::hasTable('payments') && Schema::hasColumn('payments','amount')
+// ENHANCED WORKER STATS
+$workersThisMonth = $has('workers')
+    ? \App\Models\Worker::whereBetween('created_at', [$startOfMonth, $today->endOfDay()])->count()
+    : 0;
+$workersTotalSalary = $has('workers', 'salary')
+    ? DB::table('workers')->sum('salary')
+    : 0;
+$workersAvgSalary = $totalWorkers > 0 && $has('workers', 'salary')
+    ? round($workersTotalSalary / $totalWorkers, 0)
+    : 0;
+$workersInactive = $has('workers', 'status')
+    ? \App\Models\Worker::where('status', 'inactive')->count()
+    : 0;
+
+// EMPLOYEE STATS
+$totalEmployees = $has('employees') ? DB::table('employees')->count() : 0;
+$employeesThisMonth = $has('employees')
+    ? DB::table('employees')->whereBetween('created_at', [$startOfMonth, $today->endOfDay()])->count()
+    : 0;
+$employeesTotalSalary = $has('employees', 'salary')
+    ? DB::table('employees')->sum('salary')
+    : 0;
+$employeesAvgSalary = $totalEmployees > 0 && $has('employees', 'salary')
+    ? round($employeesTotalSalary / $totalEmployees, 0)
+    : 0;
+
+// COMBINED WORKFORCE
+$totalWorkforce = $totalWorkers + $totalEmployees;
+$totalPayroll = $workersTotalSalary + $employeesTotalSalary;
+
+// ORDER STATS
+$totalOrders = $has('orders') ? DB::table('orders')->count() : 0;
+$ordersThisMonth = $has('orders')
+    ? DB::table('orders')->whereBetween('created_at', [$startOfMonth, $today->endOfDay()])->count()
+    : 0;
+$ordersPending = $has('orders', 'status')
+    ? DB::table('orders')->where('status', 'pending')->count()
+    : 0;
+$ordersCompleted = $has('orders', 'status')
+    ? DB::table('orders')->where('status', 'completed')->count()
+    : 0;
+$ordersProcessing = $has('orders', 'status')
+    ? DB::table('orders')->where('status', 'processing')->count()
+    : 0;
+$ordersTotalValue = $has('orders', 'total_amount')
+    ? DB::table('orders')->sum('total_amount')
+    : 0;
+
+// CLIENT STATS
+$totalClients = $has('clients') ? DB::table('clients')->count() : 0;
+$clientsThisMonth = $has('clients')
+    ? DB::table('clients')->whereBetween('created_at', [$startOfMonth, $today->endOfDay()])->count()
+    : 0;
+$activeClients = $has('clients', 'status')
+    ? DB::table('clients')->where('status', 'active')->count()
+    : $totalClients;
+
+// Payments - all
+$paymentsTotal = $has('payments', 'amount')
     ? DB::table('payments')->sum('amount')
     : 0;
-$paymentsThisMonth = Schema::hasTable('payments') && Schema::hasColumn('payments','amount')
+$paymentsThisMonth = $has('payments', 'amount')
     ? DB::table('payments')->whereBetween('created_at', [$startOfMonth, $today->endOfDay()])->sum('amount')
     : 0;
-$recentPayments = Schema::hasTable('payments') ? \App\Models\Payment::latest()->limit(7)->get() : collect();
+$recentPayments = $has('payments') ? \App\Models\Payment::latest()->limit(15)->get() : collect();
 
 // Transactions
-$recentTransactions = Schema::hasTable('transactions') ? \App\Models\Transaction::latest()->limit(7)->get() : collect();
-$transactionsThisMonth = Schema::hasTable('transactions') && Schema::hasColumn('transactions','amount')
+$recentTransactions = $has('transactions') ? \App\Models\Transaction::latest()->limit(7)->get() : collect();
+$transactionsThisMonth = $has('transactions', 'amount')
     ? DB::table('transactions')->whereBetween('created_at', [$startOfMonth, $today->endOfDay()])->sum('amount')
     : 0;
 
 // Incomes
-$incomesTotal = Schema::hasTable('incomes') && Schema::hasColumn('incomes','amount_received')
+$incomesTotal = $has('incomes', 'amount_received')
     ? DB::table('incomes')->sum('amount_received')
     : 0;
-$incomesThisMonth = Schema::hasTable('incomes') && Schema::hasColumn('incomes','amount_received')
+$incomesThisMonth = $has('incomes', 'amount_received')
     ? DB::table('incomes')->whereBetween('received_at', [$startOfMonth, $today->endOfDay()])->sum('amount_received')
     : 0;
-$recentIncomes = Schema::hasTable('incomes') ? \App\Models\Income::latest()->limit(7)->get() : collect();
+$recentIncomes = $has('incomes') ? \App\Models\Income::latest()->limit(7)->get() : collect();
 
 // Expenses
-$expensesTotal = Schema::hasTable('expenses') && Schema::hasColumn('expenses','amount')
+$expensesTotal = $has('expenses', 'amount')
     ? DB::table('expenses')->sum('amount')
     : 0;
-$expensesThisMonth = Schema::hasTable('expenses') && Schema::hasColumn('expenses','amount')
+$expensesThisMonth = $has('expenses', 'amount')
     ? DB::table('expenses')->whereBetween('created_at', [$startOfMonth, $today->endOfDay()])->sum('amount')
     : 0;
-$recentExpenses = Schema::hasTable('expenses') ? \App\Models\Expense::latest()->limit(7)->get() : collect();
+$recentExpenses = $has('expenses') ? \App\Models\Expense::latest()->limit(7)->get() : collect();
 
 // Projects
-$projectsCount = Schema::hasTable('projects') ? DB::table('projects')->count() : 0;
-$projectsThisMonth = Schema::hasTable('projects') ? DB::table('projects')->whereBetween('created_at', [$startOfMonth, $today->endOfDay()])->count() : 0;
-$projectsTotal = Schema::hasTable('projects') && Schema::hasColumn('projects','contract_value')
+$projectsCount = $has('projects') ? DB::table('projects')->count() : 0;
+$projectsThisMonth = $has('projects') ? DB::table('projects')->whereBetween('created_at', [$startOfMonth, $today->endOfDay()])->count() : 0;
+$projectsTotal = $has('projects', 'contract_value')
     ? DB::table('projects')->sum('contract_value')
     : null;
-$recentProjects = Schema::hasTable('projects') ? \App\Models\Project::latest()->limit(7)->get() : collect();
+$recentProjects = $has('projects') ? \App\Models\Project::latest()->limit(7)->get() : collect();
+
+// Worker Payments (for Accountant dashboard)
+$workerPaymentsToday = $has('worker_payments', 'amount') && Schema::hasColumn('worker_payments', 'paid_on')
+    ? DB::table('worker_payments')->whereDate('paid_on', $today->toDateString())->sum('amount')
+    : 0;
+$workerPaymentsThisMonth = $has('worker_payments', 'amount') && Schema::hasColumn('worker_payments', 'paid_on')
+    ? DB::table('worker_payments')->whereBetween('paid_on', [$startOfMonth->toDateString(), $today->endOfDay()->toDateString()])->sum('amount')
+    : 0;
+$recentWorkerPayments = $has('worker_payments') && $has('workers')
+    ? DB::table('worker_payments as wp')
+        ->join('workers as w', 'w.id', '=', 'wp.worker_id')
+        ->orderByDesc('wp.paid_on')
+        ->orderByDesc('wp.id')
+        ->limit(8)
+        ->get(['wp.paid_on', 'wp.amount', 'w.first_name', 'w.last_name', 'w.position'])
+    : collect();
+$workerPayByPositionMonth = $has('worker_payments') && $has('workers')
+    ? DB::table('worker_payments as wp')
+        ->join('workers as w', 'w.id', '=', 'wp.worker_id')
+        ->whereBetween('wp.paid_on', [$startOfMonth->toDateString(), $today->endOfDay()->toDateString()])
+        ->groupBy('w.position')
+        ->select('w.position', DB::raw('SUM(wp.amount) as total'))
+        ->orderByDesc('total')
+        ->get()
+    : collect();
+
+// ENHANCED PROJECT STATS
+$projectsActive = $has('projects', 'status')
+    ? DB::table('projects')->where('status', 'active')->count()
+    : $projectsCount;
+$projectsCompleted = $has('projects', 'status')
+    ? DB::table('projects')->where('status', 'completed')->count()
+    : 0;
+$projectsPending = $has('projects', 'status')
+    ? DB::table('projects')->where('status', 'pending')->count()
+    : 0;
+$projectsOnHold = $has('projects', 'status')
+    ? DB::table('projects')->whereIn('status', ['on_hold', 'paused', 'suspended'])->count()
+    : 0;
+
+// PROJECT FINANCIAL STATS
+$projectsTotalValue = $has('projects', 'contract_value')
+    ? DB::table('projects')->sum('contract_value')
+    : 0;
+$projectsPaidAmount = $has('incomes', 'amount_received')
+    ? DB::table('incomes')->sum('amount_received')
+    : 0;
+$projectsRemainingAmount = max(0, $projectsTotalValue - $projectsPaidAmount);
+$projectsPaymentProgress = $projectsTotalValue > 0 
+    ? round(($projectsPaidAmount / $projectsTotalValue) * 100, 1)
+    : 0;
+
+// ADVANCE PAYMENT DETAILED STATS
+$advancePaymentCount = $has('incomes') && Schema::hasColumn('incomes', 'type')
+    ? DB::table('incomes')->where('type', 'advance')->count()
+    : 0;
+$advancePaymentTotal = $has('incomes') && Schema::hasColumn('incomes', 'type')
+    ? DB::table('incomes')->where('type', 'advance')->sum('amount_received')
+    : 0;
+$advancePaymentThisMonth = $has('incomes') && Schema::hasColumn('incomes', 'type')
+    ? DB::table('incomes')->where('type', 'advance')->whereBetween('received_at', [$startOfMonth, $today->endOfDay()])->sum('amount_received')
+    : 0;
+
+// FINAL PAYMENT STATS
+$finalPaymentTotal = $has('incomes') && Schema::hasColumn('incomes', 'type')
+    ? DB::table('incomes')->where('type', 'final')->sum('amount_received')
+    : ($paidPayments - $advancePaymentTotal);
+
+// PROJECT COMPLETION RATE
+$completionRate = $projectsCount > 0
+    ? round(($projectsCompleted / $projectsCount) * 100, 1)
+    : 0;
+
+// AVERAGE PROJECT VALUE
+$avgProjectValue = $projectsCount > 0
+    ? round($projectsTotalValue / $projectsCount, 0)
+    : 0;
+
+// THIS MONTH PROJECT STATS
+$projectsValueThisMonth = $has('projects', 'contract_value')
+    ? DB::table('projects')->whereBetween('created_at', [$startOfMonth, $today->endOfDay()])->sum('contract_value')
+    : 0;
+
+// OUTSTANDING INVOICES (Pending, Overdue, Partially Paid)
+if ($has('incomes', 'payment_status') && $has('incomes', 'amount_remaining')) {
+    $outstandingBase = DB::table('incomes')->whereIn('payment_status', ['Pending', 'Overdue', 'partially paid']);
+    $outstandingInvoices = (clone $outstandingBase)->count();
+    $outstandingAmount = (clone $outstandingBase)->sum('amount_remaining');
+} else {
+    $outstandingInvoices = 0;
+    $outstandingAmount = $projectsRemainingAmount; // fallback to project remaining
+}
 
 // Monthly series for last 6 months
 $months = [];
@@ -75,15 +281,15 @@ for ($i = 5; $i >= 0; $i--) {
     $mStart = $dt->copy()->startOfMonth();
     $mEnd = $dt->copy()->endOfMonth();
 
-    $paymentsMonthly[] = Schema::hasTable('payments') && Schema::hasColumn('payments','amount')
+    $paymentsMonthly[] = $has('payments', 'amount')
         ? DB::table('payments')->whereBetween('created_at', [$mStart, $mEnd])->sum('amount')
         : 0;
 
-    $expensesMonthly[] = Schema::hasTable('expenses') && Schema::hasColumn('expenses','amount')
+    $expensesMonthly[] = $has('expenses', 'amount')
         ? DB::table('expenses')->whereBetween('created_at', [$mStart, $mEnd])->sum('amount')
         : 0;
 
-    $incomeMonthly[] = Schema::hasTable('incomes') && Schema::hasColumn('incomes','amount_received')
+    $incomeMonthly[] = $has('incomes', 'amount_received')
         ? DB::table('incomes')->whereBetween('received_at', [$mStart, $mEnd])->sum('amount_received')
         : 0;
 }
@@ -94,132 +300,572 @@ for ($i = 5; $i >= 0; $i--) {
     {{-- Header --}}
     <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
         <div>
-            <h1 class="text-2xl md:text-3xl font-semibold leading-tight">Dashboard</h1>
-            <p class="text-sm text-gray-500 mt-1">Overview of activity, finances and projects</p>
+            <h1 class="text-2xl md:text-3xl font-semibold leading-tight theme-aware-text">Dashboard</h1>
+            <p class="text-sm theme-aware-text-muted mt-1">Financial overview, payments & quick actions</p>
+        </div>
+    </div>
+
+    {{-- COMPREHENSIVE PROJECT & PAYMENT STATS --}}
+    <div class="theme-aware-bg-card rounded-xl shadow-lg p-6 mb-6 theme-aware-border border" style="background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);">
+        <h2 class="text-xl font-bold theme-aware-text mb-4 flex items-center">
+            <span class="bg-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center mr-3">📊</span>
+            System Overview & Key Metrics
+        </h2>
+
+        {{-- Row 1: Project Statistics --}}
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mb-4">
+            <!-- Total Projects -->
+            <div class="relative theme-aware-bg-card rounded-lg theme-aware-shadow p-4 border-l-4 border-blue-500 hover:shadow-md transition">
+                <a href="{{ route('projects.index') }}" class="absolute inset-0" aria-label="View Projects"></a>
+                <div class="text-xs theme-aware-text-muted font-medium uppercase">Total Projects</div>
+                <div class="text-3xl font-bold text-blue-600 mt-2">{{ $projectsCount }}</div>
+                <div class="text-xs theme-aware-text-muted mt-1">All time</div>
+            </div>
+
+            <!-- Active Projects -->
+            <div class="relative theme-aware-bg-card rounded-lg theme-aware-shadow p-4 border-l-4 border-green-500 hover:shadow-md transition">
+                <a href="{{ route('projects.index') }}?q=active" class="absolute inset-0" aria-label="Active Projects"></a>
+                <div class="text-xs theme-aware-text-muted font-medium uppercase">Active Projects</div>
+                <div class="text-3xl font-bold text-green-600 mt-2">{{ $projectsActive }}</div>
+                <div class="text-xs theme-aware-text-muted mt-1">In progress</div>
+            </div>
+
+            <!-- Completed Projects -->
+            <div class="relative theme-aware-bg-card rounded-lg theme-aware-shadow p-4 border-l-4 border-purple-500 hover:shadow-md transition">
+                <a href="{{ route('projects.index') }}?q=completed" class="absolute inset-0" aria-label="Completed Projects"></a>
+                <div class="text-xs theme-aware-text-muted font-medium uppercase">Completed</div>
+                <div class="text-3xl font-bold text-purple-600 mt-2">{{ $projectsCompleted }}</div>
+                <div class="text-xs theme-aware-text-muted mt-1">{{ $completionRate }}% rate</div>
+            </div>
+
+            <!-- Pending Projects -->
+            <div class="relative theme-aware-bg-card rounded-lg theme-aware-shadow p-4 border-l-4 border-yellow-500 hover:shadow-md transition">
+                <a href="{{ route('projects.index') }}?q=pending" class="absolute inset-0" aria-label="Pending Projects"></a>
+                <div class="text-xs theme-aware-text-muted font-medium uppercase">Pending</div>
+                <div class="text-3xl font-bold text-yellow-600 mt-2">{{ $projectsPending }}</div>
+                <div class="text-xs theme-aware-text-muted mt-1">Not started</div>
+            </div>
+
+            <!-- New This Month -->
+            <div class="relative theme-aware-bg-card rounded-lg theme-aware-shadow p-4 border-l-4 border-indigo-500 hover:shadow-md transition">
+                <a href="{{ route('projects.index') }}" class="absolute inset-0" aria-label="New Projects"></a>
+                <div class="text-xs theme-aware-text-muted font-medium uppercase">New This Month</div>
+                <div class="text-3xl font-bold text-indigo-600 mt-2">{{ $projectsThisMonth }}</div>
+                <div class="text-xs theme-aware-text-muted mt-1">Projects</div>
+            </div>
+
+            <!-- On Hold -->
+            <div class="relative theme-aware-bg-card rounded-lg theme-aware-shadow p-4 border-l-4 border-orange-500 hover:shadow-md transition">
+                <a href="{{ route('projects.index') }}?q=hold" class="absolute inset-0" aria-label="On Hold Projects"></a>
+                <div class="text-xs theme-aware-text-muted font-medium uppercase">On Hold</div>
+                <div class="text-3xl font-bold text-orange-600 mt-2">{{ $projectsOnHold }}</div>
+                <div class="text-xs theme-aware-text-muted mt-1">Paused</div>
+            </div>
         </div>
 
-        <div class="flex items-center gap-3">
-            <form id="dashboardSearchForm" method="GET" action="{{ url()->current() }}" class="flex items-center gap-2">
-                <label for="q" class="sr-only">Search</label>
-                <div class="relative">
-                    <input id="q" name="q" type="search" value="{{ request('q') ?? '' }}"
-                        placeholder="Search workers, payments, projects..."
-                        class="pl-10 pr-4 py-2 rounded-lg border bg-white shadow-sm focus:ring-2 focus:ring-indigo-200 focus:outline-none w-56"
-                        autocomplete="off" aria-label="Search dashboard">
-                    <svg class="w-4 h-4 absolute left-3 top-2.5 text-gray-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M11 19a8 8 0 1 1 0-16 8 8 0 0 1 0 16z"/></svg>
+        {{-- Row 2: Financial Statistics --}}
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+            <!-- Total Project Value -->
+            <div class="relative theme-aware-bg-card rounded-lg shadow-md p-5 border-l-4 border-emerald-500 hover:shadow-lg transition">
+                <a href="{{ route('projects.index') }}" class="absolute inset-0" aria-label="Total Project Value"></a>
+                <div class="flex items-center justify-between mb-2">
+                    <div class="text-xs theme-aware-text-muted font-semibold uppercase">Total Project Value</div>
+                    <span class="text-2xl">💎</span>
                 </div>
+                <div class="text-2xl font-bold text-emerald-600">RWF {{ number_format($projectsTotalValue, 0) }}</div>
+                <div class="text-xs theme-aware-text-muted mt-2">Average: RWF {{ number_format($avgProjectValue, 0) }}</div>
+                <div class="mt-3 text-xs theme-aware-text-muted">All contracts combined</div>
+            </div>
 
-                <button type="submit" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg shadow-sm">Search</button>
-                <a href="{{ route('dashboard') }}" class="px-3 py-2 border rounded-lg text-gray-600 hover:bg-gray-50">Reset</a>
-            </form>
+            <!-- Total Paid -->
+            <div class="relative theme-aware-bg-card rounded-lg shadow-md p-5 border-l-4 border-green-500 hover:shadow-lg transition">
+                <a href="{{ route('incomes.index') }}" class="absolute inset-0" aria-label="Total Paid"></a>
+                <div class="flex items-center justify-between mb-2">
+                    <div class="text-xs theme-aware-text-muted font-semibold uppercase">Total Paid</div>
+                    <span class="text-2xl">✅</span>
+                </div>
+                <div class="text-2xl font-bold text-green-600">RWF {{ number_format($projectsPaidAmount, 0) }}</div>
+                <div class="w-full bg-gray-200 rounded-full h-2 mt-3">
+                    <div class="bg-green-500 h-2 rounded-full transition-all" style="width: {{ $projectsPaymentProgress }}%"></div>
+                </div>
+                <div class="mt-2 text-xs theme-aware-text-muted">{{ $projectsPaymentProgress }}% of total value</div>
+            </div>
 
-            <a href="{{ route('projects.create') ?? '#' }}" class="inline-flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg shadow">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path d="M10 5a1 1 0 0 1 1 1v3h3a1 1 0 1 1 0 2h-3v3a1 1 0 1 1-2 0v-3H6a1 1 0 1 1 0-2h3V6a1 1 0 0 1 1-1z"/></svg>
-                New
+            <!-- Remaining Amount -->
+            <div class="relative theme-aware-bg-card rounded-lg shadow-md p-5 border-l-4 border-orange-500 hover:shadow-lg transition">
+                <a href="{{ route('incomes.index') }}" class="absolute inset-0" aria-label="Remaining Amount"></a>
+                <div class="flex items-center justify-between mb-2">
+                    <div class="text-xs theme-aware-text-muted font-semibold uppercase">Remaining Amount</div>
+                    <span class="text-2xl">⏳</span>
+                </div>
+                <div class="text-2xl font-bold text-orange-600">RWF {{ number_format($projectsRemainingAmount, 0) }}</div>
+                <div class="w-full bg-gray-200 rounded-full h-2 mt-3">
+                    <div class="bg-orange-500 h-2 rounded-full transition-all" style="width: {{ 100 - $projectsPaymentProgress }}%"></div>
+                </div>
+                <div class="mt-2 text-xs theme-aware-text-muted">{{ round(100 - $projectsPaymentProgress, 1) }}% outstanding</div>
+            </div>
+
+            <!-- Outstanding Invoices -->
+            <div class="relative theme-aware-bg-card rounded-lg shadow-md p-5 border-l-4 border-red-500 hover:shadow-lg transition">
+                <a href="{{ route('incomes.index') }}" class="absolute inset-0" aria-label="Outstanding Invoices"></a>
+                <div class="flex items-center justify-between mb-2">
+                    <div class="text-xs theme-aware-text-muted font-semibold uppercase">Outstanding Invoices</div>
+                    <span class="text-2xl">📄</span>
+                </div>
+                <div class="text-2xl font-bold text-red-600">{{ $outstandingInvoices }}</div>
+                <div class="text-lg font-semibold text-red-500 mt-2">RWF {{ number_format($outstandingAmount, 0) }}</div>
+                <div class="mt-2 text-xs theme-aware-text-muted">Pending payment</div>
+            </div>
+        </div>
+
+        {{-- Row 3: Payment Type Breakdown --}}
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+            <!-- Advance Payments Total -->
+            <div class="relative theme-aware-bg-card rounded-lg theme-aware-shadow p-4 border-t-4 border-cyan-500 hover:shadow-md transition">
+                <a href="{{ route('incomes.index') }}?q=advance" class="absolute inset-0" aria-label="Advance Payments"></a>
+                <div class="text-xs theme-aware-text-muted font-medium uppercase">Advance Payments</div>
+                <div class="text-2xl font-bold text-cyan-600 mt-2">RWF {{ number_format($advancePaymentTotal, 0) }}</div>
+                <div class="text-xs theme-aware-text-muted mt-1">{{ $advancePaymentCount }} transactions</div>
+            </div>
+
+            <!-- Advance This Month -->
+            <div class="relative theme-aware-bg-card rounded-lg theme-aware-shadow p-4 border-t-4 border-teal-500 hover:shadow-md transition">
+                <a href="{{ route('incomes.index') }}?q=advance" class="absolute inset-0" aria-label="Advance This Month"></a>
+                <div class="text-xs theme-aware-text-muted font-medium uppercase">Advance (This Month)</div>
+                <div class="text-2xl font-bold text-teal-600 mt-2">RWF {{ number_format($advancePaymentThisMonth, 0) }}</div>
+                <div class="text-xs theme-aware-text-muted mt-1">Current month</div>
+            </div>
+
+            <!-- Final Payments -->
+            <div class="relative theme-aware-bg-card rounded-lg theme-aware-shadow p-4 border-t-4 border-blue-500 hover:shadow-md transition">
+                <a href="{{ route('incomes.index') }}?q=final" class="absolute inset-0" aria-label="Final Payments"></a>
+                <div class="text-xs theme-aware-text-muted font-medium uppercase">Final Payments</div>
+                <div class="text-2xl font-bold text-blue-600 mt-2">RWF {{ number_format($finalPaymentTotal, 0) }}</div>
+                <div class="text-xs theme-aware-text-muted mt-1">Completed</div>
+            </div>
+
+            <!-- This Month Value -->
+            <div class="relative theme-aware-bg-card rounded-lg theme-aware-shadow p-4 border-t-4 border-violet-500 hover:shadow-md transition">
+                <a href="{{ route('projects.index') }}" class="absolute inset-0" aria-label="New Projects Value"></a>
+                <div class="text-xs theme-aware-text-muted font-medium uppercase">New Projects Value</div>
+                <div class="text-2xl font-bold text-violet-600 mt-2">RWF {{ number_format($projectsValueThisMonth, 0) }}</div>
+                <div class="text-xs theme-aware-text-muted mt-1">This month</div>
+            </div>
+
+            <!-- Net Cash Flow -->
+            <div class="relative theme-aware-bg-card rounded-lg theme-aware-shadow p-4 border-t-4 border-{{ ($incomesTotal - $expensesTotal) >= 0 ? 'green' : 'red' }}-500 hover:shadow-md transition">
+                <a href="{{ route('reports.index') }}" class="absolute inset-0" aria-label="Net Cash Flow"></a>
+                <div class="text-xs theme-aware-text-muted font-medium uppercase">Net Cash Flow</div>
+                <div class="text-2xl font-bold text-{{ ($incomesTotal - $expensesTotal) >= 0 ? 'green' : 'red' }}-600 mt-2">
+                    RWF {{ number_format($incomesTotal - $expensesTotal, 0) }}
+                </div>
+                <div class="text-xs theme-aware-text-muted mt-1">Income - Expenses</div>
+            </div>
+        </div>
+    </div>
+
+    {{-- TODAY & WEEK STATS --}}
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3 mb-6">
+        <!-- Today's Payments -->
+        <div class="relative theme-aware-bg-card rounded-lg theme-aware-shadow p-4 border hover:shadow-md transition">
+            <a href="{{ route('payments.index') }}" class="absolute inset-0" aria-label="Today's Payments"></a>
+            <div class="text-xs theme-aware-text-muted font-medium">TODAY'S PAYMENTS</div>
+            <div class="text-2xl font-bold text-blue-600 mt-2">{{ number_format($todayPayments, 0) }}</div>
+            <div class="text-xs theme-aware-text-muted mt-1">RWF</div>
+        </div>
+
+        <!-- Week's Payments -->
+        <div class="relative theme-aware-bg-card rounded-lg theme-aware-shadow p-4 border hover:shadow-md transition">
+            <a href="{{ route('payments.index') }}" class="absolute inset-0" aria-label="Week's Payments"></a>
+            <div class="text-xs theme-aware-text-muted font-medium">WEEK'S PAYMENTS</div>
+            <div class="text-2xl font-bold text-blue-600 mt-2">{{ number_format($weekPayments, 0) }}</div>
+            <div class="text-xs theme-aware-text-muted mt-1">RWF</div>
+        </div>
+
+        <!-- Today's Expenses -->
+        <div class="relative theme-aware-bg-card rounded-lg theme-aware-shadow p-4 border hover:shadow-md transition">
+            <a href="{{ route('expenses.index') }}" class="absolute inset-0" aria-label="Today's Expenses"></a>
+            <div class="text-xs theme-aware-text-muted font-medium">TODAY'S EXPENSES</div>
+            <div class="text-2xl font-bold text-red-600 mt-2">{{ number_format($todayExpenses, 0) }}</div>
+            <div class="text-xs theme-aware-text-muted mt-1">RWF</div>
+        </div>
+
+        <!-- Week's Expenses -->
+        <div class="relative theme-aware-bg-card rounded-lg theme-aware-shadow p-4 border hover:shadow-md transition">
+            <a href="{{ route('expenses.index') }}" class="absolute inset-0" aria-label="Week's Expenses"></a>
+            <div class="text-xs theme-aware-text-muted font-medium">WEEK'S EXPENSES</div>
+            <div class="text-2xl font-bold text-red-600 mt-2">{{ number_format($weekExpenses, 0) }}</div>
+            <div class="text-xs theme-aware-text-muted mt-1">RWF</div>
+        </div>
+
+        <!-- Remaining Payments -->
+        <div class="relative theme-aware-bg-card rounded-lg theme-aware-shadow p-4 border hover:shadow-md transition">
+            <a href="{{ route('incomes.index') }}" class="absolute inset-0" aria-label="Remaining Payments"></a>
+            <div class="text-xs theme-aware-text-muted font-medium">REMAINING PAYMENTS</div>
+            <div class="text-2xl font-bold text-orange-600 mt-2">{{ number_format($remainingPayments, 0) }}</div>
+            <div class="text-xs theme-aware-text-muted mt-1">RWF</div>
+        </div>
+
+        <!-- Advance Payments -->
+        <div class="relative theme-aware-bg-card rounded-lg theme-aware-shadow p-4 border hover:shadow-md transition">
+            <a href="{{ route('incomes.index') }}?q=advance" class="absolute inset-0" aria-label="Advance Payments"></a>
+            <div class="text-xs theme-aware-text-muted font-medium">ADVANCE PAYMENTS</div>
+            <div class="text-2xl font-bold text-green-600 mt-2">{{ number_format($advancePayments, 0) }}</div>
+            <div class="text-xs theme-aware-text-muted mt-1">RWF</div>
+        </div>
+    </div>
+
+    {{-- QUICK ACTIONS --}}
+    <div class="mb-6 bg-gradient-to-r from-green-50 to-blue-50 rounded-lg theme-aware-shadow p-4 border border-green-200">
+        <h3 class="font-semibold theme-aware-text mb-3">⚡ Quick Actions</h3>
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2">
+            <a href="{{ route('payments.create') ?? '#' }}" class="px-3 py-2 theme-aware-bg-card border border-green-300 hover:bg-green-50 rounded-lg text-xs font-medium text-center transition">
+                <span class="block">💳 New Payment</span>
+            </a>
+            <a href="{{ route('incomes.create') ?? '#' }}" class="px-3 py-2 theme-aware-bg-card border border-blue-300 hover:bg-blue-50 rounded-lg text-xs font-medium text-center transition">
+                <span class="block">💰 New Income</span>
+            </a>
+            <a href="{{ route('expenses.create') ?? '#' }}" class="px-3 py-2 theme-aware-bg-card border border-red-300 hover:bg-red-50 rounded-lg text-xs font-medium text-center transition">
+                <span class="block">📉 New Expense</span>
+            </a>
+            <a href="{{ route('projects.create') ?? '#' }}" class="px-3 py-2 theme-aware-bg-card border border-yellow-300 hover:bg-yellow-50 rounded-lg text-xs font-medium text-center transition">
+                <span class="block">📋 New Project</span>
+            </a>
+            <a href="{{ route('payments.index') ?? '#' }}" class="px-3 py-2 theme-aware-bg-card border border-purple-300 hover:bg-purple-50 rounded-lg text-xs font-medium text-center transition">
+                <span class="block">📊 View Payments</span>
+            </a>
+            <a href="{{ route('reports.index') ?? '#' }}" class="px-3 py-2 theme-aware-bg-card border border-indigo-300 hover:bg-indigo-50 rounded-lg text-xs font-medium text-center transition">
+                <span class="block">📈 Reports</span>
             </a>
         </div>
     </div>
 
-    {{-- KPI cards --}}
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <div class="bg-white rounded-lg shadow-sm p-4 border overflow-hidden transform hover:-translate-y-1 transition">
-            <div class="flex items-center justify-between">
-                <div>
-                    <div class="text-sm text-gray-500">Advance payment</div>
-                    <div class="text-2xl font-bold mt-1">{{ number_format($totalWorkers) }}</div>
-                    <div class="text-xs text-gray-400 mt-1">Active: {{ number_format($activeWorkers) }}</div>
-                </div>
-                <div class="flex-shrink-0 text-indigo-600 bg-indigo-50 rounded-full p-3">
-                    <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/></svg>
-                </div>
+    {{-- WORKFORCE & PAYROLL STATS --}}
+    @if($totalWorkforce > 0)
+    <div class="bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg theme-aware-shadow p-5 mb-6 border border-purple-200">
+        <h3 class="font-semibold theme-aware-text mb-4 flex items-center">
+            <span class="bg-purple-500 text-white rounded-full w-7 h-7 flex items-center justify-center mr-2 text-sm">👥</span>
+            Workforce & Payroll Statistics
+        </h3>
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+            <!-- Total Workforce -->
+            <div class="relative theme-aware-bg-card rounded-lg theme-aware-shadow p-4 border-l-4 border-purple-500 hover:shadow-md transition">
+                <a href="{{ route('workers.index') }}" class="absolute inset-0" aria-label="Total Workforce"></a>
+                <div class="text-xs theme-aware-text-muted font-medium uppercase">Total Workforce</div>
+                <div class="text-2xl font-bold text-purple-600 mt-2">{{ $totalWorkforce }}</div>
+                <div class="text-xs theme-aware-text-muted mt-1">Workers + Employees</div>
             </div>
-        </div>
 
-        <div class="bg-white rounded-lg shadow-sm p-4 border overflow-hidden transform hover:-translate-y-1 transition">
-            <div class="flex items-center justify-between">
-                <div>
-                    <div class="text-sm text-gray-500">Incomes (total)</div>
-                    <div class="text-2xl font-bold mt-1">{{ number_format($incomesTotal, 2) }}</div>
-                    <div class="text-xs text-gray-400 mt-1">This month: {{ number_format($incomesThisMonth, 2) }}</div>
-                </div>
-                <div class="flex-shrink-0 text-green-600 bg-green-50 rounded-full p-3">
-                    <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2"/></svg>
-                </div>
+            <!-- Active Workers -->
+            <div class="relative theme-aware-bg-card rounded-lg theme-aware-shadow p-4 border-l-4 border-green-500 hover:shadow-md transition">
+                <a href="{{ route('workers.index') }}?q=active" class="absolute inset-0" aria-label="Active Workers"></a>
+                <div class="text-xs theme-aware-text-muted font-medium uppercase">Active Workers</div>
+                <div class="text-2xl font-bold text-green-600 mt-2">{{ $activeWorkers }}</div>
+                <div class="text-xs theme-aware-text-muted mt-1">of {{ $totalWorkers }} total</div>
             </div>
-        </div>
 
-        <div class="bg-white rounded-lg shadow-sm p-4 border overflow-hidden transform hover:-translate-y-1 transition">
-            <div class="flex items-center justify-between">
-                <div>
-                    <div class="text-sm text-gray-500">Expenses (total)</div>
-                    <div class="text-2xl font-bold mt-1">{{ number_format($expensesTotal, 2) }}</div>
-                    <div class="text-xs text-gray-400 mt-1">This month: {{ number_format($expensesThisMonth, 2) }}</div>
-                </div>
-                <div class="flex-shrink-0 text-red-600 bg-red-50 rounded-full p-3">
-                    <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 10h18M6 6h12M6 14h12M6 18h12"/></svg>
-                </div>
+            <!-- Total Employees -->
+            <div class="relative theme-aware-bg-card rounded-lg theme-aware-shadow p-4 border-l-4 border-blue-500 hover:shadow-md transition">
+                <a href="{{ route('employees.index') }}" class="absolute inset-0" aria-label="Employees"></a>
+                <div class="text-xs theme-aware-text-muted font-medium uppercase">Employees</div>
+                <div class="text-2xl font-bold text-blue-600 mt-2">{{ $totalEmployees }}</div>
+                <div class="text-xs theme-aware-text-muted mt-1">Staff members</div>
             </div>
-        </div>
 
-        <div class="bg-white rounded-lg shadow-sm p-4 border overflow-hidden transform hover:-translate-y-1 transition">
-            <div class="flex items-center justify-between">
-                <div>
-                    <div class="text-sm text-gray-500">Projects</div>
-                    <div class="text-2xl font-bold mt-1">{{ number_format($projectsCount) }}</div>
-                    <div class="text-xs text-gray-400 mt-1">This month: {{ number_format($projectsThisMonth) }}</div>
-                    @if(!is_null($projectsTotal))
-                        <div class="text-xs text-gray-400 mt-2">Budget: {{ number_format($projectsTotal, 2) }}</div>
-                    @endif
-                </div>
-                <div class="flex-shrink-0 text-yellow-600 bg-yellow-50 rounded-full p-3">
-                    <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 2l3 6 6 .5-4.5 4 1 6L12 17l-5.5 2.5 1-6L3 8.5 9 8z"/></svg>
-                </div>
+            <!-- Monthly Payroll -->
+            <div class="relative theme-aware-bg-card rounded-lg theme-aware-shadow p-4 border-l-4 border-orange-500 hover:shadow-md transition">
+                <a href="{{ route('workers.index') }}" class="absolute inset-0" aria-label="Monthly Payroll"></a>
+                <div class="text-xs theme-aware-text-muted font-medium uppercase">Monthly Payroll</div>
+                <div class="text-xl font-bold text-orange-600 mt-2">{{ number_format($totalPayroll, 0) }}</div>
+                <div class="text-xs theme-aware-text-muted mt-1">RWF total</div>
+            </div>
+
+            <!-- Avg Worker Salary -->
+            <div class="relative theme-aware-bg-card rounded-lg theme-aware-shadow p-4 border-l-4 border-teal-500 hover:shadow-md transition">
+                <a href="{{ route('workers.index') }}" class="absolute inset-0" aria-label="Average Worker Pay"></a>
+                <div class="text-xs theme-aware-text-muted font-medium uppercase">Avg Worker Pay</div>
+                <div class="text-xl font-bold text-teal-600 mt-2">{{ number_format($workersAvgSalary, 0) }}</div>
+                <div class="text-xs theme-aware-text-muted mt-1">RWF/month</div>
+            </div>
+
+            <!-- Avg Employee Salary -->
+            <div class="relative theme-aware-bg-card rounded-lg theme-aware-shadow p-4 border-l-4 border-indigo-500 hover:shadow-md transition">
+                <a href="{{ route('employees.index') }}" class="absolute inset-0" aria-label="Average Employee Pay"></a>
+                <div class="text-xs theme-aware-text-muted font-medium uppercase">Avg Employee Pay</div>
+                <div class="text-xl font-bold text-indigo-600 mt-2">{{ number_format($employeesAvgSalary, 0) }}</div>
+                <div class="text-xs theme-aware-text-muted mt-1">RWF/month</div>
             </div>
         </div>
     </div>
-    {{-- Daily category stats --}}
-    <div class="mb-6 bg-white rounded-lg shadow p-4">
-        <h2 class="text-lg font-semibold mb-3">Daily totals by category</h2>
+    @endif
 
-        @if(empty($dailyTotals))
-            <p class="text-sm text-gray-500">No stats available.</p>
+    {{-- ACCOUNTANT: WORKER PAYMENTS SUMMARY --}}
+    @role('accountant')
+    <div class="bg-gradient-to-r from-sky-50 to-blue-50 rounded-lg theme-aware-shadow p-5 mb-6 border border-sky-200">
+        <h3 class="font-semibold theme-aware-text mb-4 flex items-center">
+            <span class="bg-sky-500 text-white rounded-full w-7 h-7 flex items-center justify-center mr-2 text-sm">💼</span>
+            Worker Payments — Accountant View
+        </h3>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
+            <div class="relative theme-aware-bg-card rounded-lg theme-aware-shadow p-4 border-l-4 border-sky-500 hover:shadow-md transition">
+                <a href="{{ route('workers.index') }}" class="absolute inset-0" aria-label="Today's Worker Pay"></a>
+                <div class="text-xs theme-aware-text-muted font-medium uppercase">Today's Worker Pay</div>
+                <div class="text-2xl font-bold text-sky-600 mt-2">RWF {{ number_format($workerPaymentsToday, 0) }}</div>
+                <div class="text-xs theme-aware-text-muted mt-1">{{ now()->format('M d, Y') }}</div>
+            </div>
+            <div class="relative theme-aware-bg-card rounded-lg theme-aware-shadow p-4 border-l-4 border-indigo-500 hover:shadow-md transition">
+                <a href="{{ route('workers.index') }}" class="absolute inset-0" aria-label="This Month Worker Pay"></a>
+                <div class="text-xs theme-aware-text-muted font-medium uppercase">This Month (Worker Pay)</div>
+                <div class="text-2xl font-bold text-indigo-600 mt-2">RWF {{ number_format($workerPaymentsThisMonth, 0) }}</div>
+                <div class="text-xs theme-aware-text-muted mt-1">{{ now()->startOfMonth()->format('M d') }} — {{ now()->format('M d') }}</div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <!-- Recent Worker Payments -->
+            <div class="theme-aware-bg-card rounded-lg theme-aware-shadow p-4 border">
+                <div class="flex items-center justify-between mb-2">
+                    <h4 class="font-semibold theme-aware-text text-sm">Recent Worker Payments</h4>
+                    <a href="{{ route('workers.index') ?? '#' }}" class="text-xs text-blue-600 hover:text-blue-800">Workers →</a>
+                </div>
+                @if($recentWorkerPayments->isEmpty())
+                    <p class="text-sm theme-aware-text-muted">No worker payments yet</p>
+                @else
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm">
+                            <thead class="bg-gray-50 border-b">
+                                <tr>
+                                    <th class="px-3 py-2 text-left text-xs font-semibold theme-aware-text-secondary">Date</th>
+                                    <th class="px-3 py-2 text-left text-xs font-semibold theme-aware-text-secondary">Worker</th>
+                                    <th class="px-3 py-2 text-left text-xs font-semibold theme-aware-text-secondary">Position</th>
+                                    <th class="px-3 py-2 text-left text-xs font-semibold theme-aware-text-secondary">Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y">
+                                @foreach($recentWorkerPayments as $wp)
+                                    <tr class="hover:bg-gray-50">
+                                        <td class="px-3 py-2 text-gray-700">{{ \Carbon\Carbon::parse($wp->paid_on)->format('M d, Y') }}</td>
+                                        <td class="px-3 py-2 theme-aware-text">{{ trim(($wp->first_name ?? '').' '.($wp->last_name ?? '')) }}</td>
+                                        <td class="px-3 py-2 theme-aware-text-secondary">{{ $wp->position ?? '—' }}</td>
+                                        <td class="px-3 py-2 font-semibold text-emerald-600">RWF {{ number_format($wp->amount ?? 0, 0) }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                @endif
+            </div>
+
+            <!-- Worker Pay by Position (This Month) -->
+            <div class="theme-aware-bg-card rounded-lg theme-aware-shadow p-4 border">
+                <h4 class="font-semibold theme-aware-text text-sm mb-2">Worker Pay by Position (This Month)</h4>
+                @if($workerPayByPositionMonth->isEmpty())
+                    <p class="text-sm theme-aware-text-muted">No payments recorded this month</p>
+                @else
+                    <div class="space-y-2">
+                        @php $totalPos = $workerPayByPositionMonth->sum('total'); @endphp
+                        @foreach($workerPayByPositionMonth as $row)
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm text-gray-700">{{ $row->position ?? 'Unspecified' }}</span>
+                                <span class="text-sm font-semibold text-sky-700">RWF {{ number_format($row->total, 0) }}</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-sky-500 h-2 rounded-full" style="width: {{ $totalPos > 0 ? ($row->total / $totalPos * 100) : 0 }}%"></div>
+                            </div>
+                        @endforeach
+                        <div class="mt-3 pt-3 theme-aware-border-top">
+                            <div class="flex items-center justify-between font-semibold">
+                                <span>Total</span>
+                                <span class="text-sky-700">RWF {{ number_format($totalPos, 0) }}</span>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+            </div>
+        </div>
+    </div>
+    @endrole
+
+    {{-- ORDERS & CLIENTS STATS --}}
+    @if($totalOrders > 0 || $totalClients > 0)
+    <div class="bg-gradient-to-r from-amber-50 to-yellow-50 rounded-lg theme-aware-shadow p-5 mb-6 border border-amber-200">
+        <h3 class="font-semibold theme-aware-text mb-4 flex items-center">
+            <span class="bg-amber-500 text-white rounded-full w-7 h-7 flex items-center justify-center mr-2 text-sm">📦</span>
+            Orders & Client Statistics
+        </h3>
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+            <!-- Total Orders -->
+            @if($totalOrders > 0)
+            <div class="relative theme-aware-bg-card rounded-lg theme-aware-shadow p-4 border-l-4 border-amber-500 hover:shadow-md transition">
+                <a href="{{ route('orders.index') }}" class="absolute inset-0" aria-label="Total Orders"></a>
+                <div class="text-xs theme-aware-text-muted font-medium uppercase">Total Orders</div>
+                <div class="text-2xl font-bold text-amber-600 mt-2">{{ $totalOrders }}</div>
+                <div class="text-xs theme-aware-text-muted mt-1">All time</div>
+            </div>
+
+            <!-- Pending Orders -->
+            <div class="relative theme-aware-bg-card rounded-lg theme-aware-shadow p-4 border-l-4 border-yellow-500 hover:shadow-md transition">
+                <a href="{{ route('orders.index') }}?q=pending" class="absolute inset-0" aria-label="Pending Orders"></a>
+                <div class="text-xs theme-aware-text-muted font-medium uppercase">Pending Orders</div>
+                <div class="text-2xl font-bold text-yellow-600 mt-2">{{ $ordersPending }}</div>
+                <div class="text-xs theme-aware-text-muted mt-1">Awaiting</div>
+            </div>
+
+            <!-- Processing Orders -->
+            <div class="relative theme-aware-bg-card rounded-lg theme-aware-shadow p-4 border-l-4 border-blue-500 hover:shadow-md transition">
+                <a href="{{ route('orders.index') }}?q=processing" class="absolute inset-0" aria-label="Processing Orders"></a>
+                <div class="text-xs theme-aware-text-muted font-medium uppercase">Processing</div>
+                <div class="text-2xl font-bold text-blue-600 mt-2">{{ $ordersProcessing }}</div>
+                <div class="text-xs theme-aware-text-muted mt-1">In progress</div>
+            </div>
+
+            <!-- Completed Orders -->
+            <div class="relative theme-aware-bg-card rounded-lg theme-aware-shadow p-4 border-l-4 border-green-500 hover:shadow-md transition">
+                <a href="{{ route('orders.index') }}?q=completed" class="absolute inset-0" aria-label="Completed Orders"></a>
+                <div class="text-xs theme-aware-text-muted font-medium uppercase">Completed</div>
+                <div class="text-2xl font-bold text-green-600 mt-2">{{ $ordersCompleted }}</div>
+                <div class="text-xs theme-aware-text-muted mt-1">Done</div>
+            </div>
+
+            <!-- Orders This Month -->
+            <div class="relative theme-aware-bg-card rounded-lg theme-aware-shadow p-4 border-l-4 border-purple-500 hover:shadow-md transition">
+                <a href="{{ route('orders.index') }}" class="absolute inset-0" aria-label="Orders This Month"></a>
+                <div class="text-xs theme-aware-text-muted font-medium uppercase">This Month</div>
+                <div class="text-2xl font-bold text-purple-600 mt-2">{{ $ordersThisMonth }}</div>
+                <div class="text-xs theme-aware-text-muted mt-1">New orders</div>
+            </div>
+
+            <!-- Orders Total Value -->
+            <div class="relative theme-aware-bg-card rounded-lg theme-aware-shadow p-4 border-l-4 border-emerald-500 hover:shadow-md transition">
+                <a href="{{ route('orders.index') }}" class="absolute inset-0" aria-label="Orders Total Value"></a>
+                <div class="text-xs theme-aware-text-muted font-medium uppercase">Orders Value</div>
+                <div class="text-xl font-bold text-emerald-600 mt-2">{{ number_format($ordersTotalValue, 0) }}</div>
+                <div class="text-xs theme-aware-text-muted mt-1">RWF total</div>
+            </div>
+            @endif
+
+            <!-- Total Clients -->
+            @if($totalClients > 0)
+            <div class="relative theme-aware-bg-card rounded-lg theme-aware-shadow p-4 border-l-4 border-cyan-500 hover:shadow-md transition">
+                <a href="{{ route('clients.index') }}" class="absolute inset-0" aria-label="Total Clients"></a>
+                <div class="text-xs theme-aware-text-muted font-medium uppercase">Total Clients</div>
+                <div class="text-2xl font-bold text-cyan-600 mt-2">{{ $totalClients }}</div>
+                <div class="text-xs theme-aware-text-muted mt-1">All time</div>
+            </div>
+
+            <!-- Active Clients -->
+            <div class="relative theme-aware-bg-card rounded-lg theme-aware-shadow p-4 border-l-4 border-teal-500 hover:shadow-md transition">
+                <a href="{{ route('clients.index') }}?q=active" class="absolute inset-0" aria-label="Active Clients"></a>
+                <div class="text-xs theme-aware-text-muted font-medium uppercase">Active Clients</div>
+                <div class="text-2xl font-bold text-teal-600 mt-2">{{ $activeClients }}</div>
+                <div class="text-xs theme-aware-text-muted mt-1">Currently active</div>
+            </div>
+
+            <!-- New Clients This Month -->
+            <div class="relative theme-aware-bg-card rounded-lg theme-aware-shadow p-4 border-l-4 border-indigo-500 hover:shadow-md transition">
+                <a href="{{ route('clients.index') }}" class="absolute inset-0" aria-label="New Clients This Month"></a>
+                <div class="text-xs theme-aware-text-muted font-medium uppercase">New This Month</div>
+                <div class="text-2xl font-bold text-indigo-600 mt-2">{{ $clientsThisMonth }}</div>
+                <div class="text-xs theme-aware-text-muted mt-1">New clients</div>
+            </div>
+            @endif
+        </div>
+    </div>
+    @endif
+
+    {{-- CATEGORY BREAKDOWN --}}
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        <!-- Income by Category -->
+        <div class="theme-aware-bg-card rounded-lg theme-aware-shadow p-4 border">
+            <h3 class="font-semibold theme-aware-text mb-3">💰 Income by Category</h3>
+            @if($incomeByCategory->isEmpty())
+                <p class="text-sm theme-aware-text-muted">No income data</p>
+            @else
+                <div class="space-y-2">
+                    @foreach($incomeByCategory as $item)
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm theme-aware-text-secondary">{{ $item->category ?? 'Uncategorized' }}</span>
+                            <span class="text-sm font-semibold text-green-600">RWF {{ number_format($item->total, 0) }}</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div class="bg-green-500 h-2 rounded-full" style="width: {{ ($item->total / $incomeByCategory->sum('total') * 100) }}%"></div>
+                        </div>
+                    @endforeach
+                </div>
+                <div class="mt-3 pt-3 theme-aware-border-top">
+                    <div class="flex items-center justify-between font-semibold">
+                        <span>Total Income</span>
+                        <span class="text-green-600">RWF {{ number_format($incomeByCategory->sum('total'), 0) }}</span>
+                    </div>
+                </div>
+            @endif
+        </div>
+
+        <!-- Expense by Category -->
+        <div class="theme-aware-bg-card rounded-lg theme-aware-shadow p-4 border">
+            <h3 class="font-semibold theme-aware-text mb-3">📉 Expense by Category</h3>
+            @if($expenseByCategory->isEmpty())
+                <p class="text-sm theme-aware-text-muted">No expense data</p>
+            @else
+                <div class="space-y-2">
+                    @foreach($expenseByCategory as $item)
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm theme-aware-text-secondary">{{ $item->category ?? 'Uncategorized' }}</span>
+                            <span class="text-sm font-semibold text-red-600">RWF {{ number_format($item->total, 0) }}</span>
+                        </div>
+                        <div class="w-full theme-aware-bg-tertiary rounded-full h-2">
+                            <div class="bg-red-500 h-2 rounded-full" style="width: {{ ($item->total / $expenseByCategory->sum('total') * 100) }}%"></div>
+                        </div>
+                    @endforeach
+                </div>
+                <div class="mt-3 pt-3 theme-aware-border-top">
+                    <div class="flex items-center justify-between font-semibold">
+                        <span>Total Expenses</span>
+                        <span class="text-red-600">RWF {{ number_format($expenseByCategory->sum('total'), 0) }}</span>
+                    </div>
+                </div>
+            @endif
+        </div>
+    </div>
+
+    {{-- PAYMENTS TABLE --}}
+    <div class="theme-aware-bg-card rounded-lg theme-aware-shadow p-4 border mb-6">
+        <div class="flex items-center justify-between mb-4">
+            <h3 class="font-semibold theme-aware-text">📊 Recent Payments</h3>
+            <a href="{{ route('payments.index') ?? '#' }}" class="text-xs text-blue-600 hover:text-blue-800">View All →</a>
+        </div>
+
+        @if($recentPayments->isEmpty())
+            <p class="text-sm theme-aware-text-muted text-center py-4">No payments yet</p>
         @else
             <div class="overflow-x-auto">
-                <table class="w-full text-left border">
-                    <thead class="bg-gray-50">
+                <table class="w-full text-sm">
+                    <thead class="bg-gray-50 border-b">
                         <tr>
-                            <th class="py-2 px-3 border-r text-sm text-gray-600">Date</th>
-                            @foreach($categories as $cat)
-                                <th class="py-2 px-3 border-r text-sm text-gray-600">{{ $cat }}</th>
-                            @endforeach
-                            <th class="py-2 px-3 text-sm text-gray-600">Daily Total</th>
+                            <th class="px-4 py-2 text-left text-xs font-semibold theme-aware-text-secondary">Date</th>
+                            <th class="px-4 py-2 text-left text-xs font-semibold theme-aware-text-secondary">Reference</th>
+                            <th class="px-4 py-2 text-left text-xs font-semibold theme-aware-text-secondary">Method</th>
+                            <th class="px-4 py-2 text-left text-xs font-semibold theme-aware-text-secondary">Amount</th>
+                            <th class="px-4 py-2 text-left text-xs font-semibold theme-aware-text-secondary">Status</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        @foreach($dailyTotals as $day => $cats)
-                            <tr class="border-t hover:bg-gray-50">
-                                <td class="py-2 px-3 align-top font-medium">{{ $day }}</td>
-
-                                @php $rowTotal = 0; @endphp
-
-                                @foreach($categories as $cat)
-                                    @php
-                                        $amount = isset($cats[$cat]) ? $cats[$cat] : 0;
-                                        $rowTotal += $amount;
-                                    @endphp
-                                    <td class="py-2 px-3 text-sm">
-                                        @if($amount > 0)
-                                            <span class="inline-block px-2 py-1 rounded text-sm font-medium bg-gray-100">
-                                                RWF {{ number_format($amount, 2) }}
-                                            </span>
-                                        @else
-                                            <span class="text-gray-300">—</span>
-                                        @endif
-                                    </td>
-                                @endforeach
-
-                                <td class="py-2 px-3 text-sm font-semibold text-red-600">
-                                    RWF {{ number_format($rowTotal, 2) }}
+                    <tbody class="divide-y">
+                        @foreach($recentPayments->take(10) as $payment)
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-4 py-2 text-gray-700">{{ optional($payment->created_at)->format('M d, Y') }}</td>
+                                <td class="px-4 py-2 text-gray-700">{{ $payment->reference ?? '—' }}</td>
+                                <td class="px-4 py-2 theme-aware-text-secondary">
+                                    <span class="text-xs px-2 py-1 rounded bg-gray-100">{{ $payment->method ?? '—' }}</span>
+                                </td>
+                                <td class="px-4 py-2 font-semibold text-green-600">RWF {{ number_format($payment->amount ?? 0, 0) }}</td>
+                                <td class="px-4 py-2">
+                                    <span class="text-xs px-2 py-1 rounded 
+                                        @if(($payment->status ?? '') === 'completed') bg-green-100 text-green-700
+                                        @elseif(($payment->status ?? '') === 'pending') bg-yellow-100 text-yellow-700
+                                        @else bg-gray-100 theme-aware-text-secondary @endif">
+                                        {{ ucfirst($payment->status ?? '—') }}
+                                    </span>
                                 </td>
                             </tr>
                         @endforeach
@@ -228,168 +874,112 @@ for ($i = 5; $i >= 0; $i--) {
             </div>
         @endif
     </div>
-    {{-- Project Stats Section --}}
-<div class="mb-6 bg-white rounded-lg shadow p-4">
-    <h2 class="text-lg font-semibold mb-3">Project Payment Summary</h2>
 
-    @if ($projectStats->isEmpty())
-        <p class="text-sm text-gray-500">No project stats available.</p>
-    @else
-        <div class="overflow-x-auto">
-            <table class="w-full text-left border">
-                <thead class="bg-gray-50">
-                    <tr>
-                        <th class="py-2 px-3 border-r text-sm text-gray-600">#</th>
-                        <th class="py-2 px-3 border-r text-sm text-gray-600">Project Name</th>
-                        <th class="py-2 px-3 border-r text-sm text-gray-600">Total Amount</th>
-                        <th class="py-2 px-3 border-r text-sm text-gray-600">Amount Paid</th>
-                        <th class="py-2 px-3 text-sm text-gray-600">Amount Remaining</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($projectStats as $index => $proj)
-                        <tr class="border-t hover:bg-gray-50">
-                            <td class="py-2 px-3 text-sm text-gray-500">{{ $index + 1 }}</td>
-                            <td class="py-2 px-3 font-medium text-gray-800">{{ $proj->project_name }}</td>
-                            <td class="py-2 px-3 text-sm text-gray-700">
-                                <span class="inline-block px-2 py-1 rounded bg-gray-100 font-semibold">
-                                    RWF {{ number_format($proj->total_amount, 2) }}
-                                </span>
-                            </td>
-                            <td class="py-2 px-3 text-sm text-green-700">
-                                <span class="inline-block px-2 py-1 rounded bg-green-50 font-semibold">
-                                    RWF {{ number_format($proj->amount_paid, 2) }}
-                                </span>
-                            </td>
-                            <td class="py-2 px-3 text-sm text-red-700">
-                                <span class="inline-block px-2 py-1 rounded bg-red-50 font-semibold">
-                                    RWF {{ number_format($proj->amount_remaining, 2) }}
-                                </span>
-                            </td>
+    {{-- Project Stats Section --}}
+    <div class="mb-6 theme-aware-bg-card rounded-lg theme-aware-shadow p-4 border">
+        <h2 class="text-lg font-semibold mb-3">📈 Project Payment Summary</h2>
+
+        @php
+            $projectStats = collect();
+            if ($has('projects') && $has('incomes', 'amount_received')) {
+                $projectStats = DB::table('projects')
+                    ->leftJoin('incomes', 'projects.id', '=', 'incomes.project_id')
+                    ->select(
+                        'projects.id',
+                        'projects.name as project_name',
+                        DB::raw('COALESCE(SUM(incomes.amount_received), 0) as amount_paid'),
+                        DB::raw('COALESCE(projects.contract_value, 0) as total_amount'),
+                        DB::raw('(COALESCE(projects.contract_value, 0) - COALESCE(SUM(incomes.amount_received), 0)) as amount_remaining')
+                    )
+                    ->groupBy('projects.id', 'projects.name', 'projects.contract_value')
+                    ->limit(8)
+                    ->get();
+            }
+        @endphp
+
+        @if ($projectStats->isEmpty())
+            <p class="text-sm theme-aware-text-muted">No project stats available.</p>
+        @else
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                    <thead class="bg-gray-50 border-b">
+                        <tr>
+                            <th class="px-4 py-2 text-left text-xs font-semibold theme-aware-text-secondary">#</th>
+                            <th class="px-4 py-2 text-left text-xs font-semibold theme-aware-text-secondary">Project</th>
+                            <th class="px-4 py-2 text-left text-xs font-semibold theme-aware-text-secondary">Total</th>
+                            <th class="px-4 py-2 text-left text-xs font-semibold theme-aware-text-secondary">Paid</th>
+                            <th class="px-4 py-2 text-left text-xs font-semibold theme-aware-text-secondary">Remaining</th>
+                            <th class="px-4 py-2 text-left text-xs font-semibold theme-aware-text-secondary">Progress</th>
                         </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
-    @endif
-</div>
+                    </thead>
+                    <tbody class="divide-y">
+                        @foreach ($projectStats as $index => $proj)
+                            @php
+                                $progress = $proj->total_amount > 0 ? ($proj->amount_paid / $proj->total_amount * 100) : 0;
+                            @endphp
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-4 py-2 theme-aware-text-muted">{{ $index + 1 }}</td>
+                                <td class="px-4 py-2 font-medium theme-aware-text">{{ $proj->project_name }}</td>
+                                <td class="px-4 py-2 text-gray-700">RWF {{ number_format($proj->total_amount, 0) }}</td>
+                                <td class="px-4 py-2 font-semibold text-green-600">RWF {{ number_format($proj->amount_paid, 0) }}</td>
+                                <td class="px-4 py-2 font-semibold text-orange-600">RWF {{ number_format($proj->amount_remaining, 0) }}</td>
+                                <td class="px-4 py-2">
+                                    <div class="flex items-center gap-2">
+                                        <div class="w-16 bg-gray-200 rounded-full h-2">
+                                            <div class="bg-blue-500 h-2 rounded-full" style="width: {{ $progress }}%"></div>
+                                        </div>
+                                        <span class="text-xs font-semibold theme-aware-text-secondary">{{ round($progress) }}%</span>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        @endif
+    </div>
 
     {{-- Charts --}}
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
-        <div class="bg-white rounded-lg shadow-sm p-4 border min-h-[260px] flex flex-col">
-            <h3 class="text-sm font-medium text-gray-700 mb-2">Income — Last 6 months</h3>
+        <div class="theme-aware-bg-card rounded-lg theme-aware-shadow p-4 border min-h-[260px] flex flex-col">
+            <h3 class="text-sm font-medium text-gray-700 mb-2">💰 Income — Last 6 months</h3>
             <div class="flex-1">
                 <canvas id="incomeChart" class="w-full h-48"></canvas>
             </div>
         </div>
 
-        
+        <div class="theme-aware-bg-card rounded-lg theme-aware-shadow p-4 border min-h-[260px] flex flex-col">
+            <h3 class="text-sm font-medium text-gray-700 mb-2">💳 Payments — Last 6 months</h3>
+            <div class="flex-1">
+                <canvas id="paymentsChart" class="w-full h-48"></canvas>
+            </div>
+        </div>
 
-        <div class="bg-white rounded-lg shadow-sm p-4 border min-h-[260px] flex flex-col">
-            <h3 class="text-sm font-medium text-gray-700 mb-2">Expenses — Last 6 months</h3>
+        <div class="theme-aware-bg-card rounded-lg theme-aware-shadow p-4 border min-h-[260px] flex flex-col">
+            <h3 class="text-sm font-medium text-gray-700 mb-2">📉 Expenses — Last 6 months</h3>
             <div class="flex-1">
                 <canvas id="expensesChart" class="w-full h-48"></canvas>
             </div>
         </div>
     </div>
 
-    {{-- Recent lists --}}
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <div class="bg-white rounded-lg shadow-sm p-4 border">
-            <div class="flex items-center justify-between mb-3">
-                <h4 class="font-semibold text-gray-700">Recent Employees</h4>
-                <a href="{{ route('workers.index') }}" class="text-indigo-600 text-sm">View all</a>
-            </div>
-
-            <ul class="divide-y">
-                @forelse($recentWorkers as $work)
-                    <li class="py-3 flex items-center justify-between">
-                        <div>
-                            <div class="font-medium">{{ $work->full_name ?? ($work->name ?? '—') }}</div>
-                            <div class="text-xs text-gray-400">{{ optional($work->created_at)->format('Y-m-d') ?? '—' }}</div>
-                        </div>
-                        <div class="text-xs px-3 py-1 rounded-full {{ ($work->status ?? '') === 'active' ? 'bg-green-50 text-green-700' : 'bg-gray-100 text-gray-600' }}">
-                            {{ ucfirst($work->status ?? '—') }}
-                        </div>
-                    </li>
-                @empty
-                    <li class="py-6 text-center text-gray-500">No employees found.</li>
-                @endforelse
-            </ul>
-        </div>
-
-        <div class="bg-white rounded-lg shadow-sm p-4 border">
-            <div class="flex items-center justify-between mb-3">
-                <h4 class="font-semibold text-gray-700">Recent Transactions</h4>
-                <a href="{{ route('transactions.index') ?? '#' }}" class="text-indigo-600 text-sm">View all</a>
-            </div>
-
-            <ul class="divide-y">
-                @forelse($recentTransactions as $t)
-                    <li class="py-3 flex items-center justify-between">
-                        <div>
-                            <div class="font-medium">{{ $t->type ?? ('#' . ($t->id ?? '—')) }}</div>
-                            <div class="text-xs text-gray-400">{{ isset($t->amount) ? number_format($t->amount,2) : '' }} • {{ optional($t->created_at)->diffForHumans() ?? '—' }}</div>
-                        </div>
-                        <div class="text-xs text-gray-500">{{ $t->status ?? '—' }}</div>
-                    </li>
-                @empty
-                    <li class="py-6 text-center text-gray-500">No transactions found.</li>
-                @endforelse
-            </ul>
-        </div>
-
-        <div class="bg-white rounded-lg shadow-sm p-4 border">
-            <div class="flex items-center justify-between mb-3">
-                <h4 class="font-semibold text-gray-700">Recent Payments</h4>
-                <a href="{{ route('payments.index') ?? '#' }}" class="text-indigo-600 text-sm">View all</a>
-            </div>
-
-            <ul class="divide-y">
-                @forelse($recentPayments as $p)
-                    <li class="py-3 flex items-center justify-between">
-                        <div>
-                            <div class="font-medium">{{ number_format($p->amount ?? 0, 2) }}</div>
-                            <div class="text-xs text-gray-400">{{ $p->method ?? '—' }} • {{ optional($p->created_at)->format('Y-m-d') ?? '—' }}</div>
-                        </div>
-                        <div class="text-xs text-gray-500">{{ $p->reference ?? '—' }}</div>
-                    </li>
-                @empty
-                    <li class="py-6 text-center text-gray-500">No payments found.</li>
-                @endforelse
-            </ul>
-        </div>
-
-        <div class="bg-white rounded-lg shadow-sm p-4 border">
-            <div class="flex items-center justify-between mb-3">
-                <h4 class="font-semibold text-gray-700">Recent Expenses</h4>
-                <a href="{{ route('expenses.index') ?? '#' }}" class="text-indigo-600 text-sm">View all</a>
-            </div>
-
-            <ul class="divide-y">
-                @forelse($recentExpenses as $e)
-                    <li class="py-3 flex items-center justify-between">
-                        <div>
-                            <div class="font-medium">{{ number_format($e->amount ?? 0, 2) }}</div>
-                            <div class="text-xs text-gray-400">{{ $e->category ?? '' }} • {{ optional($e->created_at)->format('Y-m-d') ?? '—' }}</div>
-                        </div>
-                        <div class="text-xs text-gray-500">{{ $e->vendor ?? '—' }}</div>
-                    </li>
-                @empty
-                    <li class="py-6 text-center text-gray-500">No expenses found.</li>
-                @endforelse
-            </ul>
-        </div>
+    <!-- Creator Footer -->
+    <div class="mt-8 pt-6 border-t border-gray-200 text-center">
+        <p class="text-sm font-semibold text-gray-700 mb-2">Created by Gashumba</p>
+        <p class="text-sm theme-aware-text-secondary mb-3">
+            <a href="mailto:gashpaci@gmail.com" class="text-blue-600 hover:text-blue-800 hover:underline">
+                <i class="fas fa-envelope me-1"></i> gashpaci@gmail.com
+            </a>
+        </p>
+        <small class="theme-aware-text-muted">© {{ date('Y') }} {{ config('app.name', 'SiteLedger') }}. All rights reserved.</small>
     </div>
-
-    <div class="mt-6 text-sm text-gray-500">© {{ date('Y') }} {{ config('app.name', 'MyApp') }}</div>
 </div>
 @endsection
 
 @push('styles')
 <style>
     /* Fine tuning beyond Tailwind utilities */
-    .shadow-sm { box-shadow: 0 6px 18px rgba(20,24,40,0.06); }
+    .theme-aware-shadow { box-shadow: 0 6px 18px rgba(20,24,40,0.06); }
     .border { border: 1px solid rgba(17,24,39,0.04); }
     .min-h-\[260px\] { min-height: 260px; } /* for older Tailwind compilers */
     /* Small responsive tweaks */
@@ -400,27 +990,11 @@ for ($i = 5; $i >= 0; $i--) {
 @endpush
 
 @push('scripts')
-<!-- Chart.js (loaded via CDN to keep view compact) -->
+<!-- Chart.js (loaded via CDN) -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    // Dashboard search: debounce so we don't fire too many requests while typing.
-    (function() {
-        const input = document.getElementById('q');
-        if (!input) return;
-        let timeout = null;
-        input.addEventListener('input', function () {
-            clearTimeout(timeout);
-            timeout = setTimeout(() => {
-                // If user clears field, auto-submit to reset filters; otherwise wait for manual submit.
-                if (input.value.trim() === '') {
-                    document.getElementById('dashboardSearchForm').submit();
-                }
-            }, 700);
-        });
-    })();
-
     // Chart shorthand
     const months = @json($months);
     const incomeData = @json($incomeMonthly);
@@ -469,8 +1043,8 @@ document.addEventListener('DOMContentLoaded', function () {
     createChart('paymentsChart', 'Payments', paymentsData, 'rgba(59,130,246,1)', 'rgba(59,130,246,0.08)');
     createChart('expensesChart', 'Expenses', expensesData, 'rgba(239,68,68,1)', 'rgba(239,68,68,0.06)');
 
-    // Small UI nicety: fade-in cards
-    document.querySelectorAll('.bg-white.rounded-lg').forEach((el, i) => {
+    // Fade-in cards
+    document.querySelectorAll('.theme-aware-bg-card.rounded-lg').forEach((el, i) => {
         el.style.opacity = 0;
         el.style.transform = 'translateY(6px)';
         setTimeout(() => {

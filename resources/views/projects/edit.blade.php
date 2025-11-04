@@ -5,7 +5,7 @@
 
 @section('content')
 <div class="container mx-auto p-6">
-    <h1 class="text-3xl font-bold text-gray-800 mb-6">✏️ Edit Project</h1>
+    <h1 class="text-3xl font-bold theme-aware-text mb-6">✏️ Edit Project</h1>
 
     {{-- Validation Errors --}}
     @if ($errors->any())
@@ -25,7 +25,7 @@
     </a>
 
     {{-- Edit Project Form --}}
-    <div class="bg-white shadow-lg rounded-2xl p-6">
+    <div class="theme-aware-bg-card shadow-lg rounded-2xl p-6">
         <form action="{{ route('projects.update', $project->id) }}" method="POST">
             @csrf
             @method('PUT')

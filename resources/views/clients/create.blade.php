@@ -9,7 +9,7 @@
     <div class="flex items-center justify-between mb-6">
         <div>
             <h1 class="text-2xl md:text-3xl font-semibold">Create Client</h1>
-            <p class="text-sm text-gray-500 mt-1">Add a new client — keep contact details accurate for invoices and projects.</p>
+            <p class="text-sm theme-aware-text-muted mt-1">Add a new client — keep contact details accurate for invoices and projects.</p>
         </div>
 
         <div class="flex items-center gap-2">
@@ -29,7 +29,7 @@
         </div>
     @endif
 
-    <form id="createClientForm" action="{{ route('clients.store') }}" method="POST" class="bg-white rounded-lg shadow-sm p-6 needs-validation" novalidate>
+    <form id="createClientForm" action="{{ route('clients.store') }}" method="POST" class="theme-aware-bg-card rounded-lg shadow-sm p-6 needs-validation" novalidate>
         @csrf
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -39,7 +39,7 @@
                 <input id="name" name="name" value="{{ old('name') }}" required
                     class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-100 @error('name') border-red-400 @enderror"
                     placeholder="Company or organization name" aria-describedby="nameHelp">
-                <div id="nameHelp" class="text-xs text-gray-400 mt-1">Official client name (used on invoices).</div>
+                <div id="nameHelp" class="text-xs theme-aware-text-muted mt-1">Official client name (used on invoices).</div>
                 @error('name') <div class="text-sm text-red-600 mt-1">{{ $message }}</div> @enderror
             </div>
 
@@ -65,12 +65,12 @@
 
             {{-- Phone --}}
             <div>
-                <label for="phone" class="block text-sm font-medium mb-1">Phone <span class="text-gray-400 text-xs">(preferred)</span></label>
+                <label for="phone" class="block text-sm font-medium mb-1">Phone <span class="theme-aware-text-muted text-xs">(preferred)</span></label>
                 <div class="relative">
                     <input id="phone" name="phone" value="{{ old('phone') }}"
                         class="w-full border rounded-lg px-3 py-2 pl-10 focus:outline-none focus:ring-2 focus:ring-indigo-100 @error('phone') border-red-400 @enderror"
                         placeholder="+250 78 123 4567" aria-label="phone">
-                    <span class="absolute left-3 top-2.5 text-sm text-gray-400">📞</span>
+                    <span class="absolute left-3 top-2.5 text-sm theme-aware-text-muted">📞</span>
                 </div>
                 @error('phone') <div class="text-sm text-red-600 mt-1">{{ $message }}</div> @enderror
             </div>

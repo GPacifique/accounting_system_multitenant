@@ -1,29 +1,44 @@
 
 @extends('layouts.app')
-@vite(['resources/css/app.css', 'resources/js/app.js'])
+
+@section('title', 'Income Tracking - Project Payments & Revenue Management | SiteLedger')
+@section('meta_description', 'Complete income and revenue management for construction projects. Track client payments, monitor project income, manage payment milestones, and analyze revenue streams across all projects.')
+@section('meta_keywords', 'income tracking, revenue management, project payments, client payments, construction income, payment milestones, revenue analytics')
+
 @vite(['resources/css/app.css', 'resources/js/app.js'])
 @section('content')
-<div class="mb-6 bg-white rounded-lg shadow p-4">
+<div class="container mx-auto px-4 py-6">
+    {{-- Role Check: Admin or Accountant Only --}}
+    @unless(auth()->user()->hasAnyRole(['admin', 'accountant']))
+        <div class="p-4 mb-4 bg-red-50 border border-red-200 rounded text-red-800">
+            <i class="fas fa-exclamation-triangle"></i> You do not have permission to access this page.
+        </div>
+        @php
+            abort(403, 'Unauthorized access');
+        @endphp
+    @endunless
+
+<div class="mb-6 theme-aware-bg-card rounded-lg shadow p-4">
     <h2 class="text-lg font-semibold mb-3">Project Totals</h2>
 
     @if($projectStats->isEmpty())
-        <p class="text-sm text-gray-500">No project stats available.</p>
+        <p class="text-sm theme-aware-text-muted">No project stats available.</p>
     @else
         <div class="overflow-x-auto">
             <table class="w-full text-left border">
                 <thead class="bg-gray-50">
                     <tr>
-                        <th class="py-2 px-3 border-r text-sm text-gray-600">Project</th>
-                        <th class="py-2 px-3 border-r text-sm text-gray-600">Total Paid</th>
-                        <th class="py-2 px-3 border-r text-sm text-gray-600">Total Remaining</th>
-                        <th class="py-2 px-3 text-sm text-gray-600">Total Revenue</th>
+                        <th class="py-2 px-3 border-r text-sm theme-aware-text-secondary">Project</th>
+                        <th class="py-2 px-3 border-r text-sm theme-aware-text-secondary">Total Paid</th>
+                        <th class="py-2 px-3 border-r text-sm theme-aware-text-secondary">Total Remaining</th>
+                            <th class="py-2 px-3 text-sm theme-aware-text-secondary">Contract Value</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($projectStats as $stat)
                         <tr class="border-t hover:bg-gray-50">
                             <td class="py-2 px-3 font-medium">
-                                {{ $stat->project->name ?? '—' }}
+                                {{ $stat->project_name ?? '—' }}
                             </td>
                             <td class="py-2 px-3 text-green-600 font-semibold">
                                 RWF{{ number_format($stat->total_paid, 2) }}
@@ -51,10 +66,20 @@
         </div>
     @endif
 
-    <a href="{{ route('incomes.create') }}" class="bg-blue-500 text-white px-4 py-2 rounded mb-4 inline-block">Add New Income</a>
+    @if(auth()->user()->hasAnyRole(['admin', 'accountant']))
+        <div class="flex gap-2 mb-4">
+            {{-- Download Buttons --}}
+            <x-download-buttons 
+                route="incomes.export" 
+                filename="incomes" 
+                size="sm" />
+            
+            <a href="{{ route('incomes.create') }}" class="bg-blue-500 text-white px-4 py-2 rounded">Add New Income</a>
+        </div>
+    @endif
 
     <div class="overflow-x-auto">
-        <table class="min-w-full bg-white border rounded">
+        <table class="min-w-full theme-aware-bg-card border rounded">
             <thead>
                 <tr class="bg-gray-200 text-gray-700">
                     <th class="py-2 px-4 border">ID</th>

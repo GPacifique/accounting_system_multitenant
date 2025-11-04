@@ -10,7 +10,7 @@
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
         <div>
             <h1 class="text-2xl md:text-3xl font-semibold">Clients</h1>
-            <p class="text-sm text-gray-500 mt-1">Manage your customers and contacts</p>
+            <p class="text-sm theme-aware-text-muted mt-1">Manage your customers and contacts</p>
         </div>
 
         <div class="flex items-center gap-3">
@@ -19,13 +19,13 @@
                 <div class="relative">
                     <input id="q" name="q" type="search" value="{{ request('q') ?? '' }}"
                         placeholder="Search name, contact person, phone or email..."
-                        class="pl-10 pr-4 py-2 rounded-lg border bg-white shadow-sm focus:ring-2 focus:ring-indigo-200 focus:outline-none w-64"
+                        class="pl-10 pr-4 py-2 rounded-lg border theme-aware-bg-card shadow-sm focus:ring-2 focus:ring-indigo-200 focus:outline-none w-64"
                         autocomplete="off" aria-label="Search clients">
-                    <svg class="w-4 h-4 absolute left-3 top-2.5 text-gray-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M11 19a8 8 0 1 1 0-16 8 8 0 0 1 0 16z"/></svg>
+                    <svg class="w-4 h-4 absolute left-3 top-2.5 theme-aware-text-muted pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M11 19a8 8 0 1 1 0-16 8 8 0 0 1 0 16z"/></svg>
                 </div>
 
                 <button type="submit" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg shadow-sm">Search</button>
-                <a href="{{ route('clients.index') }}" class="px-3 py-2 border rounded-lg text-gray-600 hover:bg-gray-50">Reset</a>
+                <a href="{{ route('clients.index') }}" class="px-3 py-2 border rounded-lg theme-aware-text-secondary hover:bg-gray-50">Reset</a>
             </form>
 
             <a href="{{ route('clients.create') }}" class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow">
@@ -53,7 +53,7 @@
         </div>
     @else
         {{-- Table --}}
-        <div class="overflow-x-auto bg-white rounded shadow-sm border">
+        <div class="overflow-x-auto theme-aware-bg-card rounded shadow-sm border">
             <table class="w-full table-auto min-w-[720px]">
                 <thead>
                     <tr class="text-left bg-gray-50 text-sm">
@@ -80,7 +80,7 @@
                                     <div>
                                         <div class="font-medium">{{ $client->name }}</div>
                                         @if(!empty($client->address))
-                                            <div class="text-xs text-gray-400">{{ Str::limit($client->address, 40) }}</div>
+                                            <div class="text-xs theme-aware-text-muted">{{ Str::limit($client->address, 40) }}</div>
                                         @endif
                                     </div>
                                 </div>
@@ -89,13 +89,13 @@
                             <td class="px-4 py-3 align-middle">
                                 <div class="font-medium">{{ $client->contact_person ?? '—' }}</div>
                                 @if(!empty($client->contact_title))
-                                    <div class="text-xs text-gray-400">{{ $client->contact_title }}</div>
+                                    <div class="text-xs theme-aware-text-muted">{{ $client->contact_title }}</div>
                                 @endif
                             </td>
 
-                            <td class="px-4 py-3 align-middle text-sm text-gray-600">{{ $client->email ?? '—' }}</td>
+                            <td class="px-4 py-3 align-middle text-sm theme-aware-text-secondary">{{ $client->email ?? '—' }}</td>
 
-                            <td class="px-4 py-3 align-middle text-sm text-gray-600">{{ $client->phone ?? '—' }}</td>
+                            <td class="px-4 py-3 align-middle text-sm theme-aware-text-secondary">{{ $client->phone ?? '—' }}</td>
 
                             <td class="px-4 py-3 align-middle text-right">
                                 <div class="inline-flex items-center gap-2">
@@ -117,7 +117,7 @@
 
         {{-- Pagination --}}
         <div class="mt-4 flex items-center justify-between">
-            <div class="text-sm text-gray-500">Showing {{ $clients->firstItem() ?? 0 }} to {{ $clients->lastItem() ?? 0 }} of {{ $clients->total() }}</div>
+            <div class="text-sm theme-aware-text-muted">Showing {{ $clients->firstItem() ?? 0 }} to {{ $clients->lastItem() ?? 0 }} of {{ $clients->total() }}</div>
             <div>{{ $clients->withQueryString()->links() }}</div>
         </div>
     @endif

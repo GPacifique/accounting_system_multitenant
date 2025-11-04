@@ -3,10 +3,6 @@
 namespace App\Http;
 
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
-use Spatie\Permission\Middlewares\RoleMiddleware;
-use Spatie\Permission\Middlewares\PermissionMiddleware;
-use Spatie\Permission\Middlewares\RoleOrPermissionMiddleware;
-use App\Http\Middleware\CustomMiddleware; // if you have other custom middleware
 
 class Kernel extends HttpKernel
 {
@@ -21,6 +17,8 @@ class Kernel extends HttpKernel
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            // Baseline security headers
+            \App\Http\Middleware\SecurityHeaders::class,
         ],
 
         'api' => [
@@ -50,8 +48,5 @@ class Kernel extends HttpKernel
         'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
         'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
         'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
-
-        // ✅ Your custom middleware (if you want to keep it)
-        'custom.role' => \App\Http\Middleware\RoleMiddleware::class,
     ];
 }

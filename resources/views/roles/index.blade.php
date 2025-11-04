@@ -4,11 +4,23 @@
 
 @section('content')
 <div class="container-fluid py-4">
+    {{-- Role Check: Admin Only --}}
+    @unless(auth()->user()->hasRole('admin'))
+        <div class="alert alert-danger">
+            <i class="fas fa-exclamation-triangle"></i> You do not have permission to access this page.
+        </div>
+        @php
+            abort(403, 'Unauthorized access');
+        @endphp
+    @endunless
+
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2><i class="fa-solid fa-user-shield me-2"></i> Roles</h2>
-        <a href="{{ route('roles.create') }}" class="btn btn-primary">
-            <i class="fa-solid fa-plus me-1"></i> New Role
-        </a>
+        @if(auth()->user()->hasRole('admin'))
+            <a href="{{ route('roles.create') }}" class="btn btn-primary">
+                <i class="fa-solid fa-plus me-1"></i> New Role
+            </a>
+        @endif
     </div>
 
     @if(session('success'))

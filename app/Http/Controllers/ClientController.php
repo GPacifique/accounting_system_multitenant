@@ -10,9 +10,19 @@ class ClientController extends Controller
     /**
      * Display a listing of the clients.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $clients = Client::latest()->paginate(10); // Paginate for large tables
+        $q = trim((string) $request->get('q'));
+        $clientsQuery = Client::query();
+        if ($q !== '') {
+            $clientsQuery->where(function ($c) use ($q) {
+                $c->where('name', 'like', "%{$q}%")
+                  ->orWhere('contact_person', 'like', "%{$q}%")
+                  ->orWhere('email', 'like', "%{$q}%")
+                  ->orWhere('phone', 'like', "%{$q}%");
+            });
+        }
+        $clients = $clientsQuery->latest()->paginate(10)->appends($request->query());
         return view('clients.index', compact('clients'));
     }
 

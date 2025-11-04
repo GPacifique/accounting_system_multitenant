@@ -122,7 +122,7 @@
                             <label for="currency" class="form-label fw-medium">Currency</label>
                             <input id="currency" type="text" name="currency"
                                    class="form-control @error('currency') is-invalid @enderror"
-                                   value="{{ old('currency', $worker->currency) }}" placeholder="USD">
+                                   value="{{ old('currency', $worker->currency) }}" placeholder="RWF">
                             @error('currency')
                                 <div class="invalid-feedback d-block">{{ $message }}</div>
                             @enderror

@@ -5,11 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\Expense;
 use App\Models\Project;
 use App\Models\Client;
+use App\Traits\Downloadable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class ExpenseController extends Controller
 {
+    use Downloadable;
     /**
      * Items per page for pagination.
      */
@@ -169,5 +171,64 @@ class ExpenseController extends Controller
             'status'      => 'nullable|string|max:255',
             'user_id'     => 'nullable|exists:users,id',
         ]);
+    }
+    
+    /**
+     * Export expenses as CSV
+     */
+    public function exportCsv(Request $request)
+    {
+        $filename = $request->get('filename', 'expenses');
+        
+        $expenses = Expense::with(['project', 'client'])->latest()->get();
+        
+        $headers = [
+            'id' => 'ID',
+            'category' => 'Category',
+            'description' => 'Description',
+            'amount' => 'Amount (RWF)',
+            'project_name' => 'Project',
+            'client_name' => 'Client',
+            'method' => 'Payment Method',
+            'status' => 'Status',
+            'created_at' => 'Created Date'
+        ];
+        
+        // Transform data for CSV
+        $csvData = $expenses->map(function ($expense) {
+            return [
+                'id' => $expense->id,
+                'category' => $expense->category ?? 'N/A',
+                'description' => $expense->description ?? 'N/A',
+                'amount' => $expense->amount ?? 0,
+                'project_name' => $expense->project ? $expense->project->name : 'N/A',
+                'client_name' => $expense->client ? $expense->client->name : 'N/A',
+                'method' => $expense->method ?? 'N/A',
+                'status' => ucfirst($expense->status ?? 'completed'),
+                'created_at' => $expense->created_at->format('Y-m-d H:i:s')
+            ];
+        });
+        
+        return $this->downloadCsv($csvData, $filename, array_keys($headers));
+    }
+    
+    /**
+     * Export expenses as PDF
+     */
+    public function exportPdf(Request $request)
+    {
+        $filename = $request->get('filename', 'expenses');
+        
+        $expenses = Expense::with(['project', 'client'])->latest()->get();
+        
+        $html = $this->generatePdfHtml('exports.financial-pdf', [
+            'data' => $expenses,
+            'title' => 'Expenses Report',
+            'subtitle' => 'Complete list of all expenses',
+            'totalRecords' => $expenses->count(),
+            'showProject' => true
+        ]);
+        
+        return $this->downloadPdf($html, $filename);
     }
 }

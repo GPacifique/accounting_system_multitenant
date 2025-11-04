@@ -5,7 +5,7 @@
 <div class="container mx-auto px-4 py-6 max-w-3xl">
     <h1 class="text-2xl font-semibold mb-4">Edit Expense #{{ $expense->id }}</h1>
 
-    <form action="{{ route('expenses.update', $expense) }}" method="POST" class="bg-white rounded-lg shadow p-6">
+    <form action="{{ route('expenses.update', $expense) }}" method="POST" class="theme-aware-bg-card rounded-lg shadow p-6">
         @method('PUT')
         @include('expenses._form')
         <div class="mt-4 flex gap-2">

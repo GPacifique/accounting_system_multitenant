@@ -6,7 +6,7 @@
 <div class="max-w-2xl mx-auto py-6">
     <h1 class="text-2xl font-semibold mb-6">Create New Report</h1>
 
-    <form action="{{ route('reports.store') }}" method="POST" class="bg-white p-6 rounded shadow">
+    <form action="{{ route('reports.store') }}" method="POST" class="theme-aware-bg-card p-6 rounded shadow">
         @csrf
 
         <div class="mb-4">

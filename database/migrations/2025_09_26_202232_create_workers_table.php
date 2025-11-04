@@ -18,7 +18,7 @@ $table->string('email')->nullable()->unique();
 $table->string('phone', 30)->nullable();
 $table->string('position', 100)->nullable();
 $table->bigInteger('salary_cents')->nullable();
-$table->string('currency', 3)->nullable()->default('USD');
+$table->string('currency', 3)->nullable()->default('RWF');
 $table->timestamp('hired_at')->nullable();
 $table->string('status', 50)->nullable()->default('active');
 $table->text('notes')->nullable();

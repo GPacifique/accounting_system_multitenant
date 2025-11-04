@@ -10,17 +10,34 @@ class Employee extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name',
+        'first_name',
+        'last_name',
         'email',
         'phone',
         'position',
         'department',
         'salary',
-        'hire_date',
+        'date_of_joining',
     ];
 
     protected $casts = [
-        'hire_date' => 'date',
+        'date_of_joining' => 'date',
         'salary' => 'decimal:2',
     ];
+
+    /**
+     * Get full name accessor
+     */
+    public function getFullNameAttribute()
+    {
+        return trim($this->first_name . ' ' . $this->last_name);
+    }
+
+    /**
+     * Payments relationship
+     */
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
+    }
 }
