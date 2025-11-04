@@ -51,7 +51,23 @@
             font-size: 1rem;
         }
 
+        .auth-container select {
+            padding: 0.9rem;
+            margin-bottom: 1rem;
+            border: none;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.7);
+            box-shadow: inset 2px 2px 6px rgba(0,0,0,0.1), inset -2px -2px 6px rgba(255,255,255,0.7);
+            font-size: 1rem;
+            width: 100%;
+        }
+
         .auth-container input:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(37,99,235,0.3);
+        }
+
+        .auth-container select:focus {
             outline: none;
             box-shadow: 0 0 0 3px rgba(37,99,235,0.3);
         }
@@ -132,6 +148,24 @@
                 <x-text-input id="password_confirmation" class="block mt-1 w-full"
                               type="password" name="password_confirmation" required autocomplete="new-password" />
                 <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
+            </div>
+
+            <!-- Role -->
+            <div class="mt-4">
+                <x-input-label for="role" :value="__('Role')" />
+                @php
+                    // Define available roles (matching migration and seeder)
+                    $availableRoles = ['admin', 'manager', 'accountant', 'user'];
+                    // If controller passes $roles use it, otherwise use predefined roles
+                    $roles = $roles ?? $availableRoles;
+                @endphp
+                <select id="role" name="role" class="block mt-1 w-full">
+                    <option value="">-- {{ __('Select role') }} --</option>
+                    @foreach($roles as $role)
+                        <option value="{{ $role }}" {{ old('role') === $role ? 'selected' : '' }}>{{ ucwords(str_replace('_', ' ', $role)) }}</option>
+                    @endforeach
+                </select>
+                <x-input-error :messages="$errors->get('role')" class="mt-2" />
             </div>
 
             <div class="flex items-center justify-between mt-6">
