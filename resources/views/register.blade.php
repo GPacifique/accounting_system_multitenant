@@ -43,10 +43,12 @@
         <div class="mt-4">
             <x-input-label for="role" :value="__('Role')" />
             @php
-                // If controller passes $roles use it, otherwise fall back to reading from Spatie Role model
-                $roles = $roles ?? \Spatie\Permission\Models\Role::pluck('name');
+                // Define available roles (matching migration and seeder)
+                $availableRoles = ['admin', 'manager', 'accountant', 'user'];
+                // If controller passes $roles use it, otherwise use predefined roles
+                $roles = $roles ?? $availableRoles;
             @endphp
-            <select id="role" name="role" class="block mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+            <select id="role" name="role" class="block mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 theme-aware-border">
                 <option value="">-- {{ __('Select role') }} --</option>
                 @foreach($roles as $role)
                     <option value="{{ $role }}" {{ old('role') === $role ? 'selected' : '' }}>{{ ucwords(str_replace('_', ' ', $role)) }}</option>

@@ -20,8 +20,8 @@ class RegisteredUserController extends Controller
      */
     public function create(): View
     {
-        // Pass available roles to registration view
-        $roles = Role::pluck('name');
+        // Define available roles (matching migration and seeder)
+        $roles = ['admin', 'manager', 'accountant', 'user'];
         return view('auth.register', compact('roles'));
     }
 
@@ -36,16 +36,17 @@ class RegisteredUserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'role' => ['nullable', 'string', 'exists:roles,name'],
+            'role' => ['nullable', 'string', 'in:admin,manager,accountant,user'],
         ]);
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'role' => $request->input('role', 'user'), // Set role column with default 'user'
         ]);
 
-        // Assign selected role if provided
+        // Assign selected role if provided using Spatie
         if ($request->filled('role')) {
             try {
                 $user->assignRole($request->input('role'));
@@ -53,6 +54,9 @@ class RegisteredUserController extends Controller
                 // If assignment fails, log and continue (user exists)
                 report($e);
             }
+        } else {
+            // Assign default 'user' role if no role selected
+            $user->assignRole('user');
         }
 
         event(new Registered($user));
