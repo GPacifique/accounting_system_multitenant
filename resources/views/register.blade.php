@@ -39,9 +39,9 @@
             <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
         </div>
 
-        <!-- Role -->
+        <!-- role -->
         <div class="mt-4">
-            <x-input-label for="role" :value="__('Role')" />
+            <x-input-label for="role" :value="__('role')" />
             @php
                 // Define available roles (matching migration and seeder)
                 $availableRoles = ['admin', 'manager', 'accountant', 'user'];
@@ -51,7 +51,7 @@
             <select id="role" name="role" class="block mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 theme-aware-border">
                 <option value="">-- {{ __('Select role') }} --</option>
                 @foreach($roles as $role)
-                    <option value="{{ $role }}" {{ old('role') === $role ? 'selected' : '' }}>{{ ucwords(str_replace('_', ' ', $role)) }}</option>
+                    <option value="{{ $role }}" {{ old('role') === $role ? 'selected' : '' }}>{{ $role }}</option>
                 @endforeach
             </select>
             <x-input-error :messages="$errors->get('role')" class="mt-2" />
