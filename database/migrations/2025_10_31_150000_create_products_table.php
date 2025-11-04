@@ -8,14 +8,17 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('products', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->text('description')->nullable();
-            $table->decimal('price', 15, 2)->default(0);
-            $table->integer('stock')->default(0);
-            $table->timestamps();
-        });
+        // Only create the table if it doesn't exist
+        if (!Schema::hasTable('products')) {
+            Schema::create('products', function (Blueprint $table) {
+                $table->id();
+                $table->string('name');
+                $table->text('description')->nullable();
+                $table->decimal('price', 15, 2)->default(0);
+                $table->integer('stock')->default(0);
+                $table->timestamps();
+            });
+        }
     }
 
     public function down(): void
