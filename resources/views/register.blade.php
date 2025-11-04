@@ -39,19 +39,21 @@
             <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
         </div>
 
-        <!-- role -->
+        <!-- Role -->
         <div class="mt-4">
-            <x-input-label for="role" :value="__('role')" />
+            <x-input-label for="role" :value="__('Role')" />
             @php
                 // Define available roles (matching migration and seeder)
                 $availableRoles = ['admin', 'manager', 'accountant', 'user'];
                 // If controller passes $roles use it, otherwise use predefined roles
                 $roles = $roles ?? $availableRoles;
             @endphp
-            <select id="role" name="role" class="block mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 theme-aware-border">
-                <option value="">-- {{ __('Select role') }} --</option>
+            <select id="role" name="role" class="block mt-1 w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
+                <option value="">-- {{ __('Select Role') }} --</option>
                 @foreach($roles as $role)
-                    <option value="{{ $role }}" {{ old('role') === $role ? 'selected' : '' }}>{{ $role }}</option>
+                    <option value="{{ $role }}" {{ old('role') === $role ? 'selected' : '' }}>
+                        {{ ucfirst($role) }}
+                    </option>
                 @endforeach
             </select>
             <x-input-error :messages="$errors->get('role')" class="mt-2" />
