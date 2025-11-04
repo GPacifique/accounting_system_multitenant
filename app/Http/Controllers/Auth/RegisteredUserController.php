@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
+use Spatie\Permission\Models\Role;
 
 class RegisteredUserController extends Controller
 {
@@ -19,7 +20,9 @@ class RegisteredUserController extends Controller
      */
     public function create(): View
     {
-        return view('auth.register');
+        // Pass available roles to registration view
+        $roles = Role::pluck('name');
+        return view('auth.register', compact('roles'));
     }
 
     /**
@@ -33,6 +36,7 @@ class RegisteredUserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'role' => ['nullable', 'string', 'exists:roles,name'],
         ]);
 
         $user = User::create([
@@ -40,6 +44,16 @@ class RegisteredUserController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
+
+        // Assign selected role if provided
+        if ($request->filled('role')) {
+            try {
+                $user->assignRole($request->input('role'));
+            } catch (\Throwable $e) {
+                // If assignment fails, log and continue (user exists)
+                report($e);
+            }
+        }
 
         event(new Registered($user));
 
