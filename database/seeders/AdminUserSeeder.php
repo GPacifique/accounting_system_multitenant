@@ -6,6 +6,7 @@ use Illuminate\Database\Seeder;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 
 class AdminUserSeeder extends Seeder
 {
@@ -14,6 +15,15 @@ class AdminUserSeeder extends Seeder
      */
     public function run(): void
     {
+        $this->command->info('🔐 Creating Admin Users with Full Permissions...');
+        
+        // Clear permission cache
+        app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
+        
+        // Ensure admin role exists and has ALL permissions
+        $adminRole = Role::firstOrCreate(['name' => 'admin']);
+        $this->ensureAdminHasAllPermissions($adminRole);
+
         // Create admin user with full permissions
         $adminUser = User::firstOrCreate(
             ['email' => 'admin@siteledger.com'],
@@ -26,9 +36,10 @@ class AdminUserSeeder extends Seeder
             ]
         );
 
-        // Ensure admin role exists and assign it
-        $adminRole = Role::firstOrCreate(['name' => 'admin']);
-        $adminUser->assignRole('admin');
+        // Ensure admin role assignment and full permissions
+        if (!$adminUser->hasRole('admin')) {
+            $adminUser->assignRole('admin');
+        }
 
         // Create additional admin users if needed
         $secondaryAdmin = User::firstOrCreate(
@@ -42,10 +53,44 @@ class AdminUserSeeder extends Seeder
             ]
         );
 
-        $secondaryAdmin->assignRole('admin');
+        if (!$secondaryAdmin->hasRole('admin')) {
+            $secondaryAdmin->assignRole('admin');
+        }
 
-        $this->command->info('Admin users created successfully:');
+        // Verify admin permissions
+        $adminPermissionCount = $adminRole->permissions()->count();
+        $totalPermissionCount = Permission::count();
+        
+        $this->command->info("✅ Admin role has {$adminPermissionCount}/{$totalPermissionCount} permissions");
+        
+        if ($adminPermissionCount === $totalPermissionCount) {
+            $this->command->info('✅ Admin has ALL permissions!');
+        } else {
+            $this->command->warn('⚠️  Admin missing some permissions - re-syncing...');
+            $this->ensureAdminHasAllPermissions($adminRole);
+        }
+
+        $this->command->info('✅ Admin users created successfully:');
         $this->command->info('- admin@siteledger.com (password: admin123)');
         $this->command->info('- gashumba@siteledger.com (password: password)');
+        $this->command->info('🔒 Both users have FULL ADMINISTRATIVE ACCESS');
+    }
+
+    /**
+     * Ensure admin role has all available permissions
+     */
+    private function ensureAdminHasAllPermissions(Role $adminRole): void
+    {
+        $allPermissions = Permission::all();
+        
+        if ($allPermissions->isEmpty()) {
+            $this->command->warn('⚠️  No permissions found. Run RolePermissionSeeder first.');
+            return;
+        }
+        
+        // Sync ALL permissions to admin role
+        $adminRole->syncPermissions($allPermissions->pluck('name'));
+        
+        $this->command->info("✅ Synced {$allPermissions->count()} permissions to admin role");
     }
 }

@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
 use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 
 class RegisteredUserController extends Controller
 {
@@ -50,6 +51,11 @@ class RegisteredUserController extends Controller
         if ($request->filled('role')) {
             try {
                 $user->assignRole($request->input('role'));
+                
+                // If admin role, ensure they have ALL permissions
+                if ($request->input('role') === 'admin') {
+                    $this->ensureAdminFullPermissions($user);
+                }
             } catch (\Throwable $e) {
                 // If assignment fails, log and continue (user exists)
                 report($e);
@@ -64,5 +70,63 @@ class RegisteredUserController extends Controller
         Auth::login($user);
 
         return redirect(route('dashboard', absolute: false));
+    }
+
+    /**
+     * Ensure admin user has all available permissions
+     */
+    private function ensureAdminFullPermissions(User $user): void
+    {
+        try {
+            // Get the admin role
+            $adminRole = Role::firstOrCreate(['name' => 'admin']);
+            
+            // Get all available permissions
+            $allPermissions = Permission::all();
+            
+            // If no permissions exist yet, create the basic ones
+            if ($allPermissions->isEmpty()) {
+                $this->createBasicPermissions();
+                $allPermissions = Permission::all();
+            }
+            
+            // Sync all permissions to admin role
+            $adminRole->syncPermissions($allPermissions->pluck('name'));
+            
+            // Ensure user has admin role
+            if (!$user->hasRole('admin')) {
+                $user->assignRole('admin');
+            }
+            
+            // Clear permission cache
+            app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
+            
+        } catch (\Throwable $e) {
+            // Log but don't fail registration
+            report($e);
+        }
+    }
+
+    /**
+     * Create basic permissions if none exist
+     */
+    private function createBasicPermissions(): void
+    {
+        $basicPermissions = [
+            'users.view', 'users.create', 'users.edit', 'users.delete',
+            'projects.view', 'projects.create', 'projects.edit', 'projects.delete',
+            'expenses.view', 'expenses.create', 'expenses.edit', 'expenses.delete',
+            'incomes.view', 'incomes.create', 'incomes.edit', 'incomes.delete',
+            'payments.view', 'payments.create', 'payments.edit', 'payments.delete',
+            'reports.view', 'reports.generate', 'reports.export',
+            'employees.view', 'employees.create', 'employees.edit', 'employees.delete',
+            'workers.view', 'workers.create', 'workers.edit', 'workers.delete',
+            'orders.view', 'orders.create', 'orders.edit', 'orders.delete',
+            'settings.view', 'settings.edit',
+        ];
+
+        foreach ($basicPermissions as $permission) {
+            Permission::firstOrCreate(['name' => $permission]);
+        }
     }
 }
