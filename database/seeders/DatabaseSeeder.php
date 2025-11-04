@@ -19,38 +19,43 @@ class DatabaseSeeder extends Seeder
         $this->call(RolePermissionSeeder::class);
         $this->command->newLine();
 
-        // Step 2: Users
-        $this->command->info('2️⃣  Seeding Users...');
+        // Step 2: Admin Users
+        $this->command->info('2️⃣  Seeding Admin Users...');
+        $this->call(AdminUserSeeder::class);
+        $this->command->newLine();
+
+        // Step 3: Users
+        $this->command->info('3️⃣  Seeding Users...');
         $this->call(UserSeeder::class);
         $this->command->newLine();
 
-        // Step 3: Clients
-        $this->command->info('3️⃣  Seeding Clients...');
+        // Step 4: Clients
+        $this->command->info('4️⃣  Seeding Clients...');
         $this->call(ClientSeeder::class);
         $this->command->newLine();
 
-        // Step 4: Projects
-        $this->command->info('4️⃣  Seeding Projects...');
+        // Step 5: Projects
+        $this->command->info('5️⃣  Seeding Projects...');
         $this->call(ProjectSeeder::class);
         $this->command->newLine();
 
-        // Step 5: Incomes
-        $this->command->info('5️⃣  Seeding Incomes...');
+        // Step 6: Incomes
+        $this->command->info('6️⃣  Seeding Incomes...');
         $this->call(IncomeSeeder::class);
         $this->command->newLine();
 
-        // Step 6: Expenses
-        $this->command->info('6️⃣  Seeding Expenses...');
+        // Step 7: Expenses
+        $this->command->info('7️⃣  Seeding Expenses...');
         $this->call(ExpenseSeeder::class);
         $this->command->newLine();
 
-        // Step 7: Workers
-        $this->command->info('7️⃣  Seeding Workers...');
+        // Step 8: Workers
+        $this->command->info('8️⃣  Seeding Workers...');
         $this->call(WorkerSeeder::class);
         $this->command->newLine();
 
-        // Step 8: Employees
-        $this->command->info('8️⃣  Seeding Employees...');
+        // Step 9: Employees
+        $this->command->info('9️⃣  Seeding Employees...');
         $this->call(EmployeeSeeder::class);
         $this->command->newLine();
 
