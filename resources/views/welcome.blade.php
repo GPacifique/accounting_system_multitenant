@@ -115,7 +115,7 @@
         <!-- Logo -->
         <img src="{{ asset('images/logo.png') }}" alt="Logo" class="logo">
 
-        <h2>Welcome to BuildMate</h2>
+        <h2>Welcome to Siteledger</h2>
 
         <!-- Login Form -->
         <form method="POST" action="{{ route('login') }}">
