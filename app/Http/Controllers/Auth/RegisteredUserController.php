@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
 use Spatie\Permission\Models\Role;
+use App\Notifications\UserRegistered;
+use Illuminate\Support\Facades\Notification;
 
 class RegisteredUserController extends Controller
 {
@@ -47,6 +49,19 @@ class RegisteredUserController extends Controller
         $user->assignRole('user');
 
         event(new Registered($user));
+
+        // Send welcome email to the new user (if enabled)
+        if (config('notifications.send_welcome_email', true)) {
+            $user->notify(new UserRegistered($user));
+        }
+
+        // Notify all admin users about the new registration (if enabled)
+        if (config('notifications.notify_admins_new_user', true)) {
+            $adminUsers = User::role('admin')->get();
+            if ($adminUsers->isNotEmpty()) {
+                Notification::send($adminUsers, new UserRegistered($user));
+            }
+        }
 
         Auth::login($user);
 
