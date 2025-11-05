@@ -44,14 +44,26 @@ class UserController extends Controller
             'roles.*' => 'string|exists:roles,name',
         ]);
 
+        // Determine primary role (first selected role or 'user' as default)
+        $primaryRole = !empty($data['roles']) ? $data['roles'][0] : 'user';
+
         $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
+            'role' => $primaryRole, // Set primary role column
         ]);
 
         if (!empty($data['roles'])) {
             $user->assignRole($data['roles']);
+            
+            // If admin role is assigned, ensure they have all permissions
+            if (in_array('admin', $data['roles'])) {
+                $this->ensureAdminFullPermissions($user);
+            }
+        } else {
+            // Assign default user role if no roles selected
+            $user->assignRole('user');
         }
 
         return redirect()->route('users.index')
@@ -98,11 +110,21 @@ class UserController extends Controller
             $user->password = Hash::make($data['password']);
         }
 
+        // Update primary role column (first selected role or keep existing)
+        if (!empty($data['roles'])) {
+            $user->role = $data['roles'][0];
+        }
+
         $user->save();
 
         // sync roles (replace current roles with provided ones, or remove if none)
         $roles = $data['roles'] ?? [];
         $user->syncRoles($roles);
+
+        // If admin role is assigned, ensure they have all permissions
+        if (in_array('admin', $roles)) {
+            $this->ensureAdminFullPermissions($user);
+        }
 
         return redirect()->route('users.show', $user)
                          ->with('success', 'User updated successfully.');
@@ -122,5 +144,63 @@ class UserController extends Controller
 
         return redirect()->route('users.index')
                          ->with('success', 'User deleted successfully.');
+    }
+
+    /**
+     * Ensure admin user has all available permissions
+     */
+    private function ensureAdminFullPermissions(User $user): void
+    {
+        try {
+            // Get the admin role
+            $adminRole = Role::firstOrCreate(['name' => 'admin']);
+            
+            // Get all available permissions
+            $allPermissions = Permission::all();
+            
+            // If no permissions exist yet, create the basic ones
+            if ($allPermissions->isEmpty()) {
+                $this->createBasicPermissions();
+                $allPermissions = Permission::all();
+            }
+            
+            // Sync all permissions to admin role
+            $adminRole->syncPermissions($allPermissions->pluck('name'));
+            
+            // Ensure user has admin role
+            if (!$user->hasRole('admin')) {
+                $user->assignRole('admin');
+            }
+            
+            // Clear permission cache
+            app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
+            
+        } catch (\Throwable $e) {
+            // Log but don't fail user creation
+            report($e);
+        }
+    }
+
+    /**
+     * Create basic permissions if none exist
+     */
+    private function createBasicPermissions(): void
+    {
+        $basicPermissions = [
+            'users.view', 'users.create', 'users.edit', 'users.delete',
+            'projects.view', 'projects.create', 'projects.edit', 'projects.delete',
+            'expenses.view', 'expenses.create', 'expenses.edit', 'expenses.delete',
+            'incomes.view', 'incomes.create', 'incomes.edit', 'incomes.delete',
+            'payments.view', 'payments.create', 'payments.edit', 'payments.delete',
+            'reports.view', 'reports.generate', 'reports.export',
+            'employees.view', 'employees.create', 'employees.edit', 'employees.delete',
+            'workers.view', 'workers.create', 'workers.edit', 'workers.delete',
+            'orders.view', 'orders.create', 'orders.edit', 'orders.delete',
+            'settings.view', 'settings.edit',
+        ];
+
+        foreach ($basicPermissions as $permission) {
+            Permission::firstOrCreate(['name' => $permission]);
+        }
     }
 }
