@@ -38,6 +38,7 @@ use App\Http\Controllers\Auth\ConfirmablePasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\EmailVerificationPromptController;
 use App\Http\Controllers\RoleSwitcherController;
+use App\Http\Controllers\WelcomeController;
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -47,6 +48,11 @@ Route::middleware('auth')->group(function () {
     // Role Switcher Routes
     Route::post('/switch-role/{role}', [RoleSwitcherController::class, 'switch'])->name('role.switch');
     Route::post('/clear-role', [RoleSwitcherController::class, 'clear'])->name('role.clear');
+    
+    // Welcome routes for users with no permissions
+    Route::get('/welcome-user', [WelcomeController::class, 'index'])->name('welcome.index');
+    Route::get('/welcome-user/request-access', [WelcomeController::class, 'requestAccess'])->name('welcome.request-access');
+    Route::post('/welcome-user/request-access', [WelcomeController::class, 'submitAccessRequest'])->name('welcome.submit-access-request');
 });
 
 Route::get('/dashboard', [DashboardController::class, 'index'])
@@ -56,7 +62,7 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
 // ============================================
 // AUTHENTICATED & VERIFIED ROUTES
 // ============================================
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth', 'verified', 'check.permissions'])->group(function () {
     
     Route::get('/profile', function () {
         return view('profile.show');

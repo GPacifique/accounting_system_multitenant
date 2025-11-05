@@ -18,6 +18,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
             'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
             'admin' => \App\Http\Middleware\AdminMiddleware::class,
+            'check.permissions' => \App\Http\Middleware\CheckUserPermissions::class,
         ]);
 
         // You can also add global middleware here if needed, for example:

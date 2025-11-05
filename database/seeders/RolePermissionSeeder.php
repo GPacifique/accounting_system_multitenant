@@ -116,9 +116,7 @@ class RolePermissionSeeder extends Seeder
             ],
             
             'user' => [
-                'projects.view',
-                'expenses.view',
-                'reports.view',
+                // No permissions - users need admin approval to access system features
             ],
         ];
 
