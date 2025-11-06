@@ -34,19 +34,53 @@ class PaymentController extends Controller
     }
 
     /**
+     * Generate a unique payment reference (AJAX endpoint)
+     */
+    public function generateReference()
+    {
+        return response()->json([
+            'reference' => $this->generatePaymentReference()
+        ]);
+    }
+
+    /**
      * Store a newly created payment in storage.
      */
     public function store(Request $request)
     {
-        $request->validate([
+        // Custom validation for payment method
+        $validatedData = $request->validate([
             'employee_id' => 'nullable|exists:employees,id',
             'amount' => 'required|numeric|min:0',
             'method' => 'required|string|max:50',
+            'custom_method' => 'nullable|string|max:50',
             'reference' => 'nullable|string|max:100',
             'status' => 'nullable|in:pending,completed,failed',
         ]);
 
-        Payment::create($request->only('employee_id', 'amount', 'method', 'reference', 'status'));
+        // Validate payment method options
+        $validMethods = ['cash', 'bank_transfer', 'mobile_money', 'credit_card', 'debit_card', 'check', 'wire_transfer', 'paypal', 'crypto', 'other'];
+        
+        if (!in_array($validatedData['method'], $validMethods)) {
+            return back()->withErrors(['method' => 'Invalid payment method selected.']);
+        }
+
+        $data = $request->only('employee_id', 'amount', 'method', 'reference', 'status');
+        
+        // Use custom method if "other" was selected and custom_method is provided
+        if ($validatedData['method'] === 'other') {
+            if (empty($validatedData['custom_method'])) {
+                return back()->withErrors(['custom_method' => 'Custom payment method is required when "Other" is selected.']);
+            }
+            $data['method'] = $validatedData['custom_method'];
+        }
+        
+        // Auto-generate reference if not provided
+        if (empty($data['reference'])) {
+            $data['reference'] = $this->generatePaymentReference();
+        }
+
+        Payment::create($data);
 
         return redirect()->route('payments.index')
             ->with('success', 'Payment recorded successfully.');
@@ -74,15 +108,34 @@ class PaymentController extends Controller
      */
     public function update(Request $request, Payment $payment)
     {
-        $request->validate([
+        // Custom validation for payment method
+        $validatedData = $request->validate([
             'employee_id' => 'nullable|exists:employees,id',
             'amount' => 'required|numeric|min:0',
             'method' => 'required|string|max:50',
+            'custom_method' => 'nullable|string|max:50',
             'reference' => 'nullable|string|max:100',
             'status' => 'nullable|in:pending,completed,failed',
         ]);
 
-        $payment->update($request->only('employee_id', 'amount', 'method', 'reference', 'status'));
+        // Validate payment method options
+        $validMethods = ['cash', 'bank_transfer', 'mobile_money', 'credit_card', 'debit_card', 'check', 'wire_transfer', 'paypal', 'crypto', 'other'];
+        
+        if (!in_array($validatedData['method'], $validMethods)) {
+            return back()->withErrors(['method' => 'Invalid payment method selected.']);
+        }
+
+        $data = $request->only('employee_id', 'amount', 'method', 'reference', 'status');
+        
+        // Use custom method if "other" was selected and custom_method is provided
+        if ($validatedData['method'] === 'other') {
+            if (empty($validatedData['custom_method'])) {
+                return back()->withErrors(['custom_method' => 'Custom payment method is required when "Other" is selected.']);
+            }
+            $data['method'] = $validatedData['custom_method'];
+        }
+
+        $payment->update($data);
 
         return redirect()->route('payments.index')
             ->with('success', 'Payment updated successfully.');
@@ -161,5 +214,28 @@ class PaymentController extends Controller
         ]);
         
         return $this->downloadPdf($html, $filename);
+    }
+
+    /**
+     * Generate a unique payment reference
+     */
+    private function generatePaymentReference()
+    {
+        do {
+            $date = now()->format('Ymd');
+            $time = now()->format('His');
+            $random = str_pad(mt_rand(1, 9999), 4, '0', STR_PAD_LEFT);
+            
+            $reference = "PAY-{$date}-{$time}-{$random}";
+            
+            // Add microseconds for additional uniqueness if needed
+            if (Payment::where('reference', $reference)->exists()) {
+                $microseconds = substr(microtime(), 2, 3);
+                $reference = "PAY-{$date}-{$time}-{$microseconds}";
+            }
+            
+        } while (Payment::where('reference', $reference)->exists());
+        
+        return $reference;
     }
 }

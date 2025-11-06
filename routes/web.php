@@ -55,6 +55,7 @@ Route::get('/', function () {
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::post('/profile', [ProfileController::class, 'update']); // Support both POST and PATCH for compatibility
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
@@ -86,6 +87,9 @@ Route::middleware(['auth', 'tenant.data'])->group(function () {
     
     // Financial Management
     Route::resource('payments', PaymentController::class);
+    
+    // Payment reference generation
+    Route::get('/payments/generate-reference', [PaymentController::class, 'generateReference'])->name('payments.generate-reference');
     
     // Payments export routes
     Route::get('/payments/export/csv', [PaymentController::class, 'exportCsv'])->name('payments.export.csv');
