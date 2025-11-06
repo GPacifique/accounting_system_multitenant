@@ -7,7 +7,7 @@
     <div class="row">
         <div class="col-12">
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <h1 class="h3 mb-0 text-gray-800">Advanced Analytics</h1>
+                <h1 class="h3 mb-0 theme-aware-text">Advanced Analytics</h1>
                 <a href="{{ route('dashboard') }}" class="btn btn-secondary">
                     <i class="fas fa-arrow-left"></i> Back to Dashboard
                 </a>
@@ -16,18 +16,18 @@
             <!-- Financial Summary Cards -->
             <div class="row mb-4">
                 <div class="col-xl-3 col-md-6 mb-4">
-                    <div class="card border-left-primary shadow h-100 py-2">
+                    <div class="card border-left-primary shadow h-100 py-2 theme-aware-bg-card">
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
-                                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                    <div class="text-xs font-weight-bold theme-aware-text-primary text-uppercase mb-1">
                                         Total Revenue</div>
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                    <div class="h5 mb-0 font-weight-bold theme-aware-text">
                                         {{ number_format($financialSummary['total_income'] ?? 0) }} RWF
                                     </div>
                                 </div>
                                 <div class="col-auto">
-                                    <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                                    <i class="fas fa-dollar-sign fa-2x theme-aware-text-muted"></i>
                                 </div>
                             </div>
                         </div>
@@ -35,18 +35,18 @@
                 </div>
 
                 <div class="col-xl-3 col-md-6 mb-4">
-                    <div class="card border-left-success shadow h-100 py-2">
+                    <div class="card border-left-success shadow h-100 py-2 theme-aware-bg-card">
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
-                                    <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                    <div class="text-xs font-weight-bold theme-aware-text-success text-uppercase mb-1">
                                         Net Profit</div>
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                    <div class="h5 mb-0 font-weight-bold theme-aware-text">
                                         {{ number_format($financialSummary['net_profit'] ?? 0) }} RWF
                                     </div>
                                 </div>
                                 <div class="col-auto">
-                                    <i class="fas fa-chart-line fa-2x text-gray-300"></i>
+                                    <i class="fas fa-chart-line fa-2x theme-aware-text-muted"></i>
                                 </div>
                             </div>
                         </div>
@@ -54,18 +54,18 @@
                 </div>
 
                 <div class="col-xl-3 col-md-6 mb-4">
-                    <div class="card border-left-info shadow h-100 py-2">
+                    <div class="card border-left-info shadow h-100 py-2 theme-aware-bg-card">
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
-                                    <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                    <div class="text-xs font-weight-bold theme-aware-text-info text-uppercase mb-1">
                                         Total Expenses</div>
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                    <div class="h5 mb-0 font-weight-bold theme-aware-text">
                                         {{ number_format($financialSummary['total_expenses'] ?? 0) }} RWF
                                     </div>
                                 </div>
                                 <div class="col-auto">
-                                    <i class="fas fa-credit-card fa-2x text-gray-300"></i>
+                                    <i class="fas fa-credit-card fa-2x theme-aware-text-muted"></i>
                                 </div>
                             </div>
                         </div>
@@ -73,18 +73,18 @@
                 </div>
 
                 <div class="col-xl-3 col-md-6 mb-4">
-                    <div class="card border-left-warning shadow h-100 py-2">
+                    <div class="card border-left-warning shadow h-100 py-2 theme-aware-bg-card">
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
-                                    <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                    <div class="text-xs font-weight-bold theme-aware-text-warning text-uppercase mb-1">
                                         Outstanding</div>
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                    <div class="h5 mb-0 font-weight-bold theme-aware-text">
                                         {{ number_format($outstandingReceivables['total'] ?? 0) }} RWF
                                     </div>
                                 </div>
                                 <div class="col-auto">
-                                    <i class="fas fa-clock fa-2x text-gray-300"></i>
+                                    <i class="fas fa-clock fa-2x theme-aware-text-muted"></i>
                                 </div>
                             </div>
                         </div>
@@ -96,11 +96,11 @@
             <div class="row">
                 <!-- Daily Trends Chart -->
                 <div class="col-xl-8 col-lg-7">
-                    <div class="card shadow mb-4">
-                        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                            <h6 class="m-0 font-weight-bold text-primary">Revenue & Expense Trends (30 Days)</h6>
+                    <div class="card shadow mb-4 theme-aware-bg-card">
+                        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between theme-aware-bg-secondary">
+                            <h6 class="m-0 font-weight-bold theme-aware-text-primary">Revenue & Expense Trends (30 Days)</h6>
                         </div>
-                        <div class="card-body">
+                        <div class="card-body theme-aware-bg-card">
                             <div class="chart-area">
                                 <canvas id="dailyTrendsChart"></canvas>
                             </div>
@@ -110,11 +110,11 @@
 
                 <!-- Income by Category Pie Chart -->
                 <div class="col-xl-4 col-lg-5">
-                    <div class="card shadow mb-4">
-                        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                            <h6 class="m-0 font-weight-bold text-primary">Income by Category</h6>
+                    <div class="card shadow mb-4 theme-aware-bg-card">
+                        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between theme-aware-bg-secondary">
+                            <h6 class="m-0 font-weight-bold theme-aware-text-primary">Income by Category</h6>
                         </div>
-                        <div class="card-body">
+                        <div class="card-body theme-aware-bg-card">
                             <div class="chart-pie pt-4 pb-2">
                                 <canvas id="incomeCategoryChart"></canvas>
                             </div>
@@ -127,11 +127,11 @@
             <div class="row">
                 <!-- Expense Categories -->
                 <div class="col-xl-6 col-lg-6">
-                    <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Expense Categories</h6>
+                    <div class="card shadow mb-4 theme-aware-bg-card">
+                        <div class="card-header py-3 theme-aware-bg-secondary">
+                            <h6 class="m-0 font-weight-bold theme-aware-text-primary">Expense Categories</h6>
                         </div>
-                        <div class="card-body">
+                        <div class="card-body theme-aware-bg-card">
                             <div class="chart-bar">
                                 <canvas id="expenseCategoryChart"></canvas>
                             </div>
@@ -141,21 +141,21 @@
 
                 <!-- Top Projects -->
                 <div class="col-xl-6 col-lg-6">
-                    <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Top Performing Projects</h6>
+                    <div class="card shadow mb-4 theme-aware-bg-card">
+                        <div class="card-header py-3 theme-aware-bg-secondary">
+                            <h6 class="m-0 font-weight-bold theme-aware-text-primary">Top Performing Projects</h6>
                         </div>
-                        <div class="card-body">
+                        <div class="card-body theme-aware-bg-card">
                             @if(!empty($topProjects) && count($topProjects) > 0)
                                 @foreach($topProjects as $project)
                                     <div class="d-flex justify-content-between align-items-center mb-3">
                                         <div>
-                                            <h6 class="mb-0">{{ $project['name'] ?? 'Project' }}</h6>
-                                            <small class="text-muted">{{ $project['status'] ?? 'Active' }}</small>
+                                            <h6 class="mb-0 theme-aware-text">{{ $project['name'] ?? 'Project' }}</h6>
+                                            <small class="theme-aware-text-muted">{{ $project['status'] ?? 'Active' }}</small>
                                         </div>
                                         <div class="text-right">
-                                            <div class="font-weight-bold">{{ number_format($project['total_income'] ?? 0) }} RWF</div>
-                                            <small class="text-success">{{ number_format($project['profit'] ?? 0) }} RWF profit</small>
+                                            <div class="font-weight-bold theme-aware-text">{{ number_format($project['total_income'] ?? 0) }} RWF</div>
+                                            <small class="theme-aware-text-success">{{ number_format($project['profit'] ?? 0) }} RWF profit</small>
                                         </div>
                                     </div>
                                     <div class="progress mb-3">
@@ -167,7 +167,7 @@
                                     </div>
                                 @endforeach
                             @else
-                                <p class="text-muted">No project data available.</p>
+                                <p class="theme-aware-text-muted">No project data available.</p>
                             @endif
                         </div>
                     </div>
@@ -177,11 +177,11 @@
             <!-- Cash Flow Analysis -->
             <div class="row">
                 <div class="col-12">
-                    <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Cash Flow Analysis (6 Months)</h6>
+                    <div class="card shadow mb-4 theme-aware-bg-card">
+                        <div class="card-header py-3 theme-aware-bg-secondary">
+                            <h6 class="m-0 font-weight-bold theme-aware-text-primary">Cash Flow Analysis (6 Months)</h6>
                         </div>
-                        <div class="card-body">
+                        <div class="card-body theme-aware-bg-card">
                             <div class="chart-area">
                                 <canvas id="cashFlowChart"></canvas>
                             </div>
@@ -195,6 +195,19 @@
 
 @push('scripts')
 <script>
+// Get current theme for chart colors
+function getThemeColors() {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    return {
+        textColor: isDark ? '#f8fafc' : '#374151',
+        gridColor: isDark ? '#475569' : '#e5e7eb',
+        backgroundColor: isDark ? '#1e293b' : '#ffffff',
+        borderColor: isDark ? '#334155' : '#d1d5db'
+    };
+}
+
+const themeColors = getThemeColors();
+
 // Daily Trends Chart
 const dailyCtx = document.getElementById('dailyTrendsChart').getContext('2d');
 const dailyChart = new Chart(dailyCtx, {
@@ -218,9 +231,30 @@ const dailyChart = new Chart(dailyCtx, {
     options: {
         responsive: true,
         maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                labels: {
+                    color: themeColors.textColor
+                }
+            }
+        },
         scales: {
+            x: {
+                ticks: {
+                    color: themeColors.textColor
+                },
+                grid: {
+                    color: themeColors.gridColor
+                }
+            },
             y: {
-                beginAtZero: true
+                beginAtZero: true,
+                ticks: {
+                    color: themeColors.textColor
+                },
+                grid: {
+                    color: themeColors.gridColor
+                }
             }
         }
     }
@@ -246,7 +280,14 @@ const incomeCategoryChart = new Chart(incomeCategoryCtx, {
     },
     options: {
         responsive: true,
-        maintainAspectRatio: false
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                labels: {
+                    color: themeColors.textColor
+                }
+            }
+        }
     }
 });
 
@@ -267,9 +308,30 @@ const expenseCategoryChart = new Chart(expenseCategoryCtx, {
     options: {
         responsive: true,
         maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                labels: {
+                    color: themeColors.textColor
+                }
+            }
+        },
         scales: {
+            x: {
+                ticks: {
+                    color: themeColors.textColor
+                },
+                grid: {
+                    color: themeColors.gridColor
+                }
+            },
             y: {
-                beginAtZero: true
+                beginAtZero: true,
+                ticks: {
+                    color: themeColors.textColor
+                },
+                grid: {
+                    color: themeColors.gridColor
+                }
             }
         }
     }
@@ -298,12 +360,56 @@ const cashFlowChart = new Chart(cashFlowCtx, {
     options: {
         responsive: true,
         maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                labels: {
+                    color: themeColors.textColor
+                }
+            }
+        },
         scales: {
+            x: {
+                ticks: {
+                    color: themeColors.textColor
+                },
+                grid: {
+                    color: themeColors.gridColor
+                }
+            },
             y: {
-                beginAtZero: true
+                beginAtZero: true,
+                ticks: {
+                    color: themeColors.textColor
+                },
+                grid: {
+                    color: themeColors.gridColor
+                }
             }
         }
     }
+});
+
+// Update charts when theme changes
+document.addEventListener('themeChanged', function() {
+    const newThemeColors = getThemeColors();
+    
+    // Update all charts with new theme colors
+    [dailyChart, incomeCategoryChart, expenseCategoryChart, cashFlowChart].forEach(chart => {
+        if (chart.options.plugins && chart.options.plugins.legend) {
+            chart.options.plugins.legend.labels.color = newThemeColors.textColor;
+        }
+        if (chart.options.scales) {
+            Object.keys(chart.options.scales).forEach(scaleKey => {
+                if (chart.options.scales[scaleKey].ticks) {
+                    chart.options.scales[scaleKey].ticks.color = newThemeColors.textColor;
+                }
+                if (chart.options.scales[scaleKey].grid) {
+                    chart.options.scales[scaleKey].grid.color = newThemeColors.gridColor;
+                }
+            });
+        }
+        chart.update();
+    });
 });
 </script>
 @endpush

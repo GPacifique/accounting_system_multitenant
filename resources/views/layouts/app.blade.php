@@ -41,6 +41,12 @@
 
     
     <style>
+        /* Global page background for dark mode */
+        html {
+            background: var(--bg-primary);
+            transition: all 0.3s ease;
+        }
+        
         body {
             overflow-x: hidden;
             background: var(--bg-primary);
@@ -49,15 +55,23 @@
             transition: all 0.3s ease;
         }
         
-        /* Theme-aware body background */
-        .theme-light body {
+        /* Theme-aware body and html background */
+        html.theme-light,
+        .theme-light {
             background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 50%, #a5d6a7 100%) !important;
             background-attachment: fixed !important;
         }
         
-        .theme-dark body {
+        html.theme-dark,
+        .theme-dark {
             background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%) !important;
             background-attachment: fixed !important;
+        }
+        
+        /* Ensure the entire viewport is covered */
+        html, body {
+            height: 100%;
+            width: 100%;
         }
         
         footer {

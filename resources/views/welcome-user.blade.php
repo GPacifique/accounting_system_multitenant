@@ -18,10 +18,10 @@
                     </svg>
                 </div>
             </div>
-            <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+            <h1 class="text-4xl md:text-5xl font-bold theme-aware-text mb-4">
                 Welcome to <span class="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">SiteLedger</span> 🎉
             </h1>
-            <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+            <p class="text-xl theme-aware-text-secondary max-w-3xl mx-auto">
                 Hello <strong>{{ $user->name }}</strong>! Your account has been successfully created. 
                 SiteLedger is your comprehensive construction finance management platform.
             </p>
@@ -58,21 +58,21 @@
 
         {{-- System Features --}}
         <div class="max-w-6xl mx-auto mb-12">
-            <h2 class="text-3xl font-bold text-center text-gray-900 mb-8">🏗️ What You'll Have Access To</h2>
+            <h2 class="text-3xl font-bold text-center theme-aware-text mb-8">🏗️ What You'll Have Access To</h2>
             
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {{-- Project Management --}}
-                <div class="bg-white rounded-lg shadow-md p-6 border-t-4 border-blue-500 hover:shadow-lg transition">
+                <div class="theme-aware-bg-card rounded-lg shadow-md p-6 border-t-4 border-blue-500 hover:shadow-lg transition">
                     <div class="flex items-center mb-4">
                         <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mr-4">
                             <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
                             </svg>
                         </div>
-                        <h3 class="text-lg font-semibold text-gray-900">Project Management</h3>
+                        <h3 class="text-lg font-semibold theme-aware-text">Project Management</h3>
                     </div>
-                    <p class="text-gray-600 mb-4">Track construction projects from start to finish with comprehensive project oversight and budget management.</p>
-                    <ul class="text-sm text-gray-500 space-y-1">
+                    <p class="theme-aware-text-secondary mb-4">Track construction projects from start to finish with comprehensive project oversight and budget management.</p>
+                    <ul class="text-sm theme-aware-text-muted space-y-1">
                         <li>• Project timelines & milestones</li>
                         <li>• Budget tracking & forecasting</li>
                         <li>• Progress monitoring</li>
@@ -81,17 +81,17 @@
                 </div>
 
                 {{-- Financial Management --}}
-                <div class="bg-white rounded-lg shadow-md p-6 border-t-4 border-green-500 hover:shadow-lg transition">
+                <div class="theme-aware-bg-card rounded-lg shadow-md p-6 border-t-4 border-green-500 hover:shadow-lg transition">
                     <div class="flex items-center mb-4">
                         <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mr-4">
                             <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
                             </svg>
                         </div>
-                        <h3 class="text-lg font-semibold text-gray-900">Financial Management</h3>
+                        <h3 class="text-lg font-semibold theme-aware-text">Financial Management</h3>
                     </div>
-                    <p class="text-gray-600 mb-4">Complete financial oversight with income tracking, expense management, and comprehensive reporting.</p>
-                    <ul class="text-sm text-gray-500 space-y-1">
+                    <p class="theme-aware-text-secondary mb-4">Complete financial oversight with income tracking, expense management, and comprehensive reporting.</p>
+                    <ul class="text-sm theme-aware-text-muted space-y-1">
                         <li>• Income & expense tracking</li>
                         <li>• Payment management</li>
                         <li>• Financial reports</li>
@@ -100,17 +100,17 @@
                 </div>
 
                 {{-- Team Management --}}
-                <div class="bg-white rounded-lg shadow-md p-6 border-t-4 border-purple-500 hover:shadow-lg transition">
+                <div class="theme-aware-bg-card rounded-lg shadow-md p-6 border-t-4 border-purple-500 hover:shadow-lg transition">
                     <div class="flex items-center mb-4">
                         <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mr-4">
                             <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
                             </svg>
                         </div>
-                        <h3 class="text-lg font-semibold text-gray-900">Team Management</h3>
+                        <h3 class="text-lg font-semibold theme-aware-text">Team Management</h3>
                     </div>
-                    <p class="text-gray-600 mb-4">Manage employees, workers, and team members with role-based access control and payroll tracking.</p>
-                    <ul class="text-sm text-gray-500 space-y-1">
+                    <p class="theme-aware-text-secondary mb-4">Manage employees, workers, and team members with role-based access control and payroll tracking.</p>
+                    <ul class="text-sm theme-aware-text-muted space-y-1">
                         <li>• Employee management</li>
                         <li>• Worker assignments</li>
                         <li>• Payroll tracking</li>
@@ -119,17 +119,17 @@
                 </div>
 
                 {{-- Reporting & Analytics --}}
-                <div class="bg-white rounded-lg shadow-md p-6 border-t-4 border-orange-500 hover:shadow-lg transition">
+                <div class="theme-aware-bg-card rounded-lg shadow-md p-6 border-t-4 border-orange-500 hover:shadow-lg transition">
                     <div class="flex items-center mb-4">
                         <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mr-4">
                             <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
                             </svg>
                         </div>
-                        <h3 class="text-lg font-semibold text-gray-900">Reporting & Analytics</h3>
+                        <h3 class="text-lg font-semibold theme-aware-text">Reporting & Analytics</h3>
                     </div>
-                    <p class="text-gray-600 mb-4">Generate comprehensive reports and analytics to make data-driven decisions for your construction business.</p>
-                    <ul class="text-sm text-gray-500 space-y-1">
+                    <p class="theme-aware-text-secondary mb-4">Generate comprehensive reports and analytics to make data-driven decisions for your construction business.</p>
+                    <ul class="text-sm theme-aware-text-muted space-y-1">
                         <li>• Financial reports</li>
                         <li>• Project analytics</li>
                         <li>• Performance metrics</li>
@@ -138,17 +138,17 @@
                 </div>
 
                 {{-- Client Management --}}
-                <div class="bg-white rounded-lg shadow-md p-6 border-t-4 border-indigo-500 hover:shadow-lg transition">
+                <div class="theme-aware-bg-card rounded-lg shadow-md p-6 border-t-4 border-indigo-500 hover:shadow-lg transition">
                     <div class="flex items-center mb-4">
                         <div class="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center mr-4">
                             <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                             </svg>
                         </div>
-                        <h3 class="text-lg font-semibold text-gray-900">Client Management</h3>
+                        <h3 class="text-lg font-semibold theme-aware-text">Client Management</h3>
                     </div>
-                    <p class="text-gray-600 mb-4">Maintain detailed client relationships with contact management and project association.</p>
-                    <ul class="text-sm text-gray-500 space-y-1">
+                    <p class="theme-aware-text-secondary mb-4">Maintain detailed client relationships with contact management and project association.</p>
+                    <ul class="text-sm theme-aware-text-muted space-y-1">
                         <li>• Client database</li>
                         <li>• Contact management</li>
                         <li>• Project associations</li>
@@ -157,17 +157,17 @@
                 </div>
 
                 {{-- Security & Compliance --}}
-                <div class="bg-white rounded-lg shadow-md p-6 border-t-4 border-red-500 hover:shadow-lg transition">
+                <div class="theme-aware-bg-card rounded-lg shadow-md p-6 border-t-4 border-red-500 hover:shadow-lg transition">
                     <div class="flex items-center mb-4">
                         <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center mr-4">
                             <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
                             </svg>
                         </div>
-                        <h3 class="text-lg font-semibold text-gray-900">Security & Compliance</h3>
+                        <h3 class="text-lg font-semibold theme-aware-text">Security & Compliance</h3>
                     </div>
-                    <p class="text-gray-600 mb-4">Enterprise-grade security with role-based access control and audit trails for compliance.</p>
-                    <ul class="text-sm text-gray-500 space-y-1">
+                    <p class="theme-aware-text-secondary mb-4">Enterprise-grade security with role-based access control and audit trails for compliance.</p>
+                    <ul class="text-sm theme-aware-text-muted space-y-1">
                         <li>• Role-based permissions</li>
                         <li>• Secure data handling</li>
                         <li>• Audit trails</li>
@@ -179,7 +179,7 @@
 
         {{-- Benefits Section --}}
         <div class="max-w-4xl mx-auto mb-12">
-            <h2 class="text-3xl font-bold text-center text-gray-900 mb-8">🚀 Why Choose SiteLedger?</h2>
+            <h2 class="text-3xl font-bold text-center theme-aware-text mb-8">🚀 Why Choose SiteLedger?</h2>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div class="flex items-start gap-4">
@@ -187,8 +187,8 @@
                         <span class="text-green-600 font-bold text-lg">💰</span>
                     </div>
                     <div>
-                        <h3 class="text-lg font-semibold text-gray-900 mb-2">Cost Control</h3>
-                        <p class="text-gray-600">Track every expense, monitor budgets in real-time, and prevent cost overruns with advanced forecasting.</p>
+                        <h3 class="text-lg font-semibold theme-aware-text mb-2">Cost Control</h3>
+                        <p class="theme-aware-text-secondary">Track every expense, monitor budgets in real-time, and prevent cost overruns with advanced forecasting.</p>
                     </div>
                 </div>
 
@@ -197,8 +197,8 @@
                         <span class="text-blue-600 font-bold text-lg">⏱️</span>
                     </div>
                     <div>
-                        <h3 class="text-lg font-semibold text-gray-900 mb-2">Time Savings</h3>
-                        <p class="text-gray-600">Automate repetitive tasks, streamline workflows, and reduce administrative overhead by up to 70%.</p>
+                        <h3 class="text-lg font-semibold theme-aware-text mb-2">Time Savings</h3>
+                        <p class="theme-aware-text-secondary">Automate repetitive tasks, streamline workflows, and reduce administrative overhead by up to 70%.</p>
                     </div>
                 </div>
 
@@ -207,8 +207,8 @@
                         <span class="text-purple-600 font-bold text-lg">📊</span>
                     </div>
                     <div>
-                        <h3 class="text-lg font-semibold text-gray-900 mb-2">Better Decisions</h3>
-                        <p class="text-gray-600">Make data-driven decisions with comprehensive analytics and real-time reporting capabilities.</p>
+                        <h3 class="text-lg font-semibold theme-aware-text mb-2">Better Decisions</h3>
+                        <p class="theme-aware-text-secondary">Make data-driven decisions with comprehensive analytics and real-time reporting capabilities.</p>
                     </div>
                 </div>
 
@@ -217,8 +217,8 @@
                         <span class="text-yellow-600 font-bold text-lg">🔒</span>
                     </div>
                     <div>
-                        <h3 class="text-lg font-semibold text-gray-900 mb-2">Data Security</h3>
-                        <p class="text-gray-600">Enterprise-grade security ensures your financial data is protected with bank-level encryption.</p>
+                        <h3 class="text-lg font-semibold theme-aware-text mb-2">Data Security</h3>
+                        <p class="theme-aware-text-secondary">Enterprise-grade security ensures your financial data is protected with bank-level encryption.</p>
                     </div>
                 </div>
             </div>
@@ -248,7 +248,7 @@
                 </div>
 
                 <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                    <a href="{{ route('welcome.request-access') }}" class="bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-blue-50 transition">
+                    <a href="{{ route('welcome.request-access') }}" class="theme-aware-bg-card text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-blue-50 transition">
                         📋 Request Access Now
                     </a>
                     <a href="mailto:admin@siteledger.com" class="bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-800 transition">
@@ -259,7 +259,7 @@
         </div>
 
         {{-- Footer --}}
-        <div class="text-center mt-12 text-gray-500">
+        <div class="text-center mt-12 theme-aware-text-muted">
             <p>&copy; {{ date('Y') }} {{ config('app.name', 'SiteLedger') }}. All rights reserved.</p>
             <p class="text-sm mt-2">Professional Construction Finance Management Platform</p>
         </div>

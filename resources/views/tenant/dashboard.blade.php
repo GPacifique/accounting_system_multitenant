@@ -14,7 +14,7 @@
         <div class="flex items-center justify-between">
             <div class="flex items-center space-x-4">
                 {{-- Tenant Avatar --}}
-                <div class="w-16 h-16 bg-white/20 rounded-xl flex items-center justify-center">
+                <div class="w-16 h-16 theme-aware-bg-card/20 rounded-xl flex items-center justify-center">
                     <span class="text-white font-bold text-xl">
                         {{ strtoupper(substr($tenant->name, 0, 2)) }}
                     </span>
@@ -30,7 +30,7 @@
                         <span>{{ $stats['users_count'] }} {{ Str::plural('user', $stats['users_count']) }}</span>
                         @if($tenant->subscription_plan)
                             <span>•</span>
-                            <span class="px-2 py-1 bg-white/20 rounded">{{ $tenant->getSubscriptionPlanLabel() }}</span>
+                            <span class="px-2 py-1 theme-aware-bg-card/20 rounded">{{ $tenant->getSubscriptionPlanLabel() }}</span>
                         @endif
                     </div>
                 </div>
@@ -38,7 +38,7 @@
             
             {{-- Quick Actions --}}
             <div class="flex space-x-3">
-                <a href="{{ route('projects.create') }}" class="bg-white text-blue-600 px-4 py-2 rounded-lg font-semibold hover:bg-blue-50 transition">
+                <a href="{{ route('projects.create') }}" class="theme-aware-bg-card text-blue-600 px-4 py-2 rounded-lg font-semibold hover:bg-blue-50 transition">
                     <i class="fas fa-plus mr-2"></i>
                     New Project
                 </a>
@@ -53,10 +53,10 @@
     {{-- Statistics Cards --}}
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         {{-- Total Projects --}}
-        <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-blue-500">
+        <div class="theme-aware-bg-card rounded-xl shadow-lg p-6 border-l-4 border-blue-500">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-sm font-medium text-gray-600">Total Projects</p>
+                    <p class="text-sm font-medium theme-aware-text-secondary">Total Projects</p>
                     <p class="text-3xl font-bold text-blue-600">{{ $stats['projects_count'] }}</p>
                 </div>
                 <div class="bg-blue-100 rounded-full p-3">
@@ -71,10 +71,10 @@
         </div>
 
         {{-- Active Tasks --}}
-        <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-orange-500">
+        <div class="theme-aware-bg-card rounded-xl shadow-lg p-6 border-l-4 border-orange-500">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-sm font-medium text-gray-600">Active Tasks</p>
+                    <p class="text-sm font-medium theme-aware-text-secondary">Active Tasks</p>
                     <p class="text-3xl font-bold text-orange-600">{{ $stats['active_tasks'] }}</p>
                 </div>
                 <div class="bg-orange-100 rounded-full p-3">
@@ -89,10 +89,10 @@
         </div>
 
         {{-- Total Tasks --}}
-        <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-green-500">
+        <div class="theme-aware-bg-card rounded-xl shadow-lg p-6 border-l-4 border-green-500">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-sm font-medium text-gray-600">Total Tasks</p>
+                    <p class="text-sm font-medium theme-aware-text-secondary">Total Tasks</p>
                     <p class="text-3xl font-bold text-green-600">{{ $stats['tasks_count'] }}</p>
                 </div>
                 <div class="bg-green-100 rounded-full p-3">
@@ -107,10 +107,10 @@
         </div>
 
         {{-- Team Members --}}
-        <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-purple-500">
+        <div class="theme-aware-bg-card rounded-xl shadow-lg p-6 border-l-4 border-purple-500">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-sm font-medium text-gray-600">Team Members</p>
+                    <p class="text-sm font-medium theme-aware-text-secondary">Team Members</p>
                     <p class="text-3xl font-bold text-purple-600">{{ $stats['users_count'] }}</p>
                 </div>
                 <div class="bg-purple-100 rounded-full p-3">
@@ -123,7 +123,7 @@
                         Manage team →
                     </a>
                 @else
-                    <span class="text-gray-400 text-sm">Team overview</span>
+                    <span class="theme-aware-text-muted text-sm">Team overview</span>
                 @endif
             </div>
         </div>
@@ -132,9 +132,9 @@
     {{-- Recent Activity --}}
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
         {{-- Recent Tasks --}}
-        <div class="bg-white rounded-xl shadow-lg p-6">
+        <div class="theme-aware-bg-card rounded-xl shadow-lg p-6">
             <div class="flex items-center justify-between mb-6">
-                <h3 class="text-lg font-semibold text-gray-900">Recent Tasks</h3>
+                <h3 class="text-lg font-semibold theme-aware-text">Recent Tasks</h3>
                 <a href="{{ route('tasks.index') }}" class="text-blue-600 text-sm hover:underline">
                     View all
                 </a>
@@ -143,21 +143,21 @@
             @if($recentTasks->count() > 0)
                 <div class="space-y-4">
                     @foreach($recentTasks as $task)
-                        <div class="flex items-center space-x-4 p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition">
+                        <div class="flex items-center space-x-4 p-3 border theme-aware-border rounded-lg hover:theme-aware-bg-secondary transition">
                             {{-- Priority Badge --}}
                             <div class="flex-shrink-0">
                                 <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium
                                     {{ $task->priority === 'urgent' ? 'bg-red-100 text-red-800' : 
                                        ($task->priority === 'high' ? 'bg-orange-100 text-orange-800' : 
-                                        ($task->priority === 'medium' ? 'bg-yellow-100 text-yellow-800' : 'bg-gray-100 text-gray-800')) }}">
+                                        ($task->priority === 'medium' ? 'bg-yellow-100 text-yellow-800' : 'theme-aware-bg-secondary theme-aware-text')) }}">
                                     {{ ucfirst($task->priority) }}
                                 </span>
                             </div>
                             
                             {{-- Task Info --}}
                             <div class="flex-grow min-w-0">
-                                <h4 class="text-sm font-medium text-gray-900 truncate">{{ $task->title }}</h4>
-                                <p class="text-xs text-gray-500">
+                                <h4 class="text-sm font-medium theme-aware-text truncate">{{ $task->title }}</h4>
+                                <p class="text-xs theme-aware-text-muted">
                                     {{ $task->project ? $task->project->name : 'No Project' }}
                                     @if($task->assignedUser)
                                         • Assigned to {{ $task->assignedUser->name }}
@@ -169,7 +169,7 @@
                             <div class="flex-shrink-0">
                                 <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium
                                     {{ $task->status === 'completed' ? 'bg-green-100 text-green-800' : 
-                                       ($task->status === 'in_progress' ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800') }}">
+                                       ($task->status === 'in_progress' ? 'bg-blue-100 text-blue-800' : 'theme-aware-bg-secondary theme-aware-text') }}">
                                     {{ ucfirst(str_replace('_', ' ', $task->status)) }}
                                 </span>
                             </div>
@@ -179,8 +179,8 @@
             @else
                 <div class="text-center py-8">
                     <i class="fas fa-tasks text-4xl text-gray-300 mb-4"></i>
-                    <h4 class="text-lg font-medium text-gray-600 mb-2">No Tasks Yet</h4>
-                    <p class="text-gray-500 mb-4">Create your first task to get started</p>
+                    <h4 class="text-lg font-medium theme-aware-text-secondary mb-2">No Tasks Yet</h4>
+                    <p class="theme-aware-text-muted mb-4">Create your first task to get started</p>
                     <a href="{{ route('tasks.create') }}" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
                         <i class="fas fa-plus mr-2"></i>
                         Create Task
@@ -190,9 +190,9 @@
         </div>
 
         {{-- Recent Projects --}}
-        <div class="bg-white rounded-xl shadow-lg p-6">
+        <div class="theme-aware-bg-card rounded-xl shadow-lg p-6">
             <div class="flex items-center justify-between mb-6">
-                <h3 class="text-lg font-semibold text-gray-900">Recent Projects</h3>
+                <h3 class="text-lg font-semibold theme-aware-text">Recent Projects</h3>
                 <a href="{{ route('projects.index') }}" class="text-blue-600 text-sm hover:underline">
                     View all
                 </a>
@@ -201,7 +201,7 @@
             @if($recentProjects->count() > 0)
                 <div class="space-y-4">
                     @foreach($recentProjects as $project)
-                        <div class="flex items-center space-x-4 p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition">
+                        <div class="flex items-center space-x-4 p-3 border theme-aware-border rounded-lg hover:theme-aware-bg-secondary transition">
                             {{-- Project Icon --}}
                             <div class="flex-shrink-0">
                                 <div class="w-10 h-10 bg-gradient-to-r from-green-500 to-blue-600 rounded-lg flex items-center justify-center">
@@ -211,8 +211,8 @@
                             
                             {{-- Project Info --}}
                             <div class="flex-grow min-w-0">
-                                <h4 class="text-sm font-medium text-gray-900 truncate">{{ $project->name }}</h4>
-                                <p class="text-xs text-gray-500">
+                                <h4 class="text-sm font-medium theme-aware-text truncate">{{ $project->name }}</h4>
+                                <p class="text-xs theme-aware-text-muted">
                                     {{ $project->client ? $project->client->name : 'No Client' }}
                                     • Updated {{ $project->updated_at->diffForHumans() }}
                                 </p>
@@ -222,7 +222,7 @@
                             <div class="flex-shrink-0">
                                 <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium
                                     {{ $project->status === 'completed' ? 'bg-green-100 text-green-800' : 
-                                       ($project->status === 'active' ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800') }}">
+                                       ($project->status === 'active' ? 'bg-blue-100 text-blue-800' : 'theme-aware-bg-secondary theme-aware-text') }}">
                                     {{ ucfirst($project->status) }}
                                 </span>
                             </div>
@@ -232,8 +232,8 @@
             @else
                 <div class="text-center py-8">
                     <i class="fas fa-project-diagram text-4xl text-gray-300 mb-4"></i>
-                    <h4 class="text-lg font-medium text-gray-600 mb-2">No Projects Yet</h4>
-                    <p class="text-gray-500 mb-4">Create your first project to get started</p>
+                    <h4 class="text-lg font-medium theme-aware-text-secondary mb-2">No Projects Yet</h4>
+                    <p class="theme-aware-text-muted mb-4">Create your first project to get started</p>
                     <a href="{{ route('projects.create') }}" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition">
                         <i class="fas fa-plus mr-2"></i>
                         Create Project
@@ -244,36 +244,36 @@
     </div>
 
     {{-- Quick Links --}}
-    <div class="bg-white rounded-xl shadow-lg p-6">
-        <h3 class="text-lg font-semibold text-gray-900 mb-6">Quick Actions</h3>
+    <div class="theme-aware-bg-card rounded-xl shadow-lg p-6">
+        <h3 class="text-lg font-semibold theme-aware-text mb-6">Quick Actions</h3>
         
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <a href="{{ route('projects.create') }}" class="flex flex-col items-center p-4 border border-gray-200 rounded-lg hover:bg-blue-50 hover:border-blue-300 transition">
+            <a href="{{ route('projects.create') }}" class="flex flex-col items-center p-4 border theme-aware-border rounded-lg hover:bg-blue-50 hover:border-blue-300 transition">
                 <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-3">
                     <i class="fas fa-project-diagram text-blue-600 text-xl"></i>
                 </div>
-                <span class="text-sm font-medium text-gray-900">New Project</span>
+                <span class="text-sm font-medium theme-aware-text">New Project</span>
             </a>
             
-            <a href="{{ route('tasks.create') }}" class="flex flex-col items-center p-4 border border-gray-200 rounded-lg hover:bg-orange-50 hover:border-orange-300 transition">
+            <a href="{{ route('tasks.create') }}" class="flex flex-col items-center p-4 border theme-aware-border rounded-lg hover:bg-orange-50 hover:border-orange-300 transition">
                 <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mb-3">
                     <i class="fas fa-tasks text-orange-600 text-xl"></i>
                 </div>
-                <span class="text-sm font-medium text-gray-900">New Task</span>
+                <span class="text-sm font-medium theme-aware-text">New Task</span>
             </a>
             
-            <a href="{{ route('incomes.create') }}" class="flex flex-col items-center p-4 border border-gray-200 rounded-lg hover:bg-green-50 hover:border-green-300 transition">
+            <a href="{{ route('incomes.create') }}" class="flex flex-col items-center p-4 border theme-aware-border rounded-lg hover:bg-green-50 hover:border-green-300 transition">
                 <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-3">
                     <i class="fas fa-plus-circle text-green-600 text-xl"></i>
                 </div>
-                <span class="text-sm font-medium text-gray-900">Add Income</span>
+                <span class="text-sm font-medium theme-aware-text">Add Income</span>
             </a>
             
-            <a href="{{ route('expenses.create') }}" class="flex flex-col items-center p-4 border border-gray-200 rounded-lg hover:bg-red-50 hover:border-red-300 transition">
+            <a href="{{ route('expenses.create') }}" class="flex flex-col items-center p-4 border theme-aware-border rounded-lg hover:bg-red-50 hover:border-red-300 transition">
                 <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center mb-3">
                     <i class="fas fa-minus-circle text-red-600 text-xl"></i>
                 </div>
-                <span class="text-sm font-medium text-gray-900">Add Expense</span>
+                <span class="text-sm font-medium theme-aware-text">Add Expense</span>
             </a>
         </div>
     </div>

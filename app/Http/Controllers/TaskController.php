@@ -92,12 +92,13 @@ class TaskController extends Controller
             'status' => 'required|in:pending,in_progress,completed,cancelled',
             'due_date' => 'nullable|date',
             'start_date' => 'nullable|date',
-            'estimated_hours' => 'nullable|integer|min:0',
+            'estimated_hours' => 'nullable|numeric|min:0',
             'estimated_cost' => 'nullable|numeric|min:0',
             'notes' => 'nullable|string',
         ]);
 
         $validated['created_by'] = Auth::id();
+        $validated = $this->ensureTenantId($validated);
 
         Task::create($validated);
 
@@ -140,8 +141,8 @@ class TaskController extends Controller
             'due_date' => 'nullable|date',
             'start_date' => 'nullable|date',
             'completed_date' => 'nullable|date',
-            'estimated_hours' => 'nullable|integer|min:0',
-            'actual_hours' => 'nullable|integer|min:0',
+            'estimated_hours' => 'nullable|numeric|min:0',
+            'actual_hours' => 'nullable|numeric|min:0',
             'estimated_cost' => 'nullable|numeric|min:0',
             'actual_cost' => 'nullable|numeric|min:0',
             'notes' => 'nullable|string',

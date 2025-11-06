@@ -22,7 +22,7 @@
                     <span>Send Invitation</span>
                 </nav>
                 <h1 class="text-3xl font-bold flex items-center">
-                    <div class="bg-white/20 rounded-lg p-2 mr-4">
+                    <div class="theme-aware-bg-card/20 rounded-lg p-2 mr-4">
                         <i class="fas fa-paper-plane text-2xl"></i>
                     </div>
                     Send Invitation
@@ -38,25 +38,25 @@
     </div>
 
     {{-- Invitation Form --}}
-    <div class="bg-white rounded-xl shadow-lg p-8">
+    <div class="theme-aware-bg-card rounded-xl shadow-lg p-8">
         <form method="POST" action="{{ route('admin.tenants.invitations.store', $tenant) }}" id="invitationForm">
             @csrf
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 {{-- Left Column --}}
                 <div class="space-y-6">
-                    <h3 class="text-lg font-semibold text-gray-900 border-b pb-2">User Information</h3>
+                    <h3 class="text-lg font-semibold theme-aware-text border-b pb-2">User Information</h3>
 
                     {{-- Email --}}
                     <div>
-                        <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
+                        <label for="email" class="block text-sm font-medium theme-aware-text-secondary mb-2">
                             Email Address <span class="text-red-500">*</span>
                         </label>
                         <input type="email" 
                                id="email" 
                                name="email" 
                                value="{{ old('email') }}"
-                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent @error('email') border-red-500 @enderror"
+                               class="w-full px-4 py-3 border theme-aware-border rounded-lg focus:ring-2 focus:ring-purple-500 focus:theme-aware-border-focus @error('email') border-red-500 @enderror"
                                placeholder="user@example.com"
                                required>
                         @error('email')
@@ -66,12 +66,12 @@
 
                     {{-- Role --}}
                     <div>
-                        <label for="role" class="block text-sm font-medium text-gray-700 mb-2">
+                        <label for="role" class="block text-sm font-medium theme-aware-text-secondary mb-2">
                             Role <span class="text-red-500">*</span>
                         </label>
                         <select id="role" 
                                 name="role" 
-                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent @error('role') border-red-500 @enderror"
+                                class="w-full px-4 py-3 border theme-aware-border rounded-lg focus:ring-2 focus:ring-purple-500 focus:theme-aware-border-focus @error('role') border-red-500 @enderror"
                                 required>
                             <option value="">Select a role</option>
                             <option value="user" {{ old('role') === 'user' ? 'selected' : '' }}>User</option>
@@ -84,7 +84,7 @@
                         @enderror
                         
                         {{-- Role Descriptions --}}
-                        <div class="mt-2 text-xs text-gray-500 space-y-1" id="roleDescriptions">
+                        <div class="mt-2 text-xs theme-aware-text-muted space-y-1" id="roleDescriptions">
                             <div class="role-desc" data-role="user" style="display: none;">
                                 <strong>User:</strong> Basic access to view and create basic records
                             </div>
@@ -108,12 +108,12 @@
                                    name="is_admin" 
                                    value="1"
                                    {{ old('is_admin') ? 'checked' : '' }}
-                                   class="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded">
-                            <label for="is_admin" class="ml-2 block text-sm text-gray-900">
+                                   class="h-4 w-4 text-purple-600 focus:ring-purple-500 theme-aware-border rounded">
+                            <label for="is_admin" class="ml-2 block text-sm theme-aware-text">
                                 Grant admin privileges
                             </label>
                         </div>
-                        <p class="mt-1 text-xs text-gray-500">
+                        <p class="mt-1 text-xs theme-aware-text-muted">
                             Admin privileges allow managing tenant settings and other users
                         </p>
                         @error('is_admin')
@@ -124,16 +124,16 @@
 
                 {{-- Right Column --}}
                 <div class="space-y-6">
-                    <h3 class="text-lg font-semibold text-gray-900 border-b pb-2">Invitation Settings</h3>
+                    <h3 class="text-lg font-semibold theme-aware-text border-b pb-2">Invitation Settings</h3>
 
                     {{-- Expiry Period --}}
                     <div>
-                        <label for="expires_in_days" class="block text-sm font-medium text-gray-700 mb-2">
+                        <label for="expires_in_days" class="block text-sm font-medium theme-aware-text-secondary mb-2">
                             Invitation Expires In <span class="text-red-500">*</span>
                         </label>
                         <select id="expires_in_days" 
                                 name="expires_in_days" 
-                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent @error('expires_in_days') border-red-500 @enderror"
+                                class="w-full px-4 py-3 border theme-aware-border rounded-lg focus:ring-2 focus:ring-purple-500 focus:theme-aware-border-focus @error('expires_in_days') border-red-500 @enderror"
                                 required>
                             <option value="1" {{ old('expires_in_days', '7') === '1' ? 'selected' : '' }}>1 Day</option>
                             <option value="3" {{ old('expires_in_days', '7') === '3' ? 'selected' : '' }}>3 Days</option>
@@ -148,28 +148,28 @@
 
                     {{-- Custom Message --}}
                     <div>
-                        <label for="message" class="block text-sm font-medium text-gray-700 mb-2">
+                        <label for="message" class="block text-sm font-medium theme-aware-text-secondary mb-2">
                             Personal Message (Optional)
                         </label>
                         <textarea id="message" 
                                   name="message" 
                                   rows="4"
-                                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent @error('message') border-red-500 @enderror"
+                                  class="w-full px-4 py-3 border theme-aware-border rounded-lg focus:ring-2 focus:ring-purple-500 focus:theme-aware-border-focus @error('message') border-red-500 @enderror"
                                   placeholder="Add a personal welcome message for the invitee...">{{ old('message') }}</textarea>
-                        <p class="mt-1 text-xs text-gray-500">This message will be included in the invitation email</p>
+                        <p class="mt-1 text-xs theme-aware-text-muted">This message will be included in the invitation email</p>
                         @error('message')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                         @enderror
                     </div>
 
                     {{-- Preview Box --}}
-                    <div class="bg-gray-50 rounded-lg p-4">
-                        <h4 class="text-sm font-medium text-gray-900 mb-2">Invitation Preview</h4>
-                        <div class="text-sm text-gray-600 space-y-1">
+                    <div class="theme-aware-bg-secondary rounded-lg p-4">
+                        <h4 class="text-sm font-medium theme-aware-text mb-2">Invitation Preview</h4>
+                        <div class="text-sm theme-aware-text-secondary space-y-1">
                             <p><strong>Tenant:</strong> {{ $tenant->name }}</p>
                             <p><strong>Business Type:</strong> {{ $tenant->getBusinessTypeLabel() }}</p>
                             <p><strong>From:</strong> {{ Auth::user()->name }}</p>
-                            <p id="previewRole"><strong>Role:</strong> <span class="text-gray-400">Select a role</span></p>
+                            <p id="previewRole"><strong>Role:</strong> <span class="theme-aware-text-muted">Select a role</span></p>
                             <p id="previewAdmin" style="display: none;"><strong>Admin:</strong> <span class="text-purple-600">Yes</span></p>
                         </div>
                     </div>
@@ -177,9 +177,9 @@
             </div>
 
             {{-- Action Buttons --}}
-            <div class="flex items-center justify-between pt-8 border-t border-gray-200 mt-8">
+            <div class="flex items-center justify-between pt-8 border-t theme-aware-border mt-8">
                 <a href="{{ route('admin.tenants.invitations.index', $tenant) }}" 
-                   class="px-6 py-3 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition">
+                   class="px-6 py-3 border theme-aware-border rounded-lg theme-aware-text-secondary hover:theme-aware-bg-secondary transition">
                     Cancel
                 </a>
                 
@@ -233,7 +233,7 @@ document.addEventListener('DOMContentLoaded', function() {
             };
             previewRole.innerHTML = `<strong>Role:</strong> ${roleLabels[selectedRole] || selectedRole}`;
         } else {
-            previewRole.innerHTML = '<strong>Role:</strong> <span class="text-gray-400">Select a role</span>';
+            previewRole.innerHTML = '<strong>Role:</strong> <span class="theme-aware-text-muted">Select a role</span>';
         }
     }
 

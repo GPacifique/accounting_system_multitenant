@@ -80,7 +80,7 @@
 
     {{-- Projects Chart --}}
     <div class="theme-aware-bg-card rounded-lg shadow-sm p-4 border mb-6">
-        <h3 class="text-sm font-medium text-gray-700 mb-4">Projects Budget — Last 6 months</h3>
+        <h3 class="text-sm font-medium theme-aware-text-secondary mb-4">Projects Budget — Last 6 months</h3>
         <div class="min-h-[260px]">
             <canvas id="projectsChart"></canvas>
         </div>
@@ -95,7 +95,7 @@
         @else
             <div class="overflow-x-auto">
                 <table class="w-full text-left border">
-                    <thead class="bg-gray-50">
+                    <thead class="theme-aware-bg-secondary">
                         <tr>
                             <th class="py-2 px-3 border-r text-sm theme-aware-text-secondary">#</th>
                             <th class="py-2 px-3 border-r text-sm theme-aware-text-secondary">Project Name</th>
@@ -106,15 +106,15 @@
                     </thead>
                     <tbody>
                         @foreach ($projectStats as $index => $proj)
-                            <tr class="border-t hover:bg-gray-50">
+                            <tr class="border-t hover:theme-aware-bg-secondary">
                                 <td class="py-2 px-3 text-sm theme-aware-text-muted">{{ $index + 1 }}</td>
                                 <td class="py-2 px-3 font-medium theme-aware-text">
                                     <a href="{{ route('projects.show', $proj->id) }}" class="text-indigo-600 hover:underline">
                                         {{ $proj->project_name }}
                                     </a>
                                 </td>
-                                <td class="py-2 px-3 text-sm text-gray-700">
-                                    <span class="inline-block px-2 py-1 rounded bg-gray-100 font-semibold">
+                                <td class="py-2 px-3 text-sm theme-aware-text-secondary">
+                                    <span class="inline-block px-2 py-1 rounded theme-aware-bg-secondary font-semibold">
                                         {{ number_format($proj->total_amount, 2) }}
                                     </span>
                                 </td>
@@ -140,7 +140,7 @@
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <div class="theme-aware-bg-card rounded-lg shadow-sm p-4 border">
             <div class="flex items-center justify-between mb-3">
-                <h4 class="font-semibold text-gray-700">Recent Projects</h4>
+                <h4 class="font-semibold theme-aware-text-secondary">Recent Projects</h4>
                 <a href="{{ route('projects.index') }}" class="text-indigo-600 text-sm">View all</a>
             </div>
 
@@ -163,7 +163,7 @@
 
         <div class="theme-aware-bg-card rounded-lg shadow-sm p-4 border">
             <div class="flex items-center justify-between mb-3">
-                <h4 class="font-semibold text-gray-700">Team Members</h4>
+                <h4 class="font-semibold theme-aware-text-secondary">Team Members</h4>
                 <a href="{{ route('workers.index') }}" class="text-indigo-600 text-sm">View all</a>
             </div>
 
@@ -174,7 +174,7 @@
                             <div class="font-medium">{{ $worker->full_name ?? ($worker->name ?? '—') }}</div>
                             <div class="text-xs theme-aware-text-muted">{{ optional($worker->created_at)->format('Y-m-d') ?? '—' }}</div>
                         </div>
-                        <div class="text-xs px-3 py-1 rounded-full {{ ($worker->status ?? '') === 'active' ? 'bg-green-50 text-green-700' : 'bg-gray-100 theme-aware-text-secondary' }}">
+                        <div class="text-xs px-3 py-1 rounded-full {{ ($worker->status ?? '') === 'active' ? 'bg-green-50 text-green-700' : 'theme-aware-bg-secondary theme-aware-text-secondary' }}">
                             {{ ucfirst($worker->status ?? '—') }}
                         </div>
                     </li>

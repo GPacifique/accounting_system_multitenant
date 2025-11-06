@@ -38,7 +38,7 @@
                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                 Total Accounts
                             </div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                            <div class="h5 mb-0 font-weight-bold theme-aware-text">
                                 {{ $stats['total_accounts'] }}
                             </div>
                         </div>
@@ -58,7 +58,7 @@
                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                 Active Accounts
                             </div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                            <div class="h5 mb-0 font-weight-bold theme-aware-text">
                                 {{ $stats['active_accounts'] }}
                             </div>
                         </div>
@@ -80,7 +80,7 @@
                             <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
                                 {{ $label }}
                             </div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                            <div class="h5 mb-0 font-weight-bold theme-aware-text">
                                 {{ $stats['by_type'][$type] ?? 0 }}
                             </div>
                         </div>

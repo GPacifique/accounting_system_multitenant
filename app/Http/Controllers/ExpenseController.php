@@ -85,6 +85,7 @@ class ExpenseController extends Controller
     {
         $data = $this->validateExpense($request);
 
+        $data = $this->ensureTenantId($data);
         Expense::create($data);
 
         return redirect()

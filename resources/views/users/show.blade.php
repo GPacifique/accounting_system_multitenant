@@ -32,30 +32,30 @@
             <!-- User Info Card -->
             <div class="lg:col-span-2 theme-aware-bg-card rounded-xl shadow-lg overflow-hidden">
                 <div class="p-6 sm:p-8">
-                    <h5 class="text-lg font-semibold text-gray-700 mb-4">Basic Information</h5>
+                    <h5 class="text-lg font-semibold theme-aware-text-secondary mb-4">Basic Information</h5>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label class="text-sm theme-aware-text-muted">Full Name</label>
-                            <p class="mt-1 text-gray-900 flex items-center gap-2">
+                            <p class="mt-1 theme-aware-text flex items-center gap-2">
                                 <i class="fas fa-user text-indigo-500"></i>{{ $user->name }}
                             </p>
                         </div>
                         <div>
                             <label class="text-sm theme-aware-text-muted">Email Address</label>
-                            <p class="mt-1 text-gray-900 flex items-center gap-2">
+                            <p class="mt-1 theme-aware-text flex items-center gap-2">
                                 <i class="fas fa-envelope text-indigo-500"></i>
                                 <a href="mailto:{{ $user->email }}" class="text-indigo-600 hover:underline">{{ $user->email }}</a>
                             </p>
                         </div>
                         <div>
                             <label class="text-sm theme-aware-text-muted">User ID</label>
-                            <p class="mt-1 text-gray-900 flex items-center gap-2">
+                            <p class="mt-1 theme-aware-text flex items-center gap-2">
                                 <i class="fas fa-hashtag theme-aware-text-muted"></i>{{ $user->id }}
                             </p>
                         </div>
                         <div>
                             <label class="text-sm theme-aware-text-muted">Member Since</label>
-                            <p class="mt-1 text-gray-900 flex items-center gap-2">
+                            <p class="mt-1 theme-aware-text flex items-center gap-2">
                                 <i class="fas fa-calendar theme-aware-text-muted"></i>{{ $user->created_at->format('M d, Y') }}
                             </p>
                         </div>
@@ -63,13 +63,13 @@
 
                     <!-- Assigned Roles -->
                     <div class="mt-8">
-                        <h5 class="text-lg font-semibold text-gray-700 mb-3 flex items-center gap-2">
+                        <h5 class="text-lg font-semibold theme-aware-text-secondary mb-3 flex items-center gap-2">
                             <i class="fas fa-user-shield theme-aware-text-secondary"></i> Assigned Roles
                         </h5>
                         @if($user->roles->count() > 0)
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                                 @foreach($user->roles as $role)
-                                    <div class="p-3 border rounded bg-gray-50">
+                                    <div class="p-3 border rounded theme-aware-bg-secondary">
                                         <div class="flex items-center justify-between">
                                             <h6 class="font-medium">
                                                 <i class="fas fa-check-circle text-green-500 mr-2"></i>{{ ucfirst($role->name) }}
@@ -93,7 +93,7 @@
             <div class="space-y-6">
                 <div class="theme-aware-bg-card rounded-xl shadow-lg overflow-hidden">
                     <div class="p-6">
-                        <h6 class="font-semibold text-gray-700 mb-4 flex items-center gap-2">
+                        <h6 class="font-semibold theme-aware-text-secondary mb-4 flex items-center gap-2">
                             <i class="fas fa-info-circle theme-aware-text-secondary"></i> Status
                         </h6>
                         <div class="mb-3">
@@ -114,7 +114,7 @@
                 @if($user->roles->count() > 0)
                 <div class="theme-aware-bg-card rounded-xl shadow-lg overflow-hidden">
                     <div class="p-6">
-                        <h6 class="font-semibold text-gray-700 mb-4 flex items-center gap-2">
+                        <h6 class="font-semibold theme-aware-text-secondary mb-4 flex items-center gap-2">
                             <i class="fas fa-lock theme-aware-text-secondary"></i> Effective Permissions
                         </h6>
                         <div class="max-h-80 overflow-y-auto">
@@ -122,7 +122,7 @@
                             @if($permissions->count() > 0)
                                 <div class="flex flex-wrap gap-2">
                                     @foreach($permissions as $perm)
-                                        <span class="inline-flex items-center px-2 py-1 rounded text-xs bg-gray-100 text-gray-700">{{ $perm->name }}</span>
+                                        <span class="inline-flex items-center px-2 py-1 rounded text-xs theme-aware-bg-secondary theme-aware-text-secondary">{{ $perm->name }}</span>
                                     @endforeach
                                 </div>
                             @else
@@ -141,7 +141,7 @@
 @push('styles')
 <style>
     .btn-primary { @apply inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 active:bg-indigo-900 focus:outline-none focus:border-indigo-900 focus:ring ring-indigo-300 disabled:opacity-25 transition ease-in-out duration-150; }
-    .btn-secondary { @apply inline-flex items-center px-4 py-2 bg-gray-200 border border-gray-300 rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest hover:bg-gray-300 active:bg-gray-400 focus:outline-none focus:border-gray-400 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150; }
+    .btn-secondary { @apply inline-flex items-center px-4 py-2 theme-aware-bg-tertiary border theme-aware-border rounded-md font-semibold text-xs theme-aware-text-secondary uppercase tracking-widest hover:bg-gray-300 active:bg-gray-400 focus:outline-none focus:theme-aware-border-secondary focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150; }
     .btn-danger { @apply inline-flex items-center px-4 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700 active:bg-red-900 focus:outline-none focus:border-red-900 focus:ring ring-red-300 disabled:opacity-25 transition ease-in-out duration-150; }
 </style>
 @endpush

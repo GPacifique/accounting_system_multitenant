@@ -16,7 +16,7 @@
         <div class="flex items-center justify-between">
             <div>
                 <p class="theme-aware-text-muted text-sm font-medium uppercase tracking-wide">{{ $title }}</p>
-                <p class="text-3xl font-bold text-gray-900 mt-2">{{ $value }}</p>
+                <p class="text-3xl font-bold theme-aware-text mt-2">{{ $value }}</p>
                 @if($subtitle)
                     <p class="theme-aware-text-secondary text-xs mt-1">{{ $subtitle }}</p>
                 @endif
@@ -47,7 +47,7 @@
                             {{ abs($trend) }}%
                         </span>
                     @else
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-sm font-medium bg-gray-100 theme-aware-text">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-sm font-medium theme-aware-bg-secondary theme-aware-text">
                             No change
                         </span>
                     @endif

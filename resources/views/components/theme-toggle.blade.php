@@ -4,7 +4,7 @@
     <button 
         type="button" 
         data-theme-toggle
-        class="theme-toggle-btn hidden md:flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-all duration-200 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+        class="theme-toggle-btn hidden md:flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-all duration-200 hover:theme-aware-bg-secondary dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
         title="Toggle theme">
         <span class="theme-icon mr-2">
             <i class="fas fa-moon"></i>
@@ -18,7 +18,7 @@
     <button 
         type="button" 
         data-theme-toggle
-        class="theme-toggle-mobile md:hidden flex items-center justify-center w-10 h-10 rounded-lg transition-all duration-200 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+        class="theme-toggle-mobile md:hidden flex items-center justify-center w-10 h-10 rounded-lg transition-all duration-200 hover:theme-aware-bg-secondary dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
         title="Toggle theme">
         <span class="theme-icon">
             <i class="fas fa-moon"></i>

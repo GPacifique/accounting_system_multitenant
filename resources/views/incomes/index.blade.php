@@ -26,7 +26,7 @@
     @else
         <div class="overflow-x-auto">
             <table class="w-full text-left border">
-                <thead class="bg-gray-50">
+                <thead class="theme-aware-bg-secondary">
                     <tr>
                         <th class="py-2 px-3 border-r text-sm theme-aware-text-secondary">Project</th>
                         <th class="py-2 px-3 border-r text-sm theme-aware-text-secondary">Total Paid</th>
@@ -36,7 +36,7 @@
                 </thead>
                 <tbody>
                     @foreach($projectStats as $stat)
-                        <tr class="border-t hover:bg-gray-50">
+                        <tr class="border-t hover:theme-aware-bg-secondary">
                             <td class="py-2 px-3 font-medium">
                                 {{ $stat->project_name ?? '—' }}
                             </td>
@@ -81,7 +81,7 @@
     <div class="overflow-x-auto">
         <table class="min-w-full theme-aware-bg-card border rounded">
             <thead>
-                <tr class="bg-gray-200 text-gray-700">
+                <tr class="theme-aware-bg-tertiary theme-aware-text-secondary">
                     <th class="py-2 px-4 border">ID</th>
                     <th class="py-2 px-4 border">Project</th>
                     <th class="py-2 px-4 border">Invoice #</th>
@@ -94,7 +94,7 @@
             </thead>
             <tbody>
                 @forelse($incomes as $income)
-                    <tr class="text-gray-700 text-center">
+                    <tr class="theme-aware-text-secondary text-center">
                         <td class="py-2 px-4 border">{{ $income->id }}</td>
                         <td class="py-2 px-4 border">{{ $income->project->name ?? 'N/A' }}</td>
                         <td class="py-2 px-4 border">{{ $income->invoice_number }}</td>

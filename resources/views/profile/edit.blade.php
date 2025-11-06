@@ -17,28 +17,28 @@
         @method('PATCH')
 
         <div class="mb-4">
-            <label for="name" class="block text-gray-700 font-medium mb-1">Name</label>
+            <label for="name" class="block theme-aware-text-secondary font-medium mb-1">Name</label>
             <input type="text" name="name" id="name" value="{{ old('name', $user->name) }}"
                 class="w-full border rounded px-3 py-2 focus:outline-none focus:ring focus:border-indigo-300">
             @error('name')<span class="text-red-600 text-sm">{{ $message }}</span>@enderror
         </div>
 
         <div class="mb-4">
-            <label for="email" class="block text-gray-700 font-medium mb-1">Email</label>
+            <label for="email" class="block theme-aware-text-secondary font-medium mb-1">Email</label>
             <input type="email" name="email" id="email" value="{{ old('email', $user->email) }}"
                 class="w-full border rounded px-3 py-2 focus:outline-none focus:ring focus:border-indigo-300">
             @error('email')<span class="text-red-600 text-sm">{{ $message }}</span>@enderror
         </div>
 
         <div class="mb-4">
-            <label for="password" class="block text-gray-700 font-medium mb-1">New Password</label>
+            <label for="password" class="block theme-aware-text-secondary font-medium mb-1">New Password</label>
             <input type="password" name="password" id="password"
                 class="w-full border rounded px-3 py-2 focus:outline-none focus:ring focus:border-indigo-300">
             @error('password')<span class="text-red-600 text-sm">{{ $message }}</span>@enderror
         </div>
 
         <div class="mb-4">
-            <label for="password_confirmation" class="block text-gray-700 font-medium mb-1">Confirm Password</label>
+            <label for="password_confirmation" class="block theme-aware-text-secondary font-medium mb-1">Confirm Password</label>
             <input type="password" name="password_confirmation" id="password_confirmation"
                 class="w-full border rounded px-3 py-2 focus:outline-none focus:ring focus:border-indigo-300">
         </div>

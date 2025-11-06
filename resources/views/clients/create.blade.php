@@ -13,7 +13,7 @@
         </div>
 
         <div class="flex items-center gap-2">
-            <a href="{{ route('clients.index') }}" class="text-sm px-3 py-2 border rounded-lg hover:bg-gray-50">← Back to list</a>
+            <a href="{{ route('clients.index') }}" class="text-sm px-3 py-2 border rounded-lg hover:theme-aware-bg-secondary">← Back to list</a>
         </div>
     </div>
 
@@ -96,7 +96,7 @@
 
         {{-- Actions --}}
         <div class="mt-6 flex flex-col sm:flex-row sm:items-center sm:justify-end gap-3">
-            <a href="{{ route('clients.index') }}" class="px-4 py-2 rounded-lg border text-gray-700 hover:bg-gray-50">Cancel</a>
+            <a href="{{ route('clients.index') }}" class="px-4 py-2 rounded-lg border theme-aware-text-secondary hover:theme-aware-bg-secondary">Cancel</a>
             <button type="submit" class="px-5 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 shadow">Save Client</button>
         </div>
     </form>

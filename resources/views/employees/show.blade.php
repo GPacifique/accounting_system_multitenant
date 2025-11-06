@@ -36,15 +36,15 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {{-- Contact Information --}}
                     <div>
-                        <h3 class="text-lg font-semibold text-gray-700 border-b pb-2 mb-4">Contact Information</h3>
+                        <h3 class="text-lg font-semibold theme-aware-text-secondary border-b pb-2 mb-4">Contact Information</h3>
                         <dl class="space-y-4">
                             <div class="flex flex-col">
                                 <dt class="text-sm font-medium theme-aware-text-muted">Full Name</dt>
-                                <dd class="mt-1 text-md text-gray-900">{{ $employee->name }}</dd>
+                                <dd class="mt-1 text-md theme-aware-text">{{ $employee->name }}</dd>
                             </div>
                             <div class="flex flex-col">
                                 <dt class="text-sm font-medium theme-aware-text-muted">Email Address</dt>
-                                <dd class="mt-1 text-md text-gray-900">
+                                <dd class="mt-1 text-md theme-aware-text">
                                     @if($employee->email)
                                         <a href="mailto:{{ $employee->email }}" class="text-indigo-600 hover:underline">{{ $employee->email }}</a>
                                     @else
@@ -54,26 +54,26 @@
                             </div>
                             <div class="flex flex-col">
                                 <dt class="text-sm font-medium theme-aware-text-muted">Phone Number</dt>
-                                <dd class="mt-1 text-md text-gray-900">{{ $employee->phone ?? 'N/A' }}</dd>
+                                <dd class="mt-1 text-md theme-aware-text">{{ $employee->phone ?? 'N/A' }}</dd>
                             </div>
                         </dl>
                     </div>
 
                     {{-- Employment Information --}}
                     <div>
-                        <h3 class="text-lg font-semibold text-gray-700 border-b pb-2 mb-4">Employment Details</h3>
+                        <h3 class="text-lg font-semibold theme-aware-text-secondary border-b pb-2 mb-4">Employment Details</h3>
                         <dl class="space-y-4">
                             <div class="flex flex-col">
                                 <dt class="text-sm font-medium theme-aware-text-muted">Position</dt>
-                                <dd class="mt-1 text-md text-gray-900">{{ $employee->position }}</dd>
+                                <dd class="mt-1 text-md theme-aware-text">{{ $employee->position }}</dd>
                             </div>
                             <div class="flex flex-col">
                                 <dt class="text-sm font-medium theme-aware-text-muted">Date Hired</dt>
-                                <dd class="mt-1 text-md text-gray-900">{{ $employee->created_at->format('d M Y') }}</dd>
+                                <dd class="mt-1 text-md theme-aware-text">{{ $employee->created_at->format('d M Y') }}</dd>
                             </div>
                              <div class="flex flex-col">
                                 <dt class="text-sm font-medium theme-aware-text-muted">Salary</dt>
-                                <dd class="mt-1 text-md text-gray-900">{{ $employee->salary ?? 'N/A' }}</dd>
+                                <dd class="mt-1 text-md theme-aware-text">{{ $employee->salary ?? 'N/A' }}</dd>
                             </div>
                         </dl>
                     </div>
@@ -93,7 +93,7 @@
         @apply inline-flex items-center px-4 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700 active:bg-red-900 focus:outline-none focus:border-red-900 focus:ring ring-red-300 disabled:opacity-25 transition ease-in-out duration-150;
     }
     .btn-secondary {
-        @apply inline-flex items-center px-4 py-2 bg-gray-200 border border-gray-300 rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest hover:bg-gray-300 active:bg-gray-400 focus:outline-none focus:border-gray-400 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150;
+        @apply inline-flex items-center px-4 py-2 theme-aware-bg-tertiary border theme-aware-border rounded-md font-semibold text-xs theme-aware-text-secondary uppercase tracking-widest hover:bg-gray-300 active:bg-gray-400 focus:outline-none focus:theme-aware-border-secondary focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150;
     }
 </style>
 @endpush

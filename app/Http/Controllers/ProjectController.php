@@ -126,6 +126,7 @@ class ProjectController extends Controller
             return back()->withErrors(['client_id' => 'Invalid client selected.']);
         }
 
+        $validated = $this->ensureTenantId($validated);
         Project::create($validated);
 
         return redirect()->route('projects.index')

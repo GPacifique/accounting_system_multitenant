@@ -32,7 +32,7 @@
 
             {{-- Project Name --}}
             <div class="mb-4">
-                <label for="name" class="block text-gray-700 font-medium">Project Name</label>
+                <label for="name" class="block theme-aware-text-secondary font-medium">Project Name</label>
                 <input type="text" id="name" name="name" value="{{ old('name', $project->name) }}"
                        class="w-full mt-2 p-2 border rounded-lg focus:ring focus:ring-blue-300"
                        required>
@@ -40,7 +40,7 @@
 
             {{-- Client --}}
             <div class="mb-4">
-                <label for="client" class="block text-gray-700 font-medium">Client</label>
+                <label for="client" class="block theme-aware-text-secondary font-medium">Client</label>
                 <input type="text" id="client" name="client" value="{{ old('client', $project->client) }}"
                        class="w-full mt-2 p-2 border rounded-lg focus:ring focus:ring-blue-300"
                        required>
@@ -48,7 +48,7 @@
 
             {{-- Status --}}
             <div class="mb-4">
-                <label for="status" class="block text-gray-700 font-medium">Status</label>
+                <label for="status" class="block theme-aware-text-secondary font-medium">Status</label>
                 <select id="status" name="status"
                         class="w-full mt-2 p-2 border rounded-lg focus:ring focus:ring-blue-300"
                         required>
@@ -60,7 +60,7 @@
 
             {{-- Deadline --}}
             <div class="mb-4">
-                <label for="deadline" class="block text-gray-700 font-medium">Deadline</label>
+                <label for="deadline" class="block theme-aware-text-secondary font-medium">Deadline</label>
                 <input type="date" id="deadline" name="deadline" value="{{ old('deadline', $project->deadline) }}"
                        class="w-full mt-2 p-2 border rounded-lg focus:ring focus:ring-blue-300"
                        required>
@@ -68,7 +68,7 @@
 
             {{-- Budget --}}
             <div class="mb-4">
-                <label for="budget" class="block text-gray-700 font-medium">Budget ($)</label>
+                <label for="budget" class="block theme-aware-text-secondary font-medium">Budget ($)</label>
                 <input type="number" step="0.01" id="budget" name="budget" value="{{ old('budget', $project->budget) }}"
                        class="w-full mt-2 p-2 border rounded-lg focus:ring focus:ring-blue-300">
             </div>

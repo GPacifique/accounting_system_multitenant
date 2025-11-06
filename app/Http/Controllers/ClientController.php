@@ -47,6 +47,7 @@ class ClientController extends Controller
             'address' => 'nullable|string|max:500',
         ]);
 
+        $validated = $this->ensureTenantId($validated);
         Client::create($validated);
 
         return redirect()->route('clients.index')

@@ -23,18 +23,18 @@
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body class="font-sans text-gray-900 antialiased">
+    <body class="font-sans theme-aware-text antialiased">
 
-        <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
+        <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 theme-aware-bg-primary">
             <div class="flex flex-col items-center">
                 <a href="/" class="flex flex-col items-center mb-4">
                     <img src="{{ asset('images/logo/siteledger-logo.svg') }}" alt="SiteLedger Logo" class="h-16 mb-2">
-                    <span class="text-2xl font-bold text-blue-800">SITELEDGER</span>
+                    <span class="text-2xl font-bold theme-aware-text-primary">SITELEDGER</span>
                     <span class="text-sm theme-aware-text-secondary">Construction Finance Management</span>
                 </a>
             </div>
 
-            <div class="w-full sm:max-w-md mt-6 px-6 py-4 theme-aware-bg-card shadow-md overflow-hidden sm:rounded-lg">
+            <div class="w-full sm:max-w-md mt-6 px-6 py-4 theme-aware-bg-card theme-aware-shadow overflow-hidden sm:rounded-lg theme-aware-border border">
                 {{ $slot }}
             </div>
         </div>

@@ -69,7 +69,7 @@
                                 <span class="text-sm theme-aware-text-secondary">{{ $item->category ?? 'Uncategorized' }}</span>
                                 <span class="text-sm font-semibold text-green-600">RWF {{ number_format($item->total, 0) }}</span>
                             </div>
-                            <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div class="w-full theme-aware-bg-tertiary rounded-full h-2">
                                 <div class="bg-green-500 h-2 rounded-full" style="width: {{ ($item->total / $incomeByCategory->sum('total') * 100) }}%"></div>
                             </div>
                         </div>
@@ -97,7 +97,7 @@
                                 <span class="text-sm theme-aware-text-secondary">{{ $item->category ?? 'Uncategorized' }}</span>
                                 <span class="text-sm font-semibold text-red-600">RWF {{ number_format($item->total, 0) }}</span>
                             </div>
-                            <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div class="w-full theme-aware-bg-tertiary rounded-full h-2">
                                 <div class="bg-red-500 h-2 rounded-full" style="width: {{ ($item->total / $expenseByCategory->sum('total') * 100) }}%"></div>
                             </div>
                         </div>
@@ -123,7 +123,7 @@
             @else
                 <div class="overflow-x-auto">
                     <table class="w-full text-sm">
-                        <thead class="bg-gray-50 border-b">
+                        <thead class="theme-aware-bg-secondary border-b">
                             <tr>
                                 <th class="px-3 py-2 text-left text-xs font-semibold theme-aware-text-secondary">Position</th>
                                 <th class="px-3 py-2 text-right text-xs font-semibold theme-aware-text-secondary">Total</th>
@@ -131,7 +131,7 @@
                         </thead>
                         <tbody class="divide-y">
                             @foreach($byPosToday as $row)
-                                <tr class="hover:bg-gray-50">
+                                <tr class="hover:theme-aware-bg-secondary">
                                     <td class="px-3 py-2">{{ $row->position ?? '—' }}</td>
                                     <td class="px-3 py-2 text-right font-semibold text-emerald-600">RWF {{ number_format($row->total ?? 0, 0) }}</td>
                                 </tr>
@@ -150,7 +150,7 @@
             @else
                 <div class="overflow-x-auto">
                     <table class="w-full text-sm">
-                        <thead class="bg-gray-50 border-b">
+                        <thead class="theme-aware-bg-secondary border-b">
                             <tr>
                                 <th class="px-3 py-2 text-left text-xs font-semibold theme-aware-text-secondary">Position</th>
                                 <th class="px-3 py-2 text-right text-xs font-semibold theme-aware-text-secondary">Total</th>
@@ -158,7 +158,7 @@
                         </thead>
                         <tbody class="divide-y">
                             @foreach($byPosMonth as $row)
-                                <tr class="hover:bg-gray-50">
+                                <tr class="hover:theme-aware-bg-secondary">
                                     <td class="px-3 py-2">{{ $row->position ?? '—' }}</td>
                                     <td class="px-3 py-2 text-right font-semibold text-emerald-600">RWF {{ number_format($row->total ?? 0, 0) }}</td>
                                 </tr>
@@ -180,9 +180,9 @@
             @else
                 <div class="space-y-2 max-h-96 overflow-y-auto">
                     @foreach($recentIncomes as $income)
-                        <div class="flex items-center justify-between p-2 rounded hover:bg-gray-50">
+                        <div class="flex items-center justify-between p-2 rounded hover:theme-aware-bg-secondary">
                             <div>
-                                <div class="text-sm font-medium text-gray-700">{{ $income->source ?? 'Income' }}</div>
+                                <div class="text-sm font-medium theme-aware-text-secondary">{{ $income->source ?? 'Income' }}</div>
                                 <div class="text-xs theme-aware-text-muted">{{ $income->received_at->format('H:i') }}</div>
                             </div>
                             <span class="text-sm font-semibold text-green-600">+RWF {{ number_format($income->amount_received, 0) }}</span>
@@ -200,9 +200,9 @@
             @else
                 <div class="space-y-2 max-h-96 overflow-y-auto">
                     @foreach($recentExpenses as $expense)
-                        <div class="flex items-center justify-between p-2 rounded hover:bg-gray-50">
+                        <div class="flex items-center justify-between p-2 rounded hover:theme-aware-bg-secondary">
                             <div>
-                                <div class="text-sm font-medium text-gray-700">{{ $expense->category ?? 'Expense' }}</div>
+                                <div class="text-sm font-medium theme-aware-text-secondary">{{ $expense->category ?? 'Expense' }}</div>
                                 <div class="text-xs theme-aware-text-muted">{{ $expense->created_at->format('H:i') }}</div>
                             </div>
                             <span class="text-sm font-semibold text-red-600">-RWF {{ number_format($expense->amount, 0) }}</span>
@@ -220,9 +220,9 @@
             @else
                 <div class="space-y-2 max-h-96 overflow-y-auto">
                     @foreach($recentPayments as $payment)
-                        <div class="flex items-center justify-between p-2 rounded hover:bg-gray-50">
+                        <div class="flex items-center justify-between p-2 rounded hover:theme-aware-bg-secondary">
                             <div>
-                                <div class="text-sm font-medium text-gray-700">{{ $payment->reference ?? 'Payment' }}</div>
+                                <div class="text-sm font-medium theme-aware-text-secondary">{{ $payment->reference ?? 'Payment' }}</div>
                                 <div class="text-xs theme-aware-text-muted">{{ $payment->method ?? '—' }}</div>
                             </div>
                             <span class="text-sm font-semibold text-blue-600">RWF {{ number_format($payment->amount, 0) }}</span>
@@ -240,9 +240,9 @@
             @else
                 <div class="space-y-2 max-h-96 overflow-y-auto">
                     @foreach($recentWorkerPayments as $wp)
-                        <div class="flex items-center justify-between p-2 rounded hover:bg-gray-50">
+                        <div class="flex items-center justify-between p-2 rounded hover:theme-aware-bg-secondary">
                             <div>
-                                <div class="text-sm font-medium text-gray-700">{{ ($wp->first_name ?? '') . ' ' . ($wp->last_name ?? '') }}</div>
+                                <div class="text-sm font-medium theme-aware-text-secondary">{{ ($wp->first_name ?? '') . ' ' . ($wp->last_name ?? '') }}</div>
                                 <div class="text-xs theme-aware-text-muted">{{ \Illuminate\Support\Carbon::parse($wp->paid_on)->format('Y-m-d') }}</div>
                             </div>
                             <a href="{{ route('workers.show', $wp->worker_id ?? 0) }}" class="text-sm font-semibold text-emerald-600 hover:underline">RWF {{ number_format($wp->amount, 0) }}</a>

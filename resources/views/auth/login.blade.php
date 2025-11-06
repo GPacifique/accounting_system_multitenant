@@ -7,12 +7,13 @@
             height: 100%;
             margin: 0;
             font-family: 'Segoe UI', Roboto, Arial, sans-serif;
-            background: linear-gradient(135deg, #c3cfe2, #c3cfe2, #ddeeff, #e2e2e2);
+            background: var(--bg-gradient-primary);
             background-size: 400% 400%;
             animation: gradientBG 15s ease infinite;
             display: flex;
             justify-content: center;
             align-items: center;
+            color: var(--text-primary);
         }
 
         @keyframes gradientBG {
@@ -22,20 +23,21 @@
         }
 
         .auth-container {
-            background: rgba(255, 255, 255, 0.25);
+            background: var(--bg-card-glass);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             border-radius: 20px;
             padding: 2.5rem;
             width: 100%;
             max-width: 400px;
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
+            box-shadow: var(--shadow-glass);
             text-align: center;
+            border: 1px solid var(--border-secondary);
         }
 
         .auth-container h2 {
             margin-bottom: 1.5rem;
-            color: #1e3a8a;
+            color: var(--text-primary);
             font-size: 1.8rem;
         }
 
@@ -47,24 +49,26 @@
         .auth-container input {
             padding: 0.9rem;
             margin-bottom: 1rem;
-            border: none;
+            border: 1px solid var(--border-secondary);
             border-radius: 12px;
-            background: rgba(255, 255, 255, 0.7);
-            box-shadow: inset 2px 2px 6px rgba(0,0,0,0.1), inset -2px -2px 6px rgba(255,255,255,0.7);
+            background: var(--bg-input);
+            box-shadow: var(--shadow-inset);
             font-size: 1rem;
+            color: var(--text-primary);
         }
 
         .auth-container input:focus {
             outline: none;
-            box-shadow: 0 0 0 3px rgba(37,99,235,0.3);
+            box-shadow: 0 0 0 3px var(--focus-ring);
+            border-color: var(--border-focus);
         }
 
         .auth-container button {
             padding: 0.9rem;
             border: none;
             border-radius: 12px;
-            background: linear-gradient(to right, #3b82f6, #2563eb);
-            color: white;
+            background: var(--bg-primary-button);
+            color: var(--text-button);
             font-size: 1rem;
             font-weight: bold;
             cursor: pointer;
@@ -72,9 +76,9 @@
         }
 
         .auth-container button:hover {
-            background: linear-gradient(to right, #2563eb, #1e40af);
+            background: var(--bg-primary-button-hover);
             transform: translateY(-2px);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--shadow-hover);
         }
 
         .auth-links {
@@ -83,12 +87,13 @@
 
         .auth-links a {
             text-decoration: none;
-            color: #2563eb;
+            color: var(--text-link);
             font-size: 0.9rem;
         }
 
         .auth-links a:hover {
             text-decoration: underline;
+            color: var(--text-link-hover);
         }
 
         @media (max-width: 480px) {
@@ -123,14 +128,14 @@
             <!-- Remember Me -->
             <div class="block mt-4">
                 <label for="remember_me" class="inline-flex items-center">
-                    <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" name="remember">
+                    <input id="remember_me" type="checkbox" class="rounded theme-aware-border text-indigo-600 shadow-sm focus:ring-indigo-500" name="remember">
                     <span class="ms-2 text-sm theme-aware-text-secondary">{{ __('Remember me') }}</span>
                 </label>
             </div>
 
             <div class="flex items-center justify-between mt-6">
                 @if (Route::has('password.request'))
-                    <a class="auth-links underline text-sm theme-aware-text-secondary hover:text-gray-900" href="{{ route('password.request') }}">
+                    <a class="auth-links underline text-sm theme-aware-text-secondary hover:theme-aware-text" href="{{ route('password.request') }}">
                         {{ __('Forgot your password?') }}
                     </a>
                 @endif

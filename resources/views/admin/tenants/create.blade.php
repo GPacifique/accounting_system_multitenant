@@ -14,14 +14,14 @@
         <div class="flex items-center justify-between">
             <div>
                 <h1 class="text-3xl font-bold flex items-center">
-                    <div class="bg-white/20 rounded-lg p-2 mr-4">
+                    <div class="theme-aware-bg-card/20 rounded-lg p-2 mr-4">
                         <i class="fas fa-plus-circle text-2xl"></i>
                     </div>
                     Create New Tenant
                 </h1>
                 <p class="text-green-100 mt-2">Set up a new business in the accounting system</p>
             </div>
-            <a href="{{ route('admin.tenants.index') }}" class="bg-white text-green-600 px-6 py-3 rounded-lg font-semibold hover:bg-green-50 transition">
+            <a href="{{ route('admin.tenants.index') }}" class="theme-aware-bg-card text-green-600 px-6 py-3 rounded-lg font-semibold hover:bg-green-50 transition">
                 <i class="fas fa-arrow-left mr-2"></i>
                 Back to Tenants
             </a>
@@ -35,15 +35,15 @@
             {{-- Main Form --}}
             <div class="lg:col-span-2 space-y-8">
                 {{-- Business Information --}}
-                <div class="bg-white rounded-xl shadow-lg p-6">
-                    <h2 class="text-xl font-bold text-gray-800 mb-6 flex items-center">
+                <div class="theme-aware-bg-card rounded-xl shadow-lg p-6">
+                    <h2 class="text-xl font-bold theme-aware-text mb-6 flex items-center">
                         <i class="fas fa-building text-blue-600 mr-3"></i>
                         Business Information
                     </h2>
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="md:col-span-2">
-                            <label for="name" class="block text-sm font-medium text-gray-700 mb-2">
+                            <label for="name" class="block text-sm font-medium theme-aware-text-secondary mb-2">
                                 Business Name *
                             </label>
                             <input type="text" 
@@ -51,7 +51,7 @@
                                    name="name" 
                                    value="{{ old('name') }}"
                                    required
-                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('name') border-red-500 @enderror"
+                                   class="w-full px-4 py-3 border theme-aware-border rounded-lg focus:ring-2 focus:ring-primary focus:theme-aware-border-focus @error('name') border-red-500 @enderror"
                                    placeholder="Enter the business name">
                             @error('name')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -59,7 +59,7 @@
                         </div>
 
                         <div>
-                            <label for="domain" class="block text-sm font-medium text-gray-700 mb-2">
+                            <label for="domain" class="block text-sm font-medium theme-aware-text-secondary mb-2">
                                 Subdomain *
                             </label>
                             <div class="flex">
@@ -68,26 +68,26 @@
                                        name="domain" 
                                        value="{{ old('domain') }}"
                                        required
-                                       class="flex-1 px-4 py-3 border border-gray-300 rounded-l-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('domain') border-red-500 @enderror"
+                                       class="flex-1 px-4 py-3 border theme-aware-border rounded-l-lg focus:ring-2 focus:ring-primary focus:theme-aware-border-focus @error('domain') border-red-500 @enderror"
                                        placeholder="company-name">
-                                <span class="inline-flex items-center px-3 rounded-r-lg border border-l-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">
+                                <span class="inline-flex items-center px-3 rounded-r-lg border border-l-0 theme-aware-border theme-aware-bg-secondary theme-aware-text-muted text-sm">
                                     .{{ config('app.domain', 'siteledger.com') }}
                                 </span>
                             </div>
                             @error('domain')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
-                            <p class="mt-1 text-xs text-gray-500">This will be the tenant's unique subdomain</p>
+                            <p class="mt-1 text-xs theme-aware-text-muted">This will be the tenant's unique subdomain</p>
                         </div>
 
                         <div>
-                            <label for="business_type" class="block text-sm font-medium text-gray-700 mb-2">
+                            <label for="business_type" class="block text-sm font-medium theme-aware-text-secondary mb-2">
                                 Business Type *
                             </label>
                             <select id="business_type" 
                                     name="business_type" 
                                     required
-                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('business_type') border-red-500 @enderror">
+                                    class="w-full px-4 py-3 border theme-aware-border rounded-lg focus:ring-2 focus:ring-primary focus:theme-aware-border-focus @error('business_type') border-red-500 @enderror">
                                 <option value="">Select business type</option>
                                 <option value="construction" {{ old('business_type') === 'construction' ? 'selected' : '' }}>Construction</option>
                                 <option value="consulting" {{ old('business_type') === 'consulting' ? 'selected' : '' }}>Consulting</option>
@@ -102,7 +102,7 @@
                         </div>
 
                         <div>
-                            <label for="contact_email" class="block text-sm font-medium text-gray-700 mb-2">
+                            <label for="contact_email" class="block text-sm font-medium theme-aware-text-secondary mb-2">
                                 Contact Email *
                             </label>
                             <input type="email" 
@@ -110,7 +110,7 @@
                                    name="contact_email" 
                                    value="{{ old('contact_email') }}"
                                    required
-                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('contact_email') border-red-500 @enderror"
+                                   class="w-full px-4 py-3 border theme-aware-border rounded-lg focus:ring-2 focus:ring-primary focus:theme-aware-border-focus @error('contact_email') border-red-500 @enderror"
                                    placeholder="business@example.com">
                             @error('contact_email')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -118,14 +118,14 @@
                         </div>
 
                         <div>
-                            <label for="contact_phone" class="block text-sm font-medium text-gray-700 mb-2">
+                            <label for="contact_phone" class="block text-sm font-medium theme-aware-text-secondary mb-2">
                                 Contact Phone
                             </label>
                             <input type="tel" 
                                    id="contact_phone" 
                                    name="contact_phone" 
                                    value="{{ old('contact_phone') }}"
-                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('contact_phone') border-red-500 @enderror"
+                                   class="w-full px-4 py-3 border theme-aware-border rounded-lg focus:ring-2 focus:ring-primary focus:theme-aware-border-focus @error('contact_phone') border-red-500 @enderror"
                                    placeholder="+1 (555) 123-4567">
                             @error('contact_phone')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -133,13 +133,13 @@
                         </div>
 
                         <div class="md:col-span-2">
-                            <label for="address" class="block text-sm font-medium text-gray-700 mb-2">
+                            <label for="address" class="block text-sm font-medium theme-aware-text-secondary mb-2">
                                 Business Address
                             </label>
                             <textarea id="address" 
                                       name="address" 
                                       rows="3"
-                                      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('address') border-red-500 @enderror"
+                                      class="w-full px-4 py-3 border theme-aware-border rounded-lg focus:ring-2 focus:ring-primary focus:theme-aware-border-focus @error('address') border-red-500 @enderror"
                                       placeholder="Enter the complete business address">{{ old('address') }}</textarea>
                             @error('address')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -149,21 +149,21 @@
                 </div>
 
                 {{-- Subscription & Settings --}}
-                <div class="bg-white rounded-xl shadow-lg p-6">
-                    <h2 class="text-xl font-bold text-gray-800 mb-6 flex items-center">
+                <div class="theme-aware-bg-card rounded-xl shadow-lg p-6">
+                    <h2 class="text-xl font-bold theme-aware-text mb-6 flex items-center">
                         <i class="fas fa-cog text-green-600 mr-3"></i>
                         Subscription & Settings
                     </h2>
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                            <label for="subscription_plan" class="block text-sm font-medium text-gray-700 mb-2">
+                            <label for="subscription_plan" class="block text-sm font-medium theme-aware-text-secondary mb-2">
                                 Subscription Plan *
                             </label>
                             <select id="subscription_plan" 
                                     name="subscription_plan" 
                                     required
-                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('subscription_plan') border-red-500 @enderror">
+                                    class="w-full px-4 py-3 border theme-aware-border rounded-lg focus:ring-2 focus:ring-primary focus:theme-aware-border-focus @error('subscription_plan') border-red-500 @enderror">
                                 <option value="basic" {{ old('subscription_plan') === 'basic' ? 'selected' : '' }}>Basic - $29/month</option>
                                 <option value="professional" {{ old('subscription_plan') === 'professional' ? 'selected' : '' }}>Professional - $59/month</option>
                                 <option value="premium" {{ old('subscription_plan') === 'premium' ? 'selected' : '' }}>Premium - $99/month</option>
@@ -175,7 +175,7 @@
                         </div>
 
                         <div>
-                            <label for="max_users" class="block text-sm font-medium text-gray-700 mb-2">
+                            <label for="max_users" class="block text-sm font-medium theme-aware-text-secondary mb-2">
                                 Maximum Users
                             </label>
                             <input type="number" 
@@ -184,7 +184,7 @@
                                    value="{{ old('max_users', 5) }}"
                                    min="1"
                                    max="1000"
-                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('max_users') border-red-500 @enderror"
+                                   class="w-full px-4 py-3 border theme-aware-border rounded-lg focus:ring-2 focus:ring-primary focus:theme-aware-border-focus @error('max_users') border-red-500 @enderror"
                                    placeholder="5">
                             @error('max_users')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -192,12 +192,12 @@
                         </div>
 
                         <div>
-                            <label for="timezone" class="block text-sm font-medium text-gray-700 mb-2">
+                            <label for="timezone" class="block text-sm font-medium theme-aware-text-secondary mb-2">
                                 Timezone
                             </label>
                             <select id="timezone" 
                                     name="timezone" 
-                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('timezone') border-red-500 @enderror">
+                                    class="w-full px-4 py-3 border theme-aware-border rounded-lg focus:ring-2 focus:ring-primary focus:theme-aware-border-focus @error('timezone') border-red-500 @enderror">
                                 <option value="UTC" {{ old('timezone') === 'UTC' ? 'selected' : '' }}>UTC (GMT+0)</option>
                                 <option value="America/New_York" {{ old('timezone') === 'America/New_York' ? 'selected' : '' }}>Eastern Time (GMT-5)</option>
                                 <option value="America/Chicago" {{ old('timezone') === 'America/Chicago' ? 'selected' : '' }}>Central Time (GMT-6)</option>
@@ -214,12 +214,12 @@
                         </div>
 
                         <div>
-                            <label for="currency" class="block text-sm font-medium text-gray-700 mb-2">
+                            <label for="currency" class="block text-sm font-medium theme-aware-text-secondary mb-2">
                                 Default Currency
                             </label>
                             <select id="currency" 
                                     name="currency" 
-                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('currency') border-red-500 @enderror">
+                                    class="w-full px-4 py-3 border theme-aware-border rounded-lg focus:ring-2 focus:ring-primary focus:theme-aware-border-focus @error('currency') border-red-500 @enderror">
                                 <option value="RWF" {{ old('currency', 'RWF') === 'RWF' ? 'selected' : '' }}>RWF - Rwandan Franc</option>
                                 <option value="USD" {{ old('currency') === 'USD' ? 'selected' : '' }}>USD - US Dollar</option>
                                 <option value="EUR" {{ old('currency') === 'EUR' ? 'selected' : '' }}>EUR - Euro</option>
@@ -237,23 +237,23 @@
                                        name="auto_activate" 
                                        value="1"
                                        {{ old('auto_activate', true) ? 'checked' : '' }}
-                                       class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
-                                <span class="ml-2 text-sm text-gray-700">Automatically activate tenant after creation</span>
+                                       class="rounded theme-aware-border text-blue-600 focus:ring-primary">
+                                <span class="ml-2 text-sm theme-aware-text-secondary">Automatically activate tenant after creation</span>
                             </label>
                         </div>
                     </div>
                 </div>
 
                 {{-- Administrator Account --}}
-                <div class="bg-white rounded-xl shadow-lg p-6">
-                    <h2 class="text-xl font-bold text-gray-800 mb-6 flex items-center">
+                <div class="theme-aware-bg-card rounded-xl shadow-lg p-6">
+                    <h2 class="text-xl font-bold theme-aware-text mb-6 flex items-center">
                         <i class="fas fa-user-shield text-purple-600 mr-3"></i>
                         Administrator Account
                     </h2>
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                            <label for="admin_name" class="block text-sm font-medium text-gray-700 mb-2">
+                            <label for="admin_name" class="block text-sm font-medium theme-aware-text-secondary mb-2">
                                 Administrator Name *
                             </label>
                             <input type="text" 
@@ -261,7 +261,7 @@
                                    name="admin_name" 
                                    value="{{ old('admin_name') }}"
                                    required
-                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('admin_name') border-red-500 @enderror"
+                                   class="w-full px-4 py-3 border theme-aware-border rounded-lg focus:ring-2 focus:ring-primary focus:theme-aware-border-focus @error('admin_name') border-red-500 @enderror"
                                    placeholder="John Doe">
                             @error('admin_name')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -269,7 +269,7 @@
                         </div>
 
                         <div>
-                            <label for="admin_email" class="block text-sm font-medium text-gray-700 mb-2">
+                            <label for="admin_email" class="block text-sm font-medium theme-aware-text-secondary mb-2">
                                 Administrator Email *
                             </label>
                             <input type="email" 
@@ -277,7 +277,7 @@
                                    name="admin_email" 
                                    value="{{ old('admin_email') }}"
                                    required
-                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('admin_email') border-red-500 @enderror"
+                                   class="w-full px-4 py-3 border theme-aware-border rounded-lg focus:ring-2 focus:ring-primary focus:theme-aware-border-focus @error('admin_email') border-red-500 @enderror"
                                    placeholder="admin@company.com">
                             @error('admin_email')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -285,7 +285,7 @@
                         </div>
 
                         <div>
-                            <label for="admin_password" class="block text-sm font-medium text-gray-700 mb-2">
+                            <label for="admin_password" class="block text-sm font-medium theme-aware-text-secondary mb-2">
                                 Administrator Password *
                             </label>
                             <div class="relative">
@@ -293,12 +293,12 @@
                                        id="admin_password" 
                                        name="admin_password" 
                                        required
-                                       class="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('admin_password') border-red-500 @enderror"
+                                       class="w-full px-4 py-3 pr-12 border theme-aware-border rounded-lg focus:ring-2 focus:ring-primary focus:theme-aware-border-focus @error('admin_password') border-red-500 @enderror"
                                        placeholder="Secure password">
                                 <button type="button" 
                                         onclick="togglePassword('admin_password')"
                                         class="absolute inset-y-0 right-0 px-3 flex items-center">
-                                    <i class="fas fa-eye text-gray-400"></i>
+                                    <i class="fas fa-eye theme-aware-text-muted"></i>
                                 </button>
                             </div>
                             @error('admin_password')
@@ -307,14 +307,14 @@
                         </div>
 
                         <div>
-                            <label for="admin_password_confirmation" class="block text-sm font-medium text-gray-700 mb-2">
+                            <label for="admin_password_confirmation" class="block text-sm font-medium theme-aware-text-secondary mb-2">
                                 Confirm Password *
                             </label>
                             <input type="password" 
                                    id="admin_password_confirmation" 
                                    name="admin_password_confirmation" 
                                    required
-                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                   class="w-full px-4 py-3 border theme-aware-border rounded-lg focus:ring-2 focus:ring-primary focus:theme-aware-border-focus"
                                    placeholder="Confirm password">
                         </div>
 
@@ -324,29 +324,29 @@
                                        name="send_welcome_email" 
                                        value="1"
                                        {{ old('send_welcome_email', true) ? 'checked' : '' }}
-                                       class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
-                                <span class="ml-2 text-sm text-gray-700">Send welcome email to administrator</span>
+                                       class="rounded theme-aware-border text-blue-600 focus:ring-primary">
+                                <span class="ml-2 text-sm theme-aware-text-secondary">Send welcome email to administrator</span>
                             </label>
                         </div>
                     </div>
                 </div>
 
                 {{-- Additional Settings --}}
-                <div class="bg-white rounded-xl shadow-lg p-6">
-                    <h2 class="text-xl font-bold text-gray-800 mb-6 flex items-center">
+                <div class="theme-aware-bg-card rounded-xl shadow-lg p-6">
+                    <h2 class="text-xl font-bold theme-aware-text mb-6 flex items-center">
                         <i class="fas fa-sliders-h text-orange-600 mr-3"></i>
                         Additional Settings
                     </h2>
                     
                     <div class="space-y-4">
                         <div>
-                            <label for="description" class="block text-sm font-medium text-gray-700 mb-2">
+                            <label for="description" class="block text-sm font-medium theme-aware-text-secondary mb-2">
                                 Business Description
                             </label>
                             <textarea id="description" 
                                       name="description" 
                                       rows="4"
-                                      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('description') border-red-500 @enderror"
+                                      class="w-full px-4 py-3 border theme-aware-border rounded-lg focus:ring-2 focus:ring-primary focus:theme-aware-border-focus @error('description') border-red-500 @enderror"
                                       placeholder="Brief description of the business and its services">{{ old('description') }}</textarea>
                             @error('description')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -355,29 +355,29 @@
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
-                                <label for="logo" class="block text-sm font-medium text-gray-700 mb-2">
+                                <label for="logo" class="block text-sm font-medium theme-aware-text-secondary mb-2">
                                     Business Logo
                                 </label>
                                 <input type="file" 
                                        id="logo" 
                                        name="logo" 
                                        accept="image/*"
-                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('logo') border-red-500 @enderror">
+                                       class="w-full px-4 py-3 border theme-aware-border rounded-lg focus:ring-2 focus:ring-primary focus:theme-aware-border-focus @error('logo') border-red-500 @enderror">
                                 @error('logo')
                                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
-                                <p class="mt-1 text-xs text-gray-500">PNG, JPG, or SVG. Max size 2MB.</p>
+                                <p class="mt-1 text-xs theme-aware-text-muted">PNG, JPG, or SVG. Max size 2MB.</p>
                             </div>
 
                             <div>
-                                <label for="registration_number" class="block text-sm font-medium text-gray-700 mb-2">
+                                <label for="registration_number" class="block text-sm font-medium theme-aware-text-secondary mb-2">
                                     Business Registration Number
                                 </label>
                                 <input type="text" 
                                        id="registration_number" 
                                        name="registration_number" 
                                        value="{{ old('registration_number') }}"
-                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('registration_number') border-red-500 @enderror"
+                                       class="w-full px-4 py-3 border theme-aware-border rounded-lg focus:ring-2 focus:ring-primary focus:theme-aware-border-focus @error('registration_number') border-red-500 @enderror"
                                        placeholder="Optional business registration number">
                                 @error('registration_number')
                                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -391,13 +391,13 @@
             {{-- Sidebar --}}
             <div class="space-y-6">
                 {{-- Plan Comparison --}}
-                <div class="bg-white rounded-xl shadow-lg p-6">
-                    <h3 class="text-lg font-bold text-gray-800 mb-4">Subscription Plans</h3>
+                <div class="theme-aware-bg-card rounded-xl shadow-lg p-6">
+                    <h3 class="text-lg font-bold theme-aware-text mb-4">Subscription Plans</h3>
                     
                     <div class="space-y-4">
-                        <div class="p-4 border border-gray-200 rounded-lg">
-                            <div class="font-semibold text-gray-800">Basic - $29/month</div>
-                            <div class="text-sm text-gray-600 mt-1">
+                        <div class="p-4 border theme-aware-border rounded-lg">
+                            <div class="font-semibold theme-aware-text">Basic - $29/month</div>
+                            <div class="text-sm theme-aware-text-secondary mt-1">
                                 • Up to 5 users<br>
                                 • Basic reporting<br>
                                 • Email support
@@ -427,12 +427,12 @@
                 </div>
 
                 {{-- Creation Preview --}}
-                <div class="bg-white rounded-xl shadow-lg p-6">
-                    <h3 class="text-lg font-bold text-gray-800 mb-4">Creation Preview</h3>
+                <div class="theme-aware-bg-card rounded-xl shadow-lg p-6">
+                    <h3 class="text-lg font-bold theme-aware-text mb-4">Creation Preview</h3>
                     
                     <div class="space-y-3 text-sm">
                         <div class="flex justify-between">
-                            <span class="text-gray-600">Tenant will be created with:</span>
+                            <span class="theme-aware-text-secondary">Tenant will be created with:</span>
                         </div>
                         <div class="pl-3 space-y-1">
                             <div>✓ Isolated database context</div>
@@ -444,7 +444,7 @@
                 </div>
 
                 {{-- Action Buttons --}}
-                <div class="bg-white rounded-xl shadow-lg p-6">
+                <div class="theme-aware-bg-card rounded-xl shadow-lg p-6">
                     <div class="space-y-4">
                         <button type="submit" 
                                 class="w-full bg-gradient-to-r from-green-600 to-teal-600 text-white py-3 px-6 rounded-lg font-semibold hover:from-green-700 hover:to-teal-700 transition">
@@ -454,7 +454,7 @@
                         
                         <button type="button" 
                                 onclick="saveDraft()"
-                                class="w-full bg-gray-200 text-gray-700 py-3 px-6 rounded-lg font-semibold hover:bg-gray-300 transition">
+                                class="w-full theme-aware-bg-tertiary theme-aware-text-secondary py-3 px-6 rounded-lg font-semibold hover:bg-gray-300 transition">
                             <i class="fas fa-save mr-2"></i>
                             Save as Draft
                         </button>
@@ -508,10 +508,10 @@ function togglePassword(fieldId) {
     
     if (field.type === 'password') {
         field.type = 'text';
-        icon.className = 'fas fa-eye-slash text-gray-400';
+        icon.className = 'fas fa-eye-slash theme-aware-text-muted';
     } else {
         field.type = 'password';
-        icon.className = 'fas fa-eye text-gray-400';
+        icon.className = 'fas fa-eye theme-aware-text-muted';
     }
 }
 

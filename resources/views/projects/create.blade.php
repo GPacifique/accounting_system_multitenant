@@ -36,7 +36,7 @@
     {{-- Mobile back button --}}
     <div class="md:hidden mb-4">
         <a href="{{ route('projects.index') }}" 
-           class="inline-flex items-center gap-2 px-4 py-2 theme-aware-bg-card rounded-lg shadow-sm border hover:bg-gray-50 transition">
+           class="inline-flex items-center gap-2 px-4 py-2 theme-aware-bg-card rounded-lg shadow-sm border hover:theme-aware-bg-secondary transition">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
             </svg>
@@ -80,7 +80,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {{-- Client select --}}
                 <div class="md:col-span-2">
-                    <label for="client_id" class="block text-sm font-semibold text-gray-700 mb-2">
+                    <label for="client_id" class="block text-sm font-semibold theme-aware-text-secondary mb-2">
                         <span class="flex items-center">
                             <svg class="w-4 h-4 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
@@ -89,7 +89,7 @@
                         </span>
                     </label>
                     <select id="client_id" name="client_id" required
-                            class="w-full border-2 border-gray-200 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition @error('client_id') border-red-400 ring-2 ring-red-200 @enderror">
+                            class="w-full border-2 theme-aware-border rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary focus:theme-aware-border-focus transition @error('client_id') border-red-400 ring-2 ring-red-200 @enderror">
                         <option value="">-- Select a client --</option>
                         @foreach($clients as $client)
                             <option value="{{ $client->id }}" {{ old('client_id') == $client->id ? 'selected' : '' }}>
@@ -108,7 +108,7 @@
 
                 {{-- Project name --}}
                 <div class="md:col-span-2">
-                    <label for="name" class="block text-sm font-semibold text-gray-700 mb-2">
+                    <label for="name" class="block text-sm font-semibold theme-aware-text-secondary mb-2">
                         <span class="flex items-center">
                             <svg class="w-4 h-4 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
@@ -117,14 +117,14 @@
                         </span>
                     </label>
                     <input id="name" name="name" value="{{ old('name') }}" required
-                           class="w-full border-2 border-gray-200 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition @error('name') border-red-400 ring-2 ring-red-200 @enderror"
+                           class="w-full border-2 theme-aware-border rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary focus:theme-aware-border-focus transition @error('name') border-red-400 ring-2 ring-red-200 @enderror"
                            placeholder="e.g. Kigali Bridge Rehabilitation Project">
                     @error('name') <p class="text-sm text-red-600 mt-1 flex items-center"><svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/></svg>{{ $message }}</p> @enderror
                 </div>
 
                 {{-- Start date --}}
                 <div>
-                    <label for="start_date" class="block text-sm font-semibold text-gray-700 mb-2">
+                    <label for="start_date" class="block text-sm font-semibold theme-aware-text-secondary mb-2">
                         <span class="flex items-center">
                             <svg class="w-4 h-4 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
@@ -133,14 +133,14 @@
                         </span>
                     </label>
                     <input id="start_date" name="start_date" type="date" value="{{ old('start_date') }}"
-                           class="w-full border-2 border-gray-200 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition @error('start_date') border-red-400 ring-2 ring-red-200 @enderror">
+                           class="w-full border-2 theme-aware-border rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary focus:theme-aware-border-focus transition @error('start_date') border-red-400 ring-2 ring-red-200 @enderror">
                     <p class="text-xs theme-aware-text-muted mt-2">Optional - Leave empty if TBD</p>
                     @error('start_date') <p class="text-sm text-red-600 mt-1">{{ $message }}</p> @enderror
                 </div>
 
                 {{-- End date --}}
                 <div>
-                    <label for="end_date" class="block text-sm font-semibold text-gray-700 mb-2">
+                    <label for="end_date" class="block text-sm font-semibold theme-aware-text-secondary mb-2">
                         <span class="flex items-center">
                             <svg class="w-4 h-4 mr-2 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
@@ -149,14 +149,14 @@
                         </span>
                     </label>
                     <input id="end_date" name="end_date" type="date" value="{{ old('end_date') }}"
-                           class="w-full border-2 border-gray-200 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition @error('end_date') border-red-400 ring-2 ring-red-200 @enderror">
+                           class="w-full border-2 theme-aware-border rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary focus:theme-aware-border-focus transition @error('end_date') border-red-400 ring-2 ring-red-200 @enderror">
                     <p id="dateHelp" class="text-xs theme-aware-text-muted mt-2">Must be same or after start date</p>
                     @error('end_date') <p class="text-sm text-red-600 mt-1">{{ $message }}</p> @enderror
                 </div>
 
                 {{-- Status --}}
                 <div class="md:col-span-2">
-                    <label for="status" class="block text-sm font-semibold text-gray-700 mb-2">
+                    <label for="status" class="block text-sm font-semibold theme-aware-text-secondary mb-2">
                         <span class="flex items-center">
                             <svg class="w-4 h-4 mr-2 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
@@ -165,7 +165,7 @@
                         </span>
                     </label>
                     <select id="status" name="status"
-                            class="w-full border-2 border-gray-200 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition @error('status') border-red-400 ring-2 ring-red-200 @enderror">
+                            class="w-full border-2 theme-aware-border rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary focus:theme-aware-border-focus transition @error('status') border-red-400 ring-2 ring-red-200 @enderror">
                         @php $status = old('status', 'planned'); @endphp
                         <option value="planned" {{ $status === 'planned' ? 'selected' : '' }}>📋 Planned</option>
                         <option value="active" {{ $status === 'active' ? 'selected' : '' }}>✅ Active</option>
@@ -192,7 +192,7 @@
             <div class="grid grid-cols-1 gap-6">
                 {{-- Contract value --}}
                 <div class="bg-gradient-to-r from-emerald-50 to-teal-50 rounded-lg p-5 border-2 border-emerald-200">
-                    <label for="contract_value" class="block text-sm font-semibold text-gray-700 mb-2">
+                    <label for="contract_value" class="block text-sm font-semibold theme-aware-text-secondary mb-2">
                         <span class="flex items-center">
                             <svg class="w-4 h-4 mr-2 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/>
@@ -203,7 +203,7 @@
                     <div class="relative">
                         <input id="contract_value" name="contract_value" type="number" step="0.01" min="0"
                                value="{{ old('contract_value', '') }}"
-                               class="w-full border-2 border-emerald-300 rounded-lg px-4 py-3 pr-32 text-lg font-semibold focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition theme-aware-bg-card @error('contract_value') border-red-400 ring-2 ring-red-200 @enderror"
+                               class="w-full border-2 border-emerald-300 rounded-lg px-4 py-3 pr-32 text-lg font-semibold focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:theme-aware-border-focus transition theme-aware-bg-card @error('contract_value') border-red-400 ring-2 ring-red-200 @enderror"
                                placeholder="0.00" aria-describedby="contractHelp">
                         <select id="contract_currency" name="contract_currency" class="absolute right-2 top-1/2 -translate-y-1/2 border-2 border-emerald-300 rounded-lg px-3 py-2 text-sm font-semibold theme-aware-bg-card focus:ring-2 focus:ring-emerald-500">
                             @php $cur = old('contract_currency', 'RWF'); @endphp
@@ -224,7 +224,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {{-- Amount paid --}}
                     <div class="bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg p-5 border-2 border-green-200">
-                        <label for="amount_paid" class="block text-sm font-semibold text-gray-700 mb-2">
+                        <label for="amount_paid" class="block text-sm font-semibold theme-aware-text-secondary mb-2">
                             <span class="flex items-center">
                                 <svg class="w-4 h-4 mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
@@ -235,7 +235,7 @@
                         <div class="relative">
                             <input id="amount_paid" name="amount_paid" type="number" step="0.01" min="0"
                                    value="{{ old('amount_paid', '') }}"
-                                   class="w-full border-2 border-green-300 rounded-lg px-4 py-3 pr-32 font-semibold focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition theme-aware-bg-card @error('amount_paid') border-red-400 ring-2 ring-red-200 @enderror"
+                                   class="w-full border-2 border-green-300 rounded-lg px-4 py-3 pr-32 font-semibold focus:outline-none focus:ring-2 focus:ring-green-500 focus:theme-aware-border-focus transition theme-aware-bg-card @error('amount_paid') border-red-400 ring-2 ring-red-200 @enderror"
                                    placeholder="0.00">
                             <select id="amount_paid_currency" name="amount_paid_currency" class="absolute right-2 top-1/2 -translate-y-1/2 border-2 border-green-300 rounded-lg px-3 py-2 text-sm font-semibold theme-aware-bg-card">
                                 @php $paidCur = old('amount_paid_currency', $cur ?? 'RWF'); @endphp
@@ -250,7 +250,7 @@
 
                     {{-- Amount remaining --}}
                     <div class="bg-gradient-to-r from-orange-50 to-amber-50 rounded-lg p-5 border-2 border-orange-200">
-                        <label for="amount_remaining" class="block text-sm font-semibold text-gray-700 mb-2">
+                        <label for="amount_remaining" class="block text-sm font-semibold theme-aware-text-secondary mb-2">
                             <span class="flex items-center">
                                 <svg class="w-4 h-4 mr-2 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
@@ -261,7 +261,7 @@
                         <div class="relative">
                             <input id="amount_remaining" name="amount_remaining" type="number" step="0.01" min="0"
                                    value="{{ old('amount_remaining', '') }}"
-                                   class="w-full border-2 border-orange-300 rounded-lg px-4 py-3 pr-32 font-semibold focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition theme-aware-bg-card @error('amount_remaining') border-red-400 ring-2 ring-red-200 @enderror"
+                                   class="w-full border-2 border-orange-300 rounded-lg px-4 py-3 pr-32 font-semibold focus:outline-none focus:ring-2 focus:ring-orange-500 focus:theme-aware-border-focus transition theme-aware-bg-card @error('amount_remaining') border-red-400 ring-2 ring-red-200 @enderror"
                                    placeholder="0.00">
                             <select id="amount_remaining_currency" name="amount_remaining_currency" class="absolute right-2 top-1/2 -translate-y-1/2 border-2 border-orange-300 rounded-lg px-3 py-2 text-sm font-semibold theme-aware-bg-card">
                                 @php $remCur = old('amount_remaining_currency', $cur ?? 'RWF'); @endphp
@@ -290,7 +290,7 @@
 
             {{-- Description / notes --}}
             <div>
-                <label for="description" class="block text-sm font-semibold text-gray-700 mb-2">
+                <label for="description" class="block text-sm font-semibold theme-aware-text-secondary mb-2">
                     <span class="flex items-center">
                         <svg class="w-4 h-4 mr-2 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"/>
@@ -299,7 +299,7 @@
                     </span>
                 </label>
                 <textarea id="description" name="description" rows="5"
-                          class="w-full border-2 border-gray-200 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition @error('description') border-red-400 ring-2 ring-red-200 @enderror"
+                          class="w-full border-2 theme-aware-border rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary focus:theme-aware-border-focus transition @error('description') border-red-400 ring-2 ring-red-200 @enderror"
                           placeholder="Enter project description, scope, special terms, or any additional notes...">{{ old('description') }}</textarea>
                 <p class="text-xs theme-aware-text-muted mt-2">Optional - Add any relevant details about the project</p>
                 @error('description') <p class="text-sm text-red-600 mt-1">{{ $message }}</p> @enderror
@@ -307,7 +307,7 @@
         </div>
 
         {{-- Actions --}}
-        <div class="mt-8 pt-6 border-t-2 border-gray-200">
+        <div class="mt-8 pt-6 border-t-2 theme-aware-border">
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div class="text-sm theme-aware-text-secondary">
                     <svg class="w-4 h-4 inline mr-1" fill="currentColor" viewBox="0 0 20 20">
@@ -317,7 +317,7 @@
                 </div>
                 <div class="flex gap-3">
                     <a href="{{ route('projects.index') }}" 
-                       class="flex-1 sm:flex-none px-6 py-3 rounded-lg border-2 border-gray-300 text-gray-700 font-semibold hover:bg-gray-50 hover:border-gray-400 transition text-center">
+                       class="flex-1 sm:flex-none px-6 py-3 rounded-lg border-2 theme-aware-border theme-aware-text-secondary font-semibold hover:theme-aware-bg-secondary hover:theme-aware-border-secondary transition text-center">
                         Cancel
                     </a>
                     <button type="submit" 

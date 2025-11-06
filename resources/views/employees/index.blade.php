@@ -34,8 +34,8 @@
     @endif
 
     <div class="overflow-x-auto">
-        <table class="min-w-full border border-gray-300">
-            <thead class="bg-gray-200">
+        <table class="min-w-full border theme-aware-border">
+            <thead class="theme-aware-bg-tertiary">
                 <tr>
                     <th class="py-2 px-4 border-b text-left">ID</th>
                     <th class="py-2 px-4 border-b text-left">First Name</th>
@@ -53,7 +53,7 @@
             </thead>
             <tbody>
                 @forelse($employees as $employee)
-                <tr class="hover:bg-gray-100">
+                <tr class="hover:theme-aware-bg-secondary">
                     <td class="py-2 px-4 border-b">{{ $employee->id }}</td>
                     <td class="py-2 px-4 border-b">{{ $employee->first_name }}</td>
                     <td class="py-2 px-4 border-b">{{ $employee->last_name }}</td>

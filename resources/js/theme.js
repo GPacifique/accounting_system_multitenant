@@ -52,7 +52,11 @@ class ThemeManager {
      * Apply theme to document
      */
     applyTheme(theme) {
+        // Apply to both html and body elements for complete coverage
         document.documentElement.setAttribute('data-theme', theme);
+        document.documentElement.className = document.documentElement.className.replace(/theme-\w+/g, '');
+        document.documentElement.classList.add(`theme-${theme}`);
+        
         document.body.className = document.body.className.replace(/theme-\w+/g, '');
         document.body.classList.add(`theme-${theme}`);
         

@@ -77,9 +77,9 @@ class SupplierController extends Controller
             'notes' => 'nullable|string',
         ]);
 
-        $validated['tenant_id'] = app('currentTenant')->id;
         $validated['created_by'] = Auth::id();
         $validated['status'] = 'active';
+        $validated = $this->ensureTenantId($validated);
 
         Supplier::create($validated);
 

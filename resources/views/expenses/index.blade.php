@@ -47,7 +47,7 @@
         @else
             <div class="overflow-x-auto">
                 <table class="w-full text-left border">
-                    <thead class="bg-gray-50">
+                    <thead class="theme-aware-bg-secondary">
                         <tr>
                             <th class="py-2 px-3 border-r text-sm theme-aware-text-secondary">Date</th>
                             @foreach($categories as $cat)
@@ -58,7 +58,7 @@
                     </thead>
                     <tbody>
                         @foreach($dailyTotals as $day => $cats)
-                            <tr class="border-t hover:bg-gray-50">
+                            <tr class="border-t hover:theme-aware-bg-secondary">
                                 <td class="py-2 px-3 align-top font-medium">{{ $day }}</td>
 
                                 @php $rowTotal = 0; @endphp
@@ -70,7 +70,7 @@
                                     @endphp
                                     <td class="py-2 px-3 text-sm">
                                         @if($amount > 0)
-                                            <span class="inline-block px-2 py-1 rounded text-sm font-medium bg-gray-100">
+                                            <span class="inline-block px-2 py-1 rounded text-sm font-medium theme-aware-bg-secondary">
                                                 RWF {{ number_format($amount, 2) }}
                                             </span>
                                         @else
@@ -92,7 +92,7 @@
 
     <div class="theme-aware-bg-card rounded-lg shadow overflow-x-auto">
         <table class="w-full text-left">
-            <thead class="bg-gray-50 border-b">
+            <thead class="theme-aware-bg-secondary border-b">
                 <tr>
                     <th class="py-3 px-4 text-sm theme-aware-text-secondary">#</th>
                      <th class="py-3 px-4 text-sm theme-aware-text-secondary">Date</th>
@@ -107,7 +107,7 @@
             </thead>
             <tbody>
                 @forelse($expenses as $expense)
-                    <tr class="border-b hover:bg-gray-50">
+                    <tr class="border-b hover:theme-aware-bg-secondary">
                         <td class="py-3 px-4">{{ $expense->id }}</td>
                         <td class="py-3 px-4">{{ optional($expense->date)->format('Y-m-d') }}</td>
                         <td class="py-3 px-4">{{ $expense->category ?? '—' }}</td>

@@ -54,6 +54,7 @@ class IncomeController extends Controller
             'notes' => 'nullable|string|max:1000',
         ]);
 
+        $validated = $this->ensureTenantId($validated);
         Income::create($validated);
 
         return redirect()->route('incomes.index')

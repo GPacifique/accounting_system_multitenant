@@ -110,7 +110,7 @@ for ($i = 5; $i >= 0; $i--) {
                 </div>
 
                 <button type="submit" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg shadow-sm">Search</button>
-                <a href="{{ route('dashboard') }}" class="px-3 py-2 border rounded-lg theme-aware-text-secondary hover:bg-gray-50">Reset</a>
+                <a href="{{ route('dashboard') }}" class="px-3 py-2 border rounded-lg theme-aware-text-secondary hover:theme-aware-bg-secondary">Reset</a>
             </form>
 
             <a href="{{ route('projects.create') ?? '#' }}" class="inline-flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg shadow">
@@ -186,7 +186,7 @@ for ($i = 5; $i >= 0; $i--) {
         @else
             <div class="overflow-x-auto">
                 <table class="w-full text-left border">
-                    <thead class="bg-gray-50">
+                    <thead class="theme-aware-bg-secondary">
                         <tr>
                             <th class="py-2 px-3 border-r text-sm theme-aware-text-secondary">Date</th>
                             @foreach($categories as $cat)
@@ -197,7 +197,7 @@ for ($i = 5; $i >= 0; $i--) {
                     </thead>
                     <tbody>
                         @foreach($dailyTotals as $day => $cats)
-                            <tr class="border-t hover:bg-gray-50">
+                            <tr class="border-t hover:theme-aware-bg-secondary">
                                 <td class="py-2 px-3 align-top font-medium">{{ $day }}</td>
 
                                 @php $rowTotal = 0; @endphp
@@ -209,7 +209,7 @@ for ($i = 5; $i >= 0; $i--) {
                                     @endphp
                                     <td class="py-2 px-3 text-sm">
                                         @if($amount > 0)
-                                            <span class="inline-block px-2 py-1 rounded text-sm font-medium bg-gray-100">
+                                            <span class="inline-block px-2 py-1 rounded text-sm font-medium theme-aware-bg-secondary">
                                                 RWF {{ number_format($amount, 2) }}
                                             </span>
                                         @else
@@ -237,7 +237,7 @@ for ($i = 5; $i >= 0; $i--) {
     @else
         <div class="overflow-x-auto">
             <table class="w-full text-left border">
-                <thead class="bg-gray-50">
+                <thead class="theme-aware-bg-secondary">
                     <tr>
                         <th class="py-2 px-3 border-r text-sm theme-aware-text-secondary">#</th>
                         <th class="py-2 px-3 border-r text-sm theme-aware-text-secondary">Project Name</th>
@@ -248,11 +248,11 @@ for ($i = 5; $i >= 0; $i--) {
                 </thead>
                 <tbody>
                     @foreach ($projectStats as $index => $proj)
-                        <tr class="border-t hover:bg-gray-50">
+                        <tr class="border-t hover:theme-aware-bg-secondary">
                             <td class="py-2 px-3 text-sm theme-aware-text-muted">{{ $index + 1 }}</td>
                             <td class="py-2 px-3 font-medium theme-aware-text">{{ $proj->project_name }}</td>
-                            <td class="py-2 px-3 text-sm text-gray-700">
-                                <span class="inline-block px-2 py-1 rounded bg-gray-100 font-semibold">
+                            <td class="py-2 px-3 text-sm theme-aware-text-secondary">
+                                <span class="inline-block px-2 py-1 rounded theme-aware-bg-secondary font-semibold">
                                     RWF {{ number_format($proj->total_amount, 2) }}
                                 </span>
                             </td>
@@ -277,21 +277,21 @@ for ($i = 5; $i >= 0; $i--) {
     {{-- Charts --}}
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
         <div class="theme-aware-bg-card rounded-lg shadow-sm p-4 border min-h-[260px] flex flex-col">
-            <h3 class="text-sm font-medium text-gray-700 mb-2">Income — Last 6 months</h3>
+            <h3 class="text-sm font-medium theme-aware-text-secondary mb-2">Income — Last 6 months</h3>
             <div class="flex-1">
                 <canvas id="incomeChart" class="w-full h-48"></canvas>
             </div>
         </div>
 
         <div class="theme-aware-bg-card rounded-lg shadow-sm p-4 border min-h-[260px] flex flex-col">
-            <h3 class="text-sm font-medium text-gray-700 mb-2">Payments — Last 6 months</h3>
+            <h3 class="text-sm font-medium theme-aware-text-secondary mb-2">Payments — Last 6 months</h3>
             <div class="flex-1">
                 <canvas id="paymentsChart" class="w-full h-48"></canvas>
             </div>
         </div>
 
         <div class="theme-aware-bg-card rounded-lg shadow-sm p-4 border min-h-[260px] flex flex-col">
-            <h3 class="text-sm font-medium text-gray-700 mb-2">Expenses — Last 6 months</h3>
+            <h3 class="text-sm font-medium theme-aware-text-secondary mb-2">Expenses — Last 6 months</h3>
             <div class="flex-1">
                 <canvas id="expensesChart" class="w-full h-48"></canvas>
             </div>
@@ -302,7 +302,7 @@ for ($i = 5; $i >= 0; $i--) {
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <div class="theme-aware-bg-card rounded-lg shadow-sm p-4 border">
             <div class="flex items-center justify-between mb-3">
-                <h4 class="font-semibold text-gray-700">Recent Workers</h4>
+                <h4 class="font-semibold theme-aware-text-secondary">Recent Workers</h4>
                 <a href="{{ route('workers.index') }}" class="text-indigo-600 text-sm">View all</a>
             </div>
 
@@ -313,7 +313,7 @@ for ($i = 5; $i >= 0; $i--) {
                             <div class="font-medium">{{ $work->full_name ?? ($work->name ?? '—') }}</div>
                             <div class="text-xs theme-aware-text-muted">{{ optional($work->created_at)->format('Y-m-d') ?? '—' }}</div>
                         </div>
-                        <div class="text-xs px-3 py-1 rounded-full {{ ($work->status ?? '') === 'active' ? 'bg-green-50 text-green-700' : 'bg-gray-100 theme-aware-text-secondary' }}">
+                        <div class="text-xs px-3 py-1 rounded-full {{ ($work->status ?? '') === 'active' ? 'bg-green-50 text-green-700' : 'theme-aware-bg-secondary theme-aware-text-secondary' }}">
                             {{ ucfirst($work->status ?? '—') }}
                         </div>
                     </li>
@@ -325,7 +325,7 @@ for ($i = 5; $i >= 0; $i--) {
 
         <div class="theme-aware-bg-card rounded-lg shadow-sm p-4 border">
             <div class="flex items-center justify-between mb-3">
-                <h4 class="font-semibold text-gray-700">Recent Transactions</h4>
+                <h4 class="font-semibold theme-aware-text-secondary">Recent Transactions</h4>
                 <a href="{{ route('transactions.index') ?? '#' }}" class="text-indigo-600 text-sm">View all</a>
             </div>
 
@@ -346,7 +346,7 @@ for ($i = 5; $i >= 0; $i--) {
 
         <div class="theme-aware-bg-card rounded-lg shadow-sm p-4 border">
             <div class="flex items-center justify-between mb-3">
-                <h4 class="font-semibold text-gray-700">Recent Payments</h4>
+                <h4 class="font-semibold theme-aware-text-secondary">Recent Payments</h4>
                 <a href="{{ route('payments.index') ?? '#' }}" class="text-indigo-600 text-sm">View all</a>
             </div>
 
@@ -367,7 +367,7 @@ for ($i = 5; $i >= 0; $i--) {
 
         <div class="theme-aware-bg-card rounded-lg shadow-sm p-4 border">
             <div class="flex items-center justify-between mb-3">
-                <h4 class="font-semibold text-gray-700">Recent Expenses</h4>
+                <h4 class="font-semibold theme-aware-text-secondary">Recent Expenses</h4>
                 <a href="{{ route('expenses.index') ?? '#' }}" class="text-indigo-600 text-sm">View all</a>
             </div>
 

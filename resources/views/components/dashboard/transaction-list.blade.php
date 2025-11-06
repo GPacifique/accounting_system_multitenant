@@ -1,15 +1,15 @@
 {{-- Dashboard transactions list card --}}
 <div class="theme-aware-bg-card overflow-hidden shadow-lg rounded-lg hover:shadow-xl transition-shadow duration-300">
-    <div class="px-6 py-5 border-b border-gray-200">
-        <h3 class="text-lg font-semibold text-gray-900">{{ $title }}</h3>
+    <div class="px-6 py-5 border-b theme-aware-border">
+        <h3 class="text-lg font-semibold theme-aware-text">{{ $title }}</h3>
     </div>
     
     <div class="divide-y divide-gray-200 max-h-96 overflow-y-auto">
         @forelse($items as $item)
-            <div class="px-6 py-4 hover:bg-gray-50 transition-colors duration-200">
+            <div class="px-6 py-4 hover:theme-aware-bg-secondary transition-colors duration-200">
                 <div class="flex items-center justify-between">
                     <div class="flex-1">
-                        <p class="text-sm font-medium text-gray-900">
+                        <p class="text-sm font-medium theme-aware-text">
                             @if($item->project)
                                 {{ $item->project->name ?? 'N/A' }}
                             @elseif($item->client)
@@ -34,7 +34,7 @@
                                 @if($item->payment_status === 'Paid') bg-green-100 text-green-800
                                 @elseif($item->payment_status === 'Pending') bg-yellow-100 text-yellow-800
                                 @elseif($item->payment_status === 'Overdue') bg-red-100 text-red-800
-                                @else bg-gray-100 theme-aware-text
+                                @else theme-aware-bg-secondary theme-aware-text
                                 @endif">
                                 {{ $item->payment_status }}
                             </span>
@@ -43,9 +43,9 @@
                                 {{ $item->status }}
                             </span>
                         @endif
-                        <p class="text-sm font-semibold text-gray-900 mt-2">
+                        <p class="text-sm font-semibold theme-aware-text mt-2">
                                                 <div>
-                        <span class="text-sm font-semibold text-gray-900">
+                        <span class="text-sm font-semibold theme-aware-text">
                             {{ $currencySymbol ?? 'RWF' }} {{ number_format($item->{$amountField ?? 'amount'}, 2) }}
                         </span>
                     </div>

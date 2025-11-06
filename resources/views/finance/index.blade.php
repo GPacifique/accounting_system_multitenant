@@ -6,7 +6,7 @@
 <div class="container-fluid">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-            <h1 class="h3 mb-0 text-gray-800">Finance Dashboard</h1>
+            <h1 class="h3 mb-0 theme-aware-text">Finance Dashboard</h1>
             <p class="text-muted">Comprehensive financial overview and management</p>
         </div>
         <div class="d-flex gap-2">
@@ -32,7 +32,7 @@
                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                 Total Income (Monthly)
                             </div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                            <div class="h5 mb-0 font-weight-bold theme-aware-text">
                                 ${{ number_format(0, 2) }}
                             </div>
                         </div>
@@ -52,7 +52,7 @@
                             <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
                                 Total Expenses (Monthly)
                             </div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                            <div class="h5 mb-0 font-weight-bold theme-aware-text">
                                 ${{ number_format(0, 2) }}
                             </div>
                         </div>
@@ -72,7 +72,7 @@
                             <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
                                 Net Profit (Monthly)
                             </div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                            <div class="h5 mb-0 font-weight-bold theme-aware-text">
                                 ${{ number_format(0, 2) }}
                             </div>
                         </div>
@@ -92,7 +92,7 @@
                             <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
                                 Outstanding Payments
                             </div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                            <div class="h5 mb-0 font-weight-bold theme-aware-text">
                                 ${{ number_format(0, 2) }}
                             </div>
                         </div>

@@ -107,6 +107,7 @@ class AccountController extends Controller
             }
         }
 
+        $validated = $this->ensureTenantId($validated);
         $account = Account::create($validated);
 
         return redirect()->route('accounts.index')

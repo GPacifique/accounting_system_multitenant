@@ -33,7 +33,7 @@
             <label class="block font-semibold mb-1">Invoice Number</label>
             <div class="flex gap-2">
                 <input id="invoice_number" type="text" name="invoice_number" value="{{ old('invoice_number', $income->invoice_number) }}" class="flex-1 border p-2 rounded" required>
-                <button type="button" id="btn-generate-invoice" class="bg-gray-100 theme-aware-text px-3 py-2 rounded border">Generate</button>
+                <button type="button" id="btn-generate-invoice" class="theme-aware-bg-secondary theme-aware-text px-3 py-2 rounded border">Generate</button>
             </div>
             <p class="text-xs theme-aware-text-muted mt-1">Click Generate to replace with a new auto-generated number.</p>
         </div>

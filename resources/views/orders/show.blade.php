@@ -8,15 +8,15 @@
         <div>
             <h2 class="text-3xl font-bold theme-aware-text leading-tight">Order #{{ $order->id }}</h2>
             <div class="text-sm theme-aware-text-muted">Placed: {{ optional($order->created_at)->format('Y-m-d H:i') }}</div>
-            <div class="mt-2 text-sm text-gray-700"><strong>Customer:</strong> {{ $order->customer_name ?? '—' }} <span class="theme-aware-text-muted">{{ $order->customer_email ?? '' }}</span></div>
-            <div class="mt-1 text-sm text-gray-700"><strong>Status:</strong>
+            <div class="mt-2 text-sm theme-aware-text-secondary"><strong>Customer:</strong> {{ $order->customer_name ?? '—' }} <span class="theme-aware-text-muted">{{ $order->customer_email ?? '' }}</span></div>
+            <div class="mt-1 text-sm theme-aware-text-secondary"><strong>Status:</strong>
                 @php
                     $status = $order->status ?? '—';
                     $statusClasses = $status === 'completed'
                         ? 'bg-green-100 text-green-800'
                         : ($status === 'processing'
                             ? 'bg-blue-100 text-blue-800'
-                            : ($status === 'cancelled' ? 'bg-red-100 text-red-800' : 'bg-gray-100 theme-aware-text'));
+                            : ($status === 'cancelled' ? 'bg-red-100 text-red-800' : 'theme-aware-bg-secondary theme-aware-text'));
                 @endphp
                 <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium {{ $statusClasses }}">{{ ucfirst($status) }}</span>
             </div>
@@ -41,7 +41,7 @@
                     <h6 class="mb-3">Items</h6>
 
                     <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-gray-50">
+                        <thead class="theme-aware-bg-secondary">
                             <tr>
                                 <th>Product</th>
                                 <th style="width:120px">Qty</th>
@@ -93,15 +93,15 @@
                         @csrf
                         <div class="md:col-span-2">
                             <label class="block text-xs font-medium theme-aware-text-secondary">Product name</label>
-                            <input name="product_name" class="mt-1 w-full rounded-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500" required>
+                            <input name="product_name" class="mt-1 w-full rounded-md theme-aware-border focus:border-indigo-500 focus:ring-indigo-500" required>
                         </div>
                         <div>
                             <label class="block text-xs font-medium theme-aware-text-secondary">Qty</label>
-                            <input name="quantity" type="number" min="1" value="1" class="mt-1 w-full rounded-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500" required>
+                            <input name="quantity" type="number" min="1" value="1" class="mt-1 w-full rounded-md theme-aware-border focus:border-indigo-500 focus:ring-indigo-500" required>
                         </div>
                         <div>
                             <label class="block text-xs font-medium theme-aware-text-secondary">Unit price</label>
-                            <input name="unit_price" type="number" step="0.01" value="0.00" class="mt-1 w-full rounded-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500" required>
+                            <input name="unit_price" type="number" step="0.01" value="0.00" class="mt-1 w-full rounded-md theme-aware-border focus:border-indigo-500 focus:ring-indigo-500" required>
                         </div>
                         <div class="md:col-span-4 text-right">
                             <button class="btn-primary">Add</button>
@@ -119,7 +119,7 @@
                             @foreach($order->payments as $p)
                                 <li class="py-3 flex items-center justify-between">
                                     <div>
-                                        <div class="text-sm font-semibold text-gray-900">{{ number_format($p->amount, 2) }}</div>
+                                        <div class="text-sm font-semibold theme-aware-text">{{ number_format($p->amount, 2) }}</div>
                                         <div class="text-xs theme-aware-text-muted">{{ $p->method ?? '—' }} • {{ $p->reference ?? '' }}</div>
                                     </div>
                                     <div class="text-xs theme-aware-text-muted">{{ optional($p->created_at)->format('Y-m-d') }}</div>
@@ -137,11 +137,11 @@
                             @csrf
                             <div>
                                 <label class="block text-xs font-medium theme-aware-text-secondary">Amount</label>
-                                <input name="amount" type="number" step="0.01" class="mt-1 w-full rounded-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500" value="{{ $order->total ?? 0 }}" required>
+                                <input name="amount" type="number" step="0.01" class="mt-1 w-full rounded-md theme-aware-border focus:border-indigo-500 focus:ring-indigo-500" value="{{ $order->total ?? 0 }}" required>
                             </div>
                             <div>
                                 <label class="block text-xs font-medium theme-aware-text-secondary">Method</label>
-                                <input name="method" class="mt-1 w-full rounded-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500" value="cash" required>
+                                <input name="method" class="mt-1 w-full rounded-md theme-aware-border focus:border-indigo-500 focus:ring-indigo-500" value="cash" required>
                             </div>
                             <div class="md:self-end text-right">
                                 <button class="btn-success">Record Payment</button>
@@ -156,20 +156,20 @@
         <!-- Right column: summary & actions -->
         <div class="lg:col-span-1">
             <div class="theme-aware-bg-card rounded-xl shadow-lg overflow-hidden p-6">
-                <h6 class="text-lg font-semibold text-gray-700">Summary</h6>
+                <h6 class="text-lg font-semibold theme-aware-text-secondary">Summary</h6>
                 <div class="mt-4 space-y-3">
                     <div class="flex items-center justify-between text-sm">
                         <span class="theme-aware-text-muted">Subtotal</span>
-                        <span class="font-semibold text-gray-900">{{ number_format($order->items->sum('line_total') ?? 0, 2) }}</span>
+                        <span class="font-semibold theme-aware-text">{{ number_format($order->items->sum('line_total') ?? 0, 2) }}</span>
                     </div>
                     <div class="flex items-center justify-between text-sm">
                         <span class="theme-aware-text-muted">Paid</span>
-                        <span class="font-semibold text-gray-900">{{ number_format($order->payments->sum('amount') ?? 0, 2) }}</span>
+                        <span class="font-semibold theme-aware-text">{{ number_format($order->payments->sum('amount') ?? 0, 2) }}</span>
                     </div>
                     <hr>
                     <div class="flex items-center justify-between text-base">
-                        <span class="text-gray-700">Balance</span>
-                        <span class="font-bold text-gray-900">{{ number_format( ($order->total ?? $order->items->sum('line_total') ?? 0) - ($order->payments->sum('amount') ?? 0), 2) }}</span>
+                        <span class="theme-aware-text-secondary">Balance</span>
+                        <span class="font-bold theme-aware-text">{{ number_format( ($order->total ?? $order->items->sum('line_total') ?? 0) - ($order->payments->sum('amount') ?? 0), 2) }}</span>
                     </div>
                 </div>
             </div>
@@ -185,7 +185,7 @@
         @apply inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 active:bg-indigo-900 focus:outline-none focus:border-indigo-900 focus:ring ring-indigo-300 disabled:opacity-25 transition ease-in-out duration-150;
     }
     .btn-secondary {
-        @apply inline-flex items-center px-4 py-2 bg-gray-200 border border-gray-300 rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest hover:bg-gray-300 active:bg-gray-400 focus:outline-none focus:border-gray-400 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150;
+        @apply inline-flex items-center px-4 py-2 theme-aware-bg-tertiary border theme-aware-border rounded-md font-semibold text-xs theme-aware-text-secondary uppercase tracking-widest hover:bg-gray-300 active:bg-gray-400 focus:outline-none focus:theme-aware-border-secondary focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150;
     }
     .btn-danger {
         @apply inline-flex items-center px-3 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700 active:bg-red-900 focus:outline-none focus:border-red-900 focus:ring ring-red-300 disabled:opacity-25 transition ease-in-out duration-150;

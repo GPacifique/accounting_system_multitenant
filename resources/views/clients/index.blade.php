@@ -25,14 +25,14 @@
                 </div>
 
                 <button type="submit" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg shadow-sm">Search</button>
-                <a href="{{ route('clients.index') }}" class="px-3 py-2 border rounded-lg theme-aware-text-secondary hover:bg-gray-50">Reset</a>
+                <a href="{{ route('clients.index') }}" class="px-3 py-2 border rounded-lg theme-aware-text-secondary hover:theme-aware-bg-secondary">Reset</a>
             </form>
 
             <a href="{{ route('clients.create') }}" class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow">
                 + New Client
             </a>
 
-            <button id="exportCsvBtn" class="px-3 py-2 border rounded-lg text-gray-700 hover:bg-gray-50" title="Export visible clients to CSV">
+            <button id="exportCsvBtn" class="px-3 py-2 border rounded-lg theme-aware-text-secondary hover:theme-aware-bg-secondary" title="Export visible clients to CSV">
                 Export CSV
             </button>
         </div>
@@ -48,7 +48,7 @@
     {{-- Empty state --}}
     @if($clients->isEmpty())
         <div class="p-6 bg-yellow-50 border border-yellow-200 rounded text-center">
-            <p class="text-gray-700">No clients found.</p>
+            <p class="theme-aware-text-secondary">No clients found.</p>
             <a href="{{ route('clients.create') }}" class="inline-block mt-3 px-4 py-2 bg-blue-600 text-white rounded">Create first client</a>
         </div>
     @else
@@ -56,7 +56,7 @@
         <div class="overflow-x-auto theme-aware-bg-card rounded shadow-sm border">
             <table class="w-full table-auto min-w-[720px]">
                 <thead>
-                    <tr class="text-left bg-gray-50 text-sm">
+                    <tr class="text-left theme-aware-bg-secondary text-sm">
                         <th class="px-4 py-3 w-12">#</th>
                         <th class="px-4 py-3">Client</th>
                         <th class="px-4 py-3">Contact Person</th>
@@ -68,7 +68,7 @@
 
                 <tbody>
                     @foreach($clients as $client)
-                        <tr class="border-t hover:bg-gray-50 transition">
+                        <tr class="border-t hover:theme-aware-bg-secondary transition">
                             <td class="px-4 py-3 align-middle">{{ $client->id }}</td>
 
                             <td class="px-4 py-3">

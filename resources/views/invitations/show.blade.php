@@ -16,40 +16,40 @@
                     {{ strtoupper(substr($invitation->tenant->name, 0, 2)) }}
                 </span>
             </div>
-            <h2 class="mt-6 text-3xl font-extrabold text-gray-900">
+            <h2 class="mt-6 text-3xl font-extrabold theme-aware-text">
                 You're Invited!
             </h2>
-            <p class="mt-2 text-sm text-gray-600">
+            <p class="mt-2 text-sm theme-aware-text-secondary">
                 Join <strong>{{ $invitation->tenant->name }}</strong> on SiteLedger
             </p>
         </div>
 
         {{-- Invitation Card --}}
-        <div class="bg-white rounded-xl shadow-lg p-8">
+        <div class="theme-aware-bg-card rounded-xl shadow-lg p-8">
             {{-- Invitation Details --}}
             <div class="space-y-6">
                 {{-- Tenant Info --}}
-                <div class="text-center border-b border-gray-200 pb-6">
-                    <h3 class="text-xl font-semibold text-gray-900">{{ $invitation->tenant->name }}</h3>
-                    <p class="text-sm text-gray-500">{{ $invitation->tenant->getBusinessTypeLabel() }}</p>
+                <div class="text-center border-b theme-aware-border pb-6">
+                    <h3 class="text-xl font-semibold theme-aware-text">{{ $invitation->tenant->name }}</h3>
+                    <p class="text-sm theme-aware-text-muted">{{ $invitation->tenant->getBusinessTypeLabel() }}</p>
                     @if($invitation->tenant->domain)
-                        <p class="text-xs text-gray-400">{{ $invitation->tenant->domain }}</p>
+                        <p class="text-xs theme-aware-text-muted">{{ $invitation->tenant->domain }}</p>
                     @endif
                 </div>
 
                 {{-- Role & Permissions --}}
-                <div class="bg-gray-50 rounded-lg p-4">
-                    <h4 class="text-sm font-medium text-gray-900 mb-2">Your Role & Permissions</h4>
+                <div class="theme-aware-bg-secondary rounded-lg p-4">
+                    <h4 class="text-sm font-medium theme-aware-text mb-2">Your Role & Permissions</h4>
                     <div class="space-y-2">
                         <div class="flex items-center justify-between">
-                            <span class="text-sm text-gray-600">Role:</span>
+                            <span class="text-sm theme-aware-text-secondary">Role:</span>
                             <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
                                 {{ $invitation->getRoleLabel() }}
                             </span>
                         </div>
                         @if($invitation->is_admin)
                             <div class="flex items-center justify-between">
-                                <span class="text-sm text-gray-600">Admin Privileges:</span>
+                                <span class="text-sm theme-aware-text-secondary">Admin Privileges:</span>
                                 <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
                                     Yes
                                 </span>
@@ -60,15 +60,15 @@
 
                 {{-- Invitation Details --}}
                 <div class="space-y-3">
-                    <div class="flex items-center text-sm text-gray-600">
+                    <div class="flex items-center text-sm theme-aware-text-secondary">
                         <i class="fas fa-user w-4 mr-3"></i>
                         <span>Invited by <strong>{{ $invitation->invitedBy->name }}</strong></span>
                     </div>
-                    <div class="flex items-center text-sm text-gray-600">
+                    <div class="flex items-center text-sm theme-aware-text-secondary">
                         <i class="fas fa-envelope w-4 mr-3"></i>
                         <span>Sent to <strong>{{ $invitation->email }}</strong></span>
                     </div>
-                    <div class="flex items-center text-sm text-gray-600">
+                    <div class="flex items-center text-sm theme-aware-text-secondary">
                         <i class="fas fa-clock w-4 mr-3"></i>
                         <span>Expires {{ $invitation->expires_at->diffForHumans() }}</span>
                     </div>
@@ -95,7 +95,7 @@
                                 </button>
                             </form>
                             <a href="{{ route('invitations.decline', $invitation->token) }}" 
-                               class="flex-1 flex justify-center py-3 px-4 border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition">
+                               class="flex-1 flex justify-center py-3 px-4 border theme-aware-border rounded-lg shadow-sm text-sm font-medium theme-aware-text-secondary theme-aware-bg-card hover:theme-aware-bg-secondary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition">
                                 <i class="fas fa-times mr-2"></i>
                                 Decline
                             </a>
@@ -149,7 +149,7 @@
                                 Log In
                             </a>
                             <a href="{{ route('register', ['return' => route('invitations.show', $invitation->token)]) }}" 
-                               class="flex-1 flex justify-center py-3 px-4 border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition">
+                               class="flex-1 flex justify-center py-3 px-4 border theme-aware-border rounded-lg shadow-sm text-sm font-medium theme-aware-text-secondary theme-aware-bg-card hover:theme-aware-bg-secondary transition">
                                 <i class="fas fa-user-plus mr-2"></i>
                                 Sign Up
                             </a>
@@ -161,10 +161,10 @@
 
         {{-- Footer --}}
         <div class="text-center">
-            <p class="text-xs text-gray-500">
+            <p class="text-xs theme-aware-text-muted">
                 This invitation will expire on {{ $invitation->expires_at->format('M d, Y \a\t H:i') }}
             </p>
-            <p class="text-xs text-gray-400 mt-2">
+            <p class="text-xs theme-aware-text-muted mt-2">
                 Powered by <a href="{{ url('/') }}" class="text-blue-600 hover:text-blue-800">SiteLedger</a>
             </p>
         </div>

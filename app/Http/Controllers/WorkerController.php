@@ -77,7 +77,7 @@ $data['salary_cents'] = (int) round($data['salary'] * 100);
 unset($data['salary']);
 }
 
-
+$data = $this->ensureTenantId($data);
 $worker = Worker::create($data);
 
 

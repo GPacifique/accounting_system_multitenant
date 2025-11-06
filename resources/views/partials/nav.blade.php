@@ -1,4 +1,4 @@
-<nav class="theme-aware-bg-card border-b border-gray-200">
+<nav class="theme-aware-bg-card border-b theme-aware-border">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
             <div class="flex">
@@ -14,7 +14,7 @@
                         <button type="submit" class="text-sm text-red-600 hover:text-red-800">Logout</button>
                     </form>
                 @else
-                    <a href="{{ route('login') }}" class="text-sm text-gray-700 hover:text-gray-900 mr-4">Login</a>
+                    <a href="{{ route('login') }}" class="text-sm theme-aware-text-secondary hover:theme-aware-text mr-4">Login</a>
                     <a href="{{ route('register') }}" class="text-sm text-indigo-600 hover:text-indigo-800">Register</a>
                 @endauth
             </div>

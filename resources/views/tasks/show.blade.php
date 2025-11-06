@@ -22,7 +22,7 @@
             @endcan
             
             <a href="{{ route('tasks.index') }}" 
-               class="inline-flex items-center px-4 py-2 bg-gray-100 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-200 focus:ring-4 focus:ring-gray-300 transition-colors">
+               class="inline-flex items-center px-4 py-2 theme-aware-bg-secondary theme-aware-text-secondary text-sm font-medium rounded-lg hover:theme-aware-bg-tertiary focus:ring-4 focus:ring-gray-300 transition-colors">
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                 </svg>
@@ -71,15 +71,15 @@
                     <div class="mt-1">
                         @if($task->assignedTo)
                             <div class="flex items-center">
-                                <div class="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center mr-2">
-                                    <span class="text-xs font-medium text-gray-600">
+                                <div class="w-8 h-8 theme-aware-bg-tertiary rounded-full flex items-center justify-center mr-2">
+                                    <span class="text-xs font-medium theme-aware-text-secondary">
                                         {{ substr($task->assignedTo->name, 0, 2) }}
                                     </span>
                                 </div>
                                 {{ $task->assignedTo->name }}
                             </div>
                         @else
-                            <span class="text-gray-400">Unassigned</span>
+                            <span class="theme-aware-text-muted">Unassigned</span>
                         @endif
                     </div>
                 </div>
@@ -89,15 +89,15 @@
                     <div class="mt-1">
                         @if($task->createdBy)
                             <div class="flex items-center">
-                                <div class="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center mr-2">
-                                    <span class="text-xs font-medium text-gray-600">
+                                <div class="w-8 h-8 theme-aware-bg-tertiary rounded-full flex items-center justify-center mr-2">
+                                    <span class="text-xs font-medium theme-aware-text-secondary">
                                         {{ substr($task->createdBy->name, 0, 2) }}
                                     </span>
                                 </div>
                                 {{ $task->createdBy->name }}
                             </div>
                         @else
-                            <span class="text-gray-400">Unknown</span>
+                            <span class="theme-aware-text-muted">Unknown</span>
                         @endif
                     </div>
                 </div>
@@ -189,7 +189,7 @@
                     {!! nl2br(e($task->description)) !!}
                 </div>
             @else
-                <p class="text-gray-400 italic">No description provided.</p>
+                <p class="theme-aware-text-muted italic">No description provided.</p>
             @endif
         </div>
 
@@ -201,7 +201,7 @@
                     {!! nl2br(e($task->notes)) !!}
                 </div>
             @else
-                <p class="text-gray-400 italic">No notes available.</p>
+                <p class="theme-aware-text-muted italic">No notes available.</p>
             @endif
         </div>
     </div>
@@ -227,7 +227,7 @@
 
     {{-- Actions --}}
     @can('tasks.delete')
-        <div class="mt-6 pt-6 border-t border-gray-200">
+        <div class="mt-6 pt-6 border-t theme-aware-border">
             <div class="flex justify-end">
                 <form action="{{ route('tasks.destroy', $task) }}" method="POST" class="inline"
                       onsubmit="return confirm('Are you sure you want to delete this task? This action cannot be undone.')">

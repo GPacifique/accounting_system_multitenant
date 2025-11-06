@@ -40,7 +40,7 @@
             </div>
 
             <div class="flex items-center justify-between mt-6">
-                <a class="auth-links underline text-sm theme-aware-text-secondary hover:text-gray-900" href="{{ route('login') }}">
+                <a class="auth-links underline text-sm theme-aware-text-secondary hover:theme-aware-text" href="{{ route('login') }}">
                     {{ __('Already registered?') }}
                 </a>
 

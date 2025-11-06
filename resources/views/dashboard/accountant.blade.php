@@ -5,7 +5,7 @@
 @section('meta_keywords', 'accountant dashboard, construction accounting, financial reports, revenue tracking, expense management, accounts receivable, construction finance')
 
 @section('content')
-<div class="py-12 bg-gray-50 min-h-screen">
+<div class="py-12 theme-aware-bg-secondary min-h-screen">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {{-- Page Header --}}
         <div class="mb-8">
@@ -71,7 +71,7 @@
                             <span class="theme-aware-text-secondary text-sm">Expenses</span>
                             <span class="font-semibold text-red-600">RWF {{ number_format($financialSummary['today']['expense'], 2) }}</span>
                         </div>
-                        <div class="border-t border-gray-200 pt-3 flex justify-between items-center">
+                        <div class="border-t theme-aware-border pt-3 flex justify-between items-center">
                             <span class="theme-aware-text-secondary font-medium">Balance</span>
                             <span class="font-bold text-lg {{ $financialSummary['today']['balance'] >= 0 ? 'text-green-600' : 'text-red-600' }}">
                                 RWF {{ number_format($financialSummary['today']['balance'], 2) }}
@@ -94,7 +94,7 @@
                             <span class="theme-aware-text-secondary text-sm">Expenses</span>
                             <span class="font-semibold text-red-600">RWF {{ number_format($financialSummary['this_month']['expense'], 2) }}</span>
                         </div>
-                        <div class="border-t border-gray-200 pt-3 flex justify-between items-center">
+                        <div class="border-t theme-aware-border pt-3 flex justify-between items-center">
                             <span class="theme-aware-text-secondary font-medium">Balance</span>
                             <span class="font-bold text-lg {{ $financialSummary['this_month']['balance'] >= 0 ? 'text-green-600' : 'text-red-600' }}">
                                 RWF {{ number_format($financialSummary['this_month']['balance'], 2) }}
@@ -117,7 +117,7 @@
                             <span class="theme-aware-text-secondary text-sm">Expenses</span>
                             <span class="font-semibold text-red-600">RWF {{ number_format($financialSummary['this_year']['expense'], 2) }}</span>
                         </div>
-                        <div class="border-t border-gray-200 pt-3 flex justify-between items-center">
+                        <div class="border-t theme-aware-border pt-3 flex justify-between items-center">
                             <span class="theme-aware-text-secondary font-medium">Balance</span>
                             <span class="font-bold text-lg {{ $financialSummary['this_year']['balance'] >= 0 ? 'text-green-600' : 'text-red-600' }}">
                                 RWF {{ number_format($financialSummary['this_year']['balance'], 2) }}

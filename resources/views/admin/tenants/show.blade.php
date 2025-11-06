@@ -14,7 +14,7 @@
         <div class="flex items-center justify-between">
             <div>
                 <div class="flex items-center mb-2">
-                    <div class="bg-white/20 rounded-lg p-2 mr-4">
+                    <div class="theme-aware-bg-card/20 rounded-lg p-2 mr-4">
                         <i class="fas fa-building text-2xl"></i>
                     </div>
                     <div>
@@ -26,12 +26,12 @@
                     <span class="bg-{{ $tenant->status === 'active' ? 'green' : ($tenant->status === 'suspended' ? 'red' : 'gray') }}-500/20 px-3 py-1 rounded-full">
                         {{ ucfirst($tenant->status) }}
                     </span>
-                    <span class="bg-white/20 px-3 py-1 rounded-full">{{ ucfirst($tenant->subscription_plan) }} Plan</span>
-                    <span class="bg-white/20 px-3 py-1 rounded-full">{{ $tenant->users_count ?? 0 }} Users</span>
+                    <span class="theme-aware-bg-card/20 px-3 py-1 rounded-full">{{ ucfirst($tenant->subscription_plan) }} Plan</span>
+                    <span class="theme-aware-bg-card/20 px-3 py-1 rounded-full">{{ $tenant->users_count ?? 0 }} Users</span>
                 </div>
             </div>
             <div class="flex space-x-3">
-                <a href="{{ route('admin.tenants.edit', $tenant) }}" class="bg-white text-purple-600 px-6 py-3 rounded-lg font-semibold hover:bg-purple-50 transition">
+                <a href="{{ route('admin.tenants.edit', $tenant) }}" class="theme-aware-bg-card text-purple-600 px-6 py-3 rounded-lg font-semibold hover:bg-purple-50 transition">
                     <i class="fas fa-edit mr-2"></i>
                     Edit
                 </a>
@@ -48,28 +48,28 @@
         <div class="lg:col-span-2 space-y-8">
             {{-- Statistics Overview --}}
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="bg-white rounded-xl shadow-lg p-6">
+                <div class="theme-aware-bg-card rounded-xl shadow-lg p-6">
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-sm font-medium text-gray-600">Total Users</p>
-                            <p class="text-2xl font-bold text-gray-900">{{ $tenant->users_count ?? 0 }}</p>
+                            <p class="text-sm font-medium theme-aware-text-secondary">Total Users</p>
+                            <p class="text-2xl font-bold theme-aware-text">{{ $tenant->users_count ?? 0 }}</p>
                         </div>
                         <div class="bg-blue-100 rounded-lg p-3">
                             <i class="fas fa-users text-blue-600 text-xl"></i>
                         </div>
                     </div>
                     <div class="mt-4">
-                        <span class="text-xs text-gray-500">
+                        <span class="text-xs theme-aware-text-muted">
                             of {{ $tenant->max_users ?? 'unlimited' }} maximum
                         </span>
                     </div>
                 </div>
 
-                <div class="bg-white rounded-xl shadow-lg p-6">
+                <div class="theme-aware-bg-card rounded-xl shadow-lg p-6">
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-sm font-medium text-gray-600">Active Projects</p>
-                            <p class="text-2xl font-bold text-gray-900">{{ $tenant->projects_count ?? 0 }}</p>
+                            <p class="text-sm font-medium theme-aware-text-secondary">Active Projects</p>
+                            <p class="text-2xl font-bold theme-aware-text">{{ $tenant->projects_count ?? 0 }}</p>
                         </div>
                         <div class="bg-green-100 rounded-lg p-3">
                             <i class="fas fa-project-diagram text-green-600 text-xl"></i>
@@ -83,11 +83,11 @@
                     </div>
                 </div>
 
-                <div class="bg-white rounded-xl shadow-lg p-6">
+                <div class="theme-aware-bg-card rounded-xl shadow-lg p-6">
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-sm font-medium text-gray-600">Revenue</p>
-                            <p class="text-2xl font-bold text-gray-900">{{ $tenant->total_revenue ?? 0 }} {{ $tenant->currency ?? 'RWF' }}</p>
+                            <p class="text-sm font-medium theme-aware-text-secondary">Revenue</p>
+                            <p class="text-2xl font-bold theme-aware-text">{{ $tenant->total_revenue ?? 0 }} {{ $tenant->currency ?? 'RWF' }}</p>
                         </div>
                         <div class="bg-purple-100 rounded-lg p-3">
                             <i class="fas fa-chart-line text-purple-600 text-xl"></i>
@@ -103,31 +103,31 @@
             </div>
 
             {{-- Business Information --}}
-            <div class="bg-white rounded-xl shadow-lg p-6">
-                <h2 class="text-xl font-bold text-gray-800 mb-6 flex items-center">
+            <div class="theme-aware-bg-card rounded-xl shadow-lg p-6">
+                <h2 class="text-xl font-bold theme-aware-text mb-6 flex items-center">
                     <i class="fas fa-info-circle text-blue-600 mr-3"></i>
                     Business Information
                 </h2>
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        <label class="block text-sm font-medium text-gray-500 mb-1">Business Name</label>
-                        <p class="text-gray-900 font-semibold">{{ $tenant->name }}</p>
+                        <label class="block text-sm font-medium theme-aware-text-muted mb-1">Business Name</label>
+                        <p class="theme-aware-text font-semibold">{{ $tenant->name }}</p>
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-gray-500 mb-1">Domain</label>
-                        <p class="text-gray-900 font-semibold">{{ $tenant->domain }}.{{ config('app.domain') }}</p>
+                        <label class="block text-sm font-medium theme-aware-text-muted mb-1">Domain</label>
+                        <p class="theme-aware-text font-semibold">{{ $tenant->domain }}.{{ config('app.domain') }}</p>
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-gray-500 mb-1">Business Type</label>
-                        <p class="text-gray-900 font-semibold">{{ ucfirst($tenant->business_type ?? 'Not specified') }}</p>
+                        <label class="block text-sm font-medium theme-aware-text-muted mb-1">Business Type</label>
+                        <p class="theme-aware-text font-semibold">{{ ucfirst($tenant->business_type ?? 'Not specified') }}</p>
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-gray-500 mb-1">Contact Email</label>
-                        <p class="text-gray-900 font-semibold">
+                        <label class="block text-sm font-medium theme-aware-text-muted mb-1">Contact Email</label>
+                        <p class="theme-aware-text font-semibold">
                             <a href="mailto:{{ $tenant->contact_email }}" class="text-blue-600 hover:text-blue-800">
                                 {{ $tenant->contact_email }}
                             </a>
@@ -136,8 +136,8 @@
 
                     @if($tenant->contact_phone)
                     <div>
-                        <label class="block text-sm font-medium text-gray-500 mb-1">Contact Phone</label>
-                        <p class="text-gray-900 font-semibold">
+                        <label class="block text-sm font-medium theme-aware-text-muted mb-1">Contact Phone</label>
+                        <p class="theme-aware-text font-semibold">
                             <a href="tel:{{ $tenant->contact_phone }}" class="text-blue-600 hover:text-blue-800">
                                 {{ $tenant->contact_phone }}
                             </a>
@@ -147,37 +147,37 @@
 
                     @if($tenant->registration_number)
                     <div>
-                        <label class="block text-sm font-medium text-gray-500 mb-1">Registration Number</label>
-                        <p class="text-gray-900 font-semibold">{{ $tenant->registration_number }}</p>
+                        <label class="block text-sm font-medium theme-aware-text-muted mb-1">Registration Number</label>
+                        <p class="theme-aware-text font-semibold">{{ $tenant->registration_number }}</p>
                     </div>
                     @endif
 
                     @if($tenant->address)
                     <div class="md:col-span-2">
-                        <label class="block text-sm font-medium text-gray-500 mb-1">Address</label>
-                        <p class="text-gray-900">{{ $tenant->address }}</p>
+                        <label class="block text-sm font-medium theme-aware-text-muted mb-1">Address</label>
+                        <p class="theme-aware-text">{{ $tenant->address }}</p>
                     </div>
                     @endif
 
                     @if($tenant->description)
                     <div class="md:col-span-2">
-                        <label class="block text-sm font-medium text-gray-500 mb-1">Description</label>
-                        <p class="text-gray-900">{{ $tenant->description }}</p>
+                        <label class="block text-sm font-medium theme-aware-text-muted mb-1">Description</label>
+                        <p class="theme-aware-text">{{ $tenant->description }}</p>
                     </div>
                     @endif
                 </div>
             </div>
 
             {{-- Subscription & Settings --}}
-            <div class="bg-white rounded-xl shadow-lg p-6">
-                <h2 class="text-xl font-bold text-gray-800 mb-6 flex items-center">
+            <div class="theme-aware-bg-card rounded-xl shadow-lg p-6">
+                <h2 class="text-xl font-bold theme-aware-text mb-6 flex items-center">
                     <i class="fas fa-cog text-green-600 mr-3"></i>
                     Subscription & Settings
                 </h2>
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        <label class="block text-sm font-medium text-gray-500 mb-1">Subscription Plan</label>
+                        <label class="block text-sm font-medium theme-aware-text-muted mb-1">Subscription Plan</label>
                         <div class="flex items-center">
                             <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-semibold">
                                 {{ ucfirst($tenant->subscription_plan) }}
@@ -186,7 +186,7 @@
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-gray-500 mb-1">Status</label>
+                        <label class="block text-sm font-medium theme-aware-text-muted mb-1">Status</label>
                         <div class="flex items-center">
                             <span class="bg-{{ $tenant->status === 'active' ? 'green' : ($tenant->status === 'suspended' ? 'red' : 'gray') }}-100 text-{{ $tenant->status === 'active' ? 'green' : ($tenant->status === 'suspended' ? 'red' : 'gray') }}-800 px-3 py-1 rounded-full text-sm font-semibold">
                                 {{ ucfirst($tenant->status) }}
@@ -195,24 +195,24 @@
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-gray-500 mb-1">Timezone</label>
-                        <p class="text-gray-900 font-semibold">{{ $tenant->timezone ?? 'UTC' }}</p>
+                        <label class="block text-sm font-medium theme-aware-text-muted mb-1">Timezone</label>
+                        <p class="theme-aware-text font-semibold">{{ $tenant->timezone ?? 'UTC' }}</p>
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-gray-500 mb-1">Default Currency</label>
-                        <p class="text-gray-900 font-semibold">{{ $tenant->currency ?? 'RWF' }}</p>
+                        <label class="block text-sm font-medium theme-aware-text-muted mb-1">Default Currency</label>
+                        <p class="theme-aware-text font-semibold">{{ $tenant->currency ?? 'RWF' }}</p>
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-gray-500 mb-1">Created Date</label>
-                        <p class="text-gray-900 font-semibold">{{ $tenant->created_at->format('M j, Y g:i A') }}</p>
+                        <label class="block text-sm font-medium theme-aware-text-muted mb-1">Created Date</label>
+                        <p class="theme-aware-text font-semibold">{{ $tenant->created_at->format('M j, Y g:i A') }}</p>
                     </div>
 
                     @if($tenant->trial_ends_at)
                     <div>
-                        <label class="block text-sm font-medium text-gray-500 mb-1">Trial Ends</label>
-                        <p class="text-gray-900 font-semibold {{ $tenant->trial_ends_at->isPast() ? 'text-red-600' : 'text-orange-600' }}">
+                        <label class="block text-sm font-medium theme-aware-text-muted mb-1">Trial Ends</label>
+                        <p class="theme-aware-text font-semibold {{ $tenant->trial_ends_at->isPast() ? 'text-red-600' : 'text-orange-600' }}">
                             {{ $tenant->trial_ends_at->format('M j, Y') }}
                             @if($tenant->trial_ends_at->isPast())
                                 (Expired)
@@ -226,7 +226,7 @@
 
                 @if(isset($tenant->features) && count($tenant->features) > 0)
                 <div class="mt-6">
-                    <label class="block text-sm font-medium text-gray-500 mb-3">Enabled Features</label>
+                    <label class="block text-sm font-medium theme-aware-text-muted mb-3">Enabled Features</label>
                     <div class="flex flex-wrap gap-2">
                         @foreach($tenant->features as $feature)
                             <span class="bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full text-sm">
@@ -239,9 +239,9 @@
             </div>
 
             {{-- Users List --}}
-            <div class="bg-white rounded-xl shadow-lg p-6">
+            <div class="theme-aware-bg-card rounded-xl shadow-lg p-6">
                 <div class="flex items-center justify-between mb-6">
-                    <h2 class="text-xl font-bold text-gray-800 flex items-center">
+                    <h2 class="text-xl font-bold theme-aware-text flex items-center">
                         <i class="fas fa-users text-purple-600 mr-3"></i>
                         Users ({{ $tenant->users_count ?? 0 }})
                     </h2>
@@ -254,29 +254,29 @@
                     <div class="overflow-x-auto">
                         <table class="w-full">
                             <thead>
-                                <tr class="border-b border-gray-200">
-                                    <th class="text-left py-3 px-4 font-semibold text-gray-700">User</th>
-                                    <th class="text-left py-3 px-4 font-semibold text-gray-700">Role</th>
-                                    <th class="text-left py-3 px-4 font-semibold text-gray-700">Status</th>
-                                    <th class="text-left py-3 px-4 font-semibold text-gray-700">Last Login</th>
+                                <tr class="border-b theme-aware-border">
+                                    <th class="text-left py-3 px-4 font-semibold theme-aware-text-secondary">User</th>
+                                    <th class="text-left py-3 px-4 font-semibold theme-aware-text-secondary">Role</th>
+                                    <th class="text-left py-3 px-4 font-semibold theme-aware-text-secondary">Status</th>
+                                    <th class="text-left py-3 px-4 font-semibold theme-aware-text-secondary">Last Login</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach($tenant->users->take(5) as $user)
-                                    <tr class="border-b border-gray-100 hover:bg-gray-50">
+                                    <tr class="border-b border-gray-100 hover:theme-aware-bg-secondary">
                                         <td class="py-3 px-4">
                                             <div class="flex items-center">
                                                 <div class="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-sm font-semibold mr-3">
                                                     {{ substr($user->name, 0, 1) }}
                                                 </div>
                                                 <div>
-                                                    <p class="font-semibold text-gray-900">{{ $user->name }}</p>
-                                                    <p class="text-sm text-gray-500">{{ $user->email }}</p>
+                                                    <p class="font-semibold theme-aware-text">{{ $user->name }}</p>
+                                                    <p class="text-sm theme-aware-text-muted">{{ $user->email }}</p>
                                                 </div>
                                             </div>
                                         </td>
                                         <td class="py-3 px-4">
-                                            <span class="bg-gray-100 text-gray-800 px-2 py-1 rounded text-sm">
+                                            <span class="theme-aware-bg-secondary theme-aware-text px-2 py-1 rounded text-sm">
                                                 {{ ucfirst($user->role ?? 'user') }}
                                             </span>
                                         </td>
@@ -285,7 +285,7 @@
                                                 {{ $user->email_verified_at ? 'Active' : 'Pending' }}
                                             </span>
                                         </td>
-                                        <td class="py-3 px-4 text-sm text-gray-500">
+                                        <td class="py-3 px-4 text-sm theme-aware-text-muted">
                                             {{ $user->last_login_at ? $user->last_login_at->diffForHumans() : 'Never' }}
                                         </td>
                                     </tr>
@@ -294,7 +294,7 @@
                         </table>
                     </div>
                 @else
-                    <div class="text-center py-8 text-gray-500">
+                    <div class="text-center py-8 theme-aware-text-muted">
                         <i class="fas fa-users text-3xl mb-3"></i>
                         <p>No users found for this tenant</p>
                     </div>
@@ -302,9 +302,9 @@
             </div>
 
             {{-- Recent Activity --}}
-            <div class="bg-white rounded-xl shadow-lg p-6">
+            <div class="theme-aware-bg-card rounded-xl shadow-lg p-6">
                 <div class="flex items-center justify-between mb-6">
-                    <h2 class="text-xl font-bold text-gray-800 flex items-center">
+                    <h2 class="text-xl font-bold theme-aware-text flex items-center">
                         <i class="fas fa-clock text-orange-600 mr-3"></i>
                         Recent Activity
                     </h2>
@@ -316,18 +316,18 @@
                 @if(isset($tenant->recent_activity) && $tenant->recent_activity->count() > 0)
                     <div class="space-y-4">
                         @foreach($tenant->recent_activity->take(10) as $activity)
-                            <div class="flex items-start space-x-3 p-3 bg-gray-50 rounded-lg">
+                            <div class="flex items-start space-x-3 p-3 theme-aware-bg-secondary rounded-lg">
                                 <div class="w-8 h-8 bg-{{ $activity->severity === 'high' ? 'red' : ($activity->severity === 'medium' ? 'yellow' : 'blue') }}-100 rounded-full flex items-center justify-center flex-shrink-0">
                                     <i class="fas fa-{{ $activity->severity === 'high' ? 'exclamation-triangle' : ($activity->severity === 'medium' ? 'info-circle' : 'check') }} text-{{ $activity->severity === 'high' ? 'red' : ($activity->severity === 'medium' ? 'yellow' : 'blue') }}-600 text-sm"></i>
                                 </div>
                                 <div class="flex-1">
-                                    <p class="text-gray-900 font-medium">{{ $activity->action }}</p>
-                                    <p class="text-sm text-gray-600">{{ $activity->description }}</p>
+                                    <p class="theme-aware-text font-medium">{{ $activity->action }}</p>
+                                    <p class="text-sm theme-aware-text-secondary">{{ $activity->description }}</p>
                                     <div class="flex items-center justify-between mt-2">
-                                        <span class="text-xs text-gray-500">
+                                        <span class="text-xs theme-aware-text-muted">
                                             by {{ $activity->user ? $activity->user->name : 'System' }}
                                         </span>
-                                        <span class="text-xs text-gray-500">
+                                        <span class="text-xs theme-aware-text-muted">
                                             {{ $activity->created_at->diffForHumans() }}
                                         </span>
                                     </div>
@@ -336,7 +336,7 @@
                         @endforeach
                     </div>
                 @else
-                    <div class="text-center py-8 text-gray-500">
+                    <div class="text-center py-8 theme-aware-text-muted">
                         <i class="fas fa-clock text-3xl mb-3"></i>
                         <p>No recent activity found</p>
                     </div>
@@ -347,8 +347,8 @@
         {{-- Sidebar --}}
         <div class="space-y-6">
             {{-- Quick Actions --}}
-            <div class="bg-white rounded-xl shadow-lg p-6">
-                <h3 class="text-lg font-bold text-gray-800 mb-4">Quick Actions</h3>
+            <div class="theme-aware-bg-card rounded-xl shadow-lg p-6">
+                <h3 class="text-lg font-bold theme-aware-text mb-4">Quick Actions</h3>
                 
                 <div class="space-y-3">
                     <a href="{{ route('admin.tenants.edit', $tenant) }}" 
@@ -392,12 +392,12 @@
             </div>
 
             {{-- System Health --}}
-            <div class="bg-white rounded-xl shadow-lg p-6">
-                <h3 class="text-lg font-bold text-gray-800 mb-4">System Health</h3>
+            <div class="theme-aware-bg-card rounded-xl shadow-lg p-6">
+                <h3 class="text-lg font-bold theme-aware-text mb-4">System Health</h3>
                 
                 <div class="space-y-4">
                     <div class="flex items-center justify-between">
-                        <span class="text-gray-600">Database Status:</span>
+                        <span class="theme-aware-text-secondary">Database Status:</span>
                         <span class="text-green-600 font-semibold">
                             <i class="fas fa-check-circle mr-1"></i>
                             Healthy
@@ -405,21 +405,21 @@
                     </div>
                     
                     <div class="flex items-center justify-between">
-                        <span class="text-gray-600">Last Backup:</span>
+                        <span class="theme-aware-text-secondary">Last Backup:</span>
                         <span class="text-blue-600 font-semibold text-sm">
                             {{ $tenant->last_backup_at ? $tenant->last_backup_at->diffForHumans() : 'Never' }}
                         </span>
                     </div>
                     
                     <div class="flex items-center justify-between">
-                        <span class="text-gray-600">Storage Used:</span>
+                        <span class="theme-aware-text-secondary">Storage Used:</span>
                         <span class="font-semibold text-sm">
                             {{ $tenant->storage_used ?? '0' }} MB
                         </span>
                     </div>
                     
                     <div class="flex items-center justify-between">
-                        <span class="text-gray-600">API Calls (Today):</span>
+                        <span class="theme-aware-text-secondary">API Calls (Today):</span>
                         <span class="font-semibold text-sm">
                             {{ $tenant->api_calls_today ?? 0 }}
                         </span>
@@ -429,8 +429,8 @@
 
             {{-- Logo Display --}}
             @if($tenant->logo)
-            <div class="bg-white rounded-xl shadow-lg p-6">
-                <h3 class="text-lg font-bold text-gray-800 mb-4">Business Logo</h3>
+            <div class="theme-aware-bg-card rounded-xl shadow-lg p-6">
+                <h3 class="text-lg font-bold theme-aware-text mb-4">Business Logo</h3>
                 <div class="text-center">
                     <img src="{{ Storage::url($tenant->logo) }}" 
                          alt="{{ $tenant->name }} Logo" 
@@ -440,8 +440,8 @@
             @endif
 
             {{-- Contact Information --}}
-            <div class="bg-white rounded-xl shadow-lg p-6">
-                <h3 class="text-lg font-bold text-gray-800 mb-4">Contact</h3>
+            <div class="theme-aware-bg-card rounded-xl shadow-lg p-6">
+                <h3 class="text-lg font-bold theme-aware-text mb-4">Contact</h3>
                 
                 <div class="space-y-3">
                     <div class="flex items-center">

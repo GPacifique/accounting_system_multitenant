@@ -20,7 +20,7 @@
                     <span>Invitations</span>
                 </nav>
                 <h1 class="text-3xl font-bold flex items-center">
-                    <div class="bg-white/20 rounded-lg p-2 mr-4">
+                    <div class="theme-aware-bg-card/20 rounded-lg p-2 mr-4">
                         <i class="fas fa-user-plus text-2xl"></i>
                     </div>
                     Tenant Invitations
@@ -29,7 +29,7 @@
             </div>
             <div class="flex space-x-3">
                 <a href="{{ route('admin.tenants.invitations.create', $tenant) }}" 
-                   class="bg-white text-purple-600 px-6 py-3 rounded-lg font-semibold hover:bg-purple-50 transition">
+                   class="theme-aware-bg-card text-purple-600 px-6 py-3 rounded-lg font-semibold hover:bg-purple-50 transition">
                     <i class="fas fa-plus mr-2"></i>
                     Send Invitation
                 </a>
@@ -44,10 +44,10 @@
 
     {{-- Statistics Cards --}}
     <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-yellow-500">
+        <div class="theme-aware-bg-card rounded-xl shadow-lg p-6 border-l-4 border-yellow-500">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-sm font-medium text-gray-600">Pending</p>
+                    <p class="text-sm font-medium theme-aware-text-secondary">Pending</p>
                     <p class="text-2xl font-bold text-yellow-600">{{ $invitations->where('status', 'pending')->count() }}</p>
                 </div>
                 <div class="bg-yellow-100 rounded-full p-3">
@@ -56,10 +56,10 @@
             </div>
         </div>
 
-        <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-green-500">
+        <div class="theme-aware-bg-card rounded-xl shadow-lg p-6 border-l-4 border-green-500">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-sm font-medium text-gray-600">Accepted</p>
+                    <p class="text-sm font-medium theme-aware-text-secondary">Accepted</p>
                     <p class="text-2xl font-bold text-green-600">{{ $invitations->where('status', 'accepted')->count() }}</p>
                 </div>
                 <div class="bg-green-100 rounded-full p-3">
@@ -68,10 +68,10 @@
             </div>
         </div>
 
-        <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-red-500">
+        <div class="theme-aware-bg-card rounded-xl shadow-lg p-6 border-l-4 border-red-500">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-sm font-medium text-gray-600">Expired</p>
+                    <p class="text-sm font-medium theme-aware-text-secondary">Expired</p>
                     <p class="text-2xl font-bold text-red-600">{{ $invitations->where('status', 'expired')->count() }}</p>
                 </div>
                 <div class="bg-red-100 rounded-full p-3">
@@ -80,53 +80,53 @@
             </div>
         </div>
 
-        <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-gray-500">
+        <div class="theme-aware-bg-card rounded-xl shadow-lg p-6 border-l-4 border-gray-500">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-sm font-medium text-gray-600">Total</p>
-                    <p class="text-2xl font-bold text-gray-600">{{ $invitations->total() }}</p>
+                    <p class="text-sm font-medium theme-aware-text-secondary">Total</p>
+                    <p class="text-2xl font-bold theme-aware-text-secondary">{{ $invitations->total() }}</p>
                 </div>
-                <div class="bg-gray-100 rounded-full p-3">
-                    <i class="fas fa-envelope text-gray-600"></i>
+                <div class="theme-aware-bg-secondary rounded-full p-3">
+                    <i class="fas fa-envelope theme-aware-text-secondary"></i>
                 </div>
             </div>
         </div>
     </div>
 
     {{-- Invitations Table --}}
-    <div class="bg-white rounded-xl shadow-lg overflow-hidden">
-        <div class="px-6 py-4 border-b border-gray-200">
-            <h3 class="text-lg font-medium text-gray-900">All Invitations</h3>
+    <div class="theme-aware-bg-card rounded-xl shadow-lg overflow-hidden">
+        <div class="px-6 py-4 border-b theme-aware-border">
+            <h3 class="text-lg font-medium theme-aware-text">All Invitations</h3>
         </div>
 
         <div class="overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-50">
+                <thead class="theme-aware-bg-secondary">
                     <tr>
-                        <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th class="px-6 py-4 text-left text-xs font-medium theme-aware-text-muted uppercase tracking-wider">
                             Email & Role
                         </th>
-                        <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th class="px-6 py-4 text-left text-xs font-medium theme-aware-text-muted uppercase tracking-wider">
                             Status
                         </th>
-                        <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th class="px-6 py-4 text-left text-xs font-medium theme-aware-text-muted uppercase tracking-wider">
                             Invited By
                         </th>
-                        <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th class="px-6 py-4 text-left text-xs font-medium theme-aware-text-muted uppercase tracking-wider">
                             Expires
                         </th>
-                        <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th class="px-6 py-4 text-left text-xs font-medium theme-aware-text-muted uppercase tracking-wider">
                             Actions
                         </th>
                     </tr>
                 </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
+                <tbody class="theme-aware-bg-card divide-y divide-gray-200">
                     @forelse($invitations as $invitation)
-                        <tr class="hover:bg-gray-50">
+                        <tr class="hover:theme-aware-bg-secondary">
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div>
-                                    <div class="text-sm font-medium text-gray-900">{{ $invitation->email }}</div>
-                                    <div class="text-sm text-gray-500">
+                                    <div class="text-sm font-medium theme-aware-text">{{ $invitation->email }}</div>
+                                    <div class="text-sm theme-aware-text-muted">
                                         {{ $invitation->getRoleLabel() }}
                                         @if($invitation->is_admin)
                                             <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-purple-100 text-purple-800 ml-2">
@@ -142,12 +142,12 @@
                                 </span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="text-sm text-gray-900">{{ $invitation->invitedBy->name }}</div>
-                                <div class="text-sm text-gray-500">{{ $invitation->created_at->format('M d, Y') }}</div>
+                                <div class="text-sm theme-aware-text">{{ $invitation->invitedBy->name }}</div>
+                                <div class="text-sm theme-aware-text-muted">{{ $invitation->created_at->format('M d, Y') }}</div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="text-sm text-gray-900">{{ $invitation->expires_at->format('M d, Y') }}</div>
-                                <div class="text-sm text-gray-500">{{ $invitation->expires_at->diffForHumans() }}</div>
+                                <div class="text-sm theme-aware-text">{{ $invitation->expires_at->format('M d, Y') }}</div>
+                                <div class="text-sm theme-aware-text-muted">{{ $invitation->expires_at->diffForHumans() }}</div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                 <div class="flex items-center space-x-2">
@@ -169,14 +169,14 @@
                                             <i class="fas fa-times"></i>
                                         </button>
                                     @else
-                                        <span class="text-gray-400">No actions</span>
+                                        <span class="theme-aware-text-muted">No actions</span>
                                     @endif
                                 </div>
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="px-6 py-12 text-center text-gray-500">
+                            <td colspan="5" class="px-6 py-12 text-center theme-aware-text-muted">
                                 <div class="flex flex-col items-center">
                                     <i class="fas fa-user-plus text-4xl mb-4 text-gray-300"></i>
                                     <h3 class="text-lg font-medium mb-2">No invitations sent</h3>
@@ -196,7 +196,7 @@
 
         {{-- Pagination --}}
         @if($invitations->hasPages())
-            <div class="bg-white px-6 py-4 border-t border-gray-200">
+            <div class="theme-aware-bg-card px-6 py-4 border-t theme-aware-border">
                 {{ $invitations->links() }}
             </div>
         @endif

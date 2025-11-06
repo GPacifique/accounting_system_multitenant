@@ -54,9 +54,14 @@ class DatabaseSeeder extends Seeder
         $this->call(SampleTenantsSeeder::class);
         $this->command->newLine();
 
-        // Step 9: Sample Tasks (if not already seeded)
+        // Step 9: Chart of Accounts
+        $this->command->info('9️⃣  Seeding Chart of Accounts...');
+        $this->call(AccountsSeeder::class);
+        $this->command->newLine();
+
+        // Step 10: Sample Tasks (if not already seeded)
         if (!\App\Models\Task::exists()) {
-            $this->command->info('9️⃣  Seeding Sample Tasks...');
+            $this->command->info('🔟 Seeding Sample Tasks...');
             $this->call(SampleTasksSeeder::class);
             $this->command->newLine();
         }

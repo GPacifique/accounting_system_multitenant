@@ -11,7 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('audit_logs', function (Blueprint $table) {
+        // Only create the table if it doesn't exist
+        if (!Schema::hasTable('audit_logs')) {
+            Schema::create('audit_logs', function (Blueprint $table) {
             $table->id();
             $table->foreignId('tenant_id')->nullable()->constrained()->onDelete('cascade');
             $table->foreignId('user_id')->nullable()->constrained()->onDelete('set null');
@@ -35,16 +37,15 @@ return new class extends Migration
             
             $table->timestamps();
             
-            $table->index(['tenant_id']);
-            $table->index(['user_id']);
-            $table->index(['action']);
-            $table->index(['model_type', 'model_id']);
-            $table->index(['created_at']);
-            $table->index(['severity']);
-        });
-    }
-
-    /**
+                $table->index(['tenant_id']);
+                $table->index(['user_id']);
+                $table->index(['action']);
+                $table->index(['model_type', 'model_id']);
+                $table->index(['created_at']);
+                $table->index(['severity']);
+            });
+        }
+    }    /**
      * Reverse the migrations.
      */
     public function down(): void

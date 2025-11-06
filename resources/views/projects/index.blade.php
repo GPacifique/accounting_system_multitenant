@@ -153,14 +153,12 @@
                                     @endif
                                 </td>
                                 <td>
-                                    @if($project->notes)
-                                        <span class="text-gray-700">{{ Str::limit($project->notes, 50) }}</span>
+                                    @if(!empty($project->notes))
+                                        <span class="theme-aware-text-secondary">{{ Str::limit($project->notes, 50) }}</span>
                                     @else
-                                        <span class="theme-aware-text-muted">—</span>
+                                        —
                                     @endif
-                                </td>
-
-                                <td class="text-right">
+                                </td>                                <td class="text-right">
                                     <div class="inline-flex items-center gap-2">
                                         <x-enhanced-button type="info" size="sm" href="{{ route('projects.show', $project) }}">
                                             <i class="fas fa-eye"></i>

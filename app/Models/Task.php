@@ -35,6 +35,8 @@ class Task extends Model
         'due_date' => 'date',
         'start_date' => 'date',
         'completed_date' => 'date',
+        'estimated_hours' => 'decimal:2',
+        'actual_hours' => 'decimal:2',
         'estimated_cost' => 'decimal:2',
         'actual_cost' => 'decimal:2',
         'attachments' => 'array',

@@ -21,41 +21,41 @@
             <div class="p-6 sm:p-8">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        <h3 class="text-lg font-semibold text-gray-700 border-b pb-2 mb-4">Expense Info</h3>
+                        <h3 class="text-lg font-semibold theme-aware-text-secondary border-b pb-2 mb-4">Expense Info</h3>
                         <dl class="space-y-4">
                             <div class="flex flex-col">
                                 <dt class="text-sm font-medium theme-aware-text-muted">Date</dt>
-                                <dd class="mt-1 text-md text-gray-900">{{ optional($expense->date)->format('Y-m-d') ?? '—' }}</dd>
+                                <dd class="mt-1 text-md theme-aware-text">{{ optional($expense->date)->format('Y-m-d') ?? '—' }}</dd>
                             </div>
                             <div class="flex flex-col">
                                 <dt class="text-sm font-medium theme-aware-text-muted">Category</dt>
-                                <dd class="mt-1 text-md text-gray-900">{{ $expense->category ?? '—' }}</dd>
+                                <dd class="mt-1 text-md theme-aware-text">{{ $expense->category ?? '—' }}</dd>
                             </div>
                             <div class="flex flex-col">
                                 <dt class="text-sm font-medium theme-aware-text-muted">Method</dt>
-                                <dd class="mt-1 text-md text-gray-900">{{ $expense->method ?? '—' }}</dd>
+                                <dd class="mt-1 text-md theme-aware-text">{{ $expense->method ?? '—' }}</dd>
                             </div>
                             <div class="flex flex-col">
                                 <dt class="text-sm font-medium theme-aware-text-muted">Reference</dt>
-                                <dd class="mt-1 text-md text-gray-900">{{ $expense->reference ?? '—' }}</dd>
+                                <dd class="mt-1 text-md theme-aware-text">{{ $expense->reference ?? '—' }}</dd>
                             </div>
                         </dl>
                     </div>
 
                     <div>
-                        <h3 class="text-lg font-semibold text-gray-700 border-b pb-2 mb-4">Associations</h3>
+                        <h3 class="text-lg font-semibold theme-aware-text-secondary border-b pb-2 mb-4">Associations</h3>
                         <dl class="space-y-4">
                             <div class="flex flex-col">
                                 <dt class="text-sm font-medium theme-aware-text-muted">Project</dt>
-                                <dd class="mt-1 text-md text-gray-900">{{ $expense->project_id ? ($expense->project->name ?? '—') : '—' }}</dd>
+                                <dd class="mt-1 text-md theme-aware-text">{{ $expense->project_id ? ($expense->project->name ?? '—') : '—' }}</dd>
                             </div>
                             <div class="flex flex-col">
                                 <dt class="text-sm font-medium theme-aware-text-muted">Client</dt>
-                                <dd class="mt-1 text-md text-gray-900">{{ $expense->client_id ? ($expense->client->name ?? '—') : '—' }}</dd>
+                                <dd class="mt-1 text-md theme-aware-text">{{ $expense->client_id ? ($expense->client->name ?? '—') : '—' }}</dd>
                             </div>
                             <div class="flex flex-col md:col-span-2">
                                 <dt class="text-sm font-medium theme-aware-text-muted">Registered By</dt>
-                                <dd class="mt-1 text-md text-gray-900">{{ $expense->user->name ?? '—' }}</dd>
+                                <dd class="mt-1 text-md theme-aware-text">{{ $expense->user->name ?? '—' }}</dd>
                             </div>
                         </dl>
                     </div>
@@ -96,7 +96,7 @@
         @apply inline-flex items-center px-4 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700 active:bg-red-900 focus:outline-none focus:border-red-900 focus:ring ring-red-300 disabled:opacity-25 transition ease-in-out duration-150;
     }
     .btn-secondary {
-        @apply inline-flex items-center px-4 py-2 bg-gray-200 border border-gray-300 rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest hover:bg-gray-300 active:bg-gray-400 focus:outline-none focus:border-gray-400 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150;
+        @apply inline-flex items-center px-4 py-2 theme-aware-bg-tertiary border theme-aware-border rounded-md font-semibold text-xs theme-aware-text-secondary uppercase tracking-widest hover:bg-gray-300 active:bg-gray-400 focus:outline-none focus:theme-aware-border-secondary focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150;
     }
 </style>
 @endpush

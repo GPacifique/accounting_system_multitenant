@@ -9,20 +9,20 @@
            class="text-blue-600 hover:text-blue-800 mr-4">
             <i class="fas fa-arrow-left"></i>
         </a>
-        <h1 class="text-3xl font-bold text-gray-800">Create New Subscription</h1>
+        <h1 class="text-3xl font-bold theme-aware-text">Create New Subscription</h1>
     </div>
 
-    <div class="bg-white rounded-lg shadow-lg p-6">
+    <div class="theme-aware-bg-card rounded-lg shadow-lg p-6">
         <form method="POST" action="{{ route('admin.subscriptions.store') }}">
             @csrf
 
             <!-- Tenant Selection -->
             <div class="mb-6">
-                <label for="tenant_id" class="block text-sm font-medium text-gray-700 mb-2">
+                <label for="tenant_id" class="block text-sm font-medium theme-aware-text-secondary mb-2">
                     Tenant
                 </label>
                 <select name="tenant_id" id="tenant_id" 
-                        class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" 
+                        class="block w-full px-3 py-2 border theme-aware-border rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-blue-500" 
                         required>
                     <option value="">Select a tenant</option>
                     @foreach($tenants as $tenant)
@@ -38,11 +38,11 @@
 
             <!-- Plan Selection -->
             <div class="mb-6">
-                <label for="plan" class="block text-sm font-medium text-gray-700 mb-2">
+                <label for="plan" class="block text-sm font-medium theme-aware-text-secondary mb-2">
                     Plan
                 </label>
                 <select name="plan" id="plan" 
-                        class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" 
+                        class="block w-full px-3 py-2 border theme-aware-border rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-blue-500" 
                         required>
                     <option value="">Select a plan</option>
                     @foreach($plans as $key => $plan)
@@ -61,11 +61,11 @@
 
             <!-- Billing Cycle -->
             <div class="mb-6">
-                <label for="billing_cycle" class="block text-sm font-medium text-gray-700 mb-2">
+                <label for="billing_cycle" class="block text-sm font-medium theme-aware-text-secondary mb-2">
                     Billing Cycle
                 </label>
                 <select name="billing_cycle" id="billing_cycle" 
-                        class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" 
+                        class="block w-full px-3 py-2 border theme-aware-border rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-blue-500" 
                         required>
                     <option value="">Select billing cycle</option>
                     <option value="monthly" {{ old('billing_cycle') == 'monthly' ? 'selected' : '' }}>
@@ -82,12 +82,12 @@
 
             <!-- Start Date -->
             <div class="mb-6">
-                <label for="start_date" class="block text-sm font-medium text-gray-700 mb-2">
+                <label for="start_date" class="block text-sm font-medium theme-aware-text-secondary mb-2">
                     Start Date
                 </label>
                 <input type="date" name="start_date" id="start_date" 
                        value="{{ old('start_date', now()->format('Y-m-d')) }}"
-                       class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" 
+                       class="block w-full px-3 py-2 border theme-aware-border rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-blue-500" 
                        required>
                 @error('start_date')
                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -95,9 +95,9 @@
             </div>
 
             <!-- Price Preview -->
-            <div class="mb-6 p-4 bg-gray-50 rounded-lg">
-                <h3 class="text-sm font-medium text-gray-700 mb-2">Price Preview</h3>
-                <div id="price-preview" class="text-lg font-semibold text-gray-900">
+            <div class="mb-6 p-4 theme-aware-bg-secondary rounded-lg">
+                <h3 class="text-sm font-medium theme-aware-text-secondary mb-2">Price Preview</h3>
+                <div id="price-preview" class="text-lg font-semibold theme-aware-text">
                     Select a plan and billing cycle to see pricing
                 </div>
             </div>
@@ -105,7 +105,7 @@
             <!-- Action Buttons -->
             <div class="flex justify-end space-x-4">
                 <a href="{{ route('admin.subscriptions.index') }}" 
-                   class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50 transition">
+                   class="px-4 py-2 border theme-aware-border rounded-md theme-aware-text-secondary theme-aware-bg-card hover:theme-aware-bg-secondary transition">
                     Cancel
                 </a>
                 <button type="submit" 
@@ -139,7 +139,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <div class="text-lg font-semibold text-blue-600">
                     $${parseFloat(price).toFixed(2)} ${cycleText}
                 </div>
-                <div class="text-sm text-gray-600">${planName} Plan</div>
+                <div class="text-sm theme-aware-text-secondary">${planName} Plan</div>
             `;
         } else {
             pricePreview.textContent = 'Select a plan and billing cycle to see pricing';

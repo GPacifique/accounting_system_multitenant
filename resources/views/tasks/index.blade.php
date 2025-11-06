@@ -26,7 +26,7 @@
             {{-- Export Dropdown --}}
             <div class="relative" x-data="{ open: false }">
                 <button @click="open = !open" 
-                        class="inline-flex items-center px-4 py-2 bg-gray-100 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-200 focus:ring-4 focus:ring-gray-300 transition-colors">
+                        class="inline-flex items-center px-4 py-2 theme-aware-bg-secondary theme-aware-text-secondary text-sm font-medium rounded-lg hover:theme-aware-bg-tertiary focus:ring-4 focus:ring-gray-300 transition-colors">
                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                     </svg>
@@ -37,17 +37,17 @@
                 </button>
 
                 <div x-show="open" @click.away="open = false" x-transition
-                     class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-50 border">
+                     class="absolute right-0 mt-2 w-48 theme-aware-bg-card rounded-md theme-aware-shadow z-50 theme-aware-border border">
                     <div class="py-1">
                         <a href="{{ route('tasks.export.csv') }}" 
-                           class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                           class="block px-4 py-2 text-sm theme-aware-text hover:theme-aware-bg-secondary">
                             <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                             </svg>
                             Export as CSV
                         </a>
                         <a href="{{ route('tasks.export.pdf') }}" 
-                           class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                           class="block px-4 py-2 text-sm theme-aware-text hover:theme-aware-bg-secondary">
                             <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
                             </svg>
@@ -67,7 +67,7 @@
         </div>
 
         <div class="theme-aware-bg-card rounded-lg p-4 border">
-            <div class="text-2xl font-bold text-gray-600">{{ number_format($taskStats['pending']) }}</div>
+            <div class="text-2xl font-bold theme-aware-text-secondary">{{ number_format($taskStats['pending']) }}</div>
             <div class="text-sm theme-aware-text-muted">Pending</div>
         </div>
 
@@ -95,13 +95,13 @@
                 <label for="search" class="block text-sm font-medium theme-aware-text-secondary mb-1">Search</label>
                 <input type="text" name="search" id="search" value="{{ request('search') }}"
                        placeholder="Search tasks..."
-                       class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                       class="w-full px-3 py-2 border theme-aware-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-blue-500">
             </div>
 
             {{-- Status Filter --}}
             <div>
                 <label for="status" class="block text-sm font-medium theme-aware-text-secondary mb-1">Status</label>
-                <select name="status" id="status" class="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                <select name="status" id="status" class="px-3 py-2 border theme-aware-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-blue-500">
                     <option value="">All Statuses</option>
                     @foreach(\App\Models\Task::STATUSES as $key => $value)
                         <option value="{{ $key }}" {{ request('status') == $key ? 'selected' : '' }}>{{ $value }}</option>
@@ -112,7 +112,7 @@
             {{-- Priority Filter --}}
             <div>
                 <label for="priority" class="block text-sm font-medium theme-aware-text-secondary mb-1">Priority</label>
-                <select name="priority" id="priority" class="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                <select name="priority" id="priority" class="px-3 py-2 border theme-aware-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-blue-500">
                     <option value="">All Priorities</option>
                     @foreach(\App\Models\Task::PRIORITIES as $key => $value)
                         <option value="{{ $key }}" {{ request('priority') == $key ? 'selected' : '' }}>{{ $value }}</option>
@@ -123,7 +123,7 @@
             {{-- Project Filter --}}
             <div>
                 <label for="project_id" class="block text-sm font-medium theme-aware-text-secondary mb-1">Project</label>
-                <select name="project_id" id="project_id" class="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                <select name="project_id" id="project_id" class="px-3 py-2 border theme-aware-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-blue-500">
                     <option value="">All Projects</option>
                     @foreach($projects as $project)
                         <option value="{{ $project->id }}" {{ request('project_id') == $project->id ? 'selected' : '' }}>{{ $project->name }}</option>
@@ -134,7 +134,7 @@
             {{-- Assigned To Filter --}}
             <div>
                 <label for="assigned_to" class="block text-sm font-medium theme-aware-text-secondary mb-1">Assigned To</label>
-                <select name="assigned_to" id="assigned_to" class="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                <select name="assigned_to" id="assigned_to" class="px-3 py-2 border theme-aware-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-blue-500">
                     <option value="">All Users</option>
                     @foreach($users as $user)
                         <option value="{{ $user->id }}" {{ request('assigned_to') == $user->id ? 'selected' : '' }}>{{ $user->name }}</option>
@@ -147,7 +147,7 @@
                 <button type="submit" class="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 transition-colors">
                     Filter
                 </button>
-                <a href="{{ route('tasks.index') }}" class="px-4 py-2 bg-gray-100 text-gray-700 text-sm font-medium rounded-md hover:bg-gray-200 focus:ring-4 focus:ring-gray-300 transition-colors">
+                <a href="{{ route('tasks.index') }}" class="px-4 py-2 theme-aware-bg-secondary theme-aware-text-secondary text-sm font-medium rounded-md hover:theme-aware-bg-tertiary focus:ring-4 focus:ring-gray-300 transition-colors">
                     Clear
                 </a>
             </div>
@@ -158,7 +158,7 @@
     <div class="theme-aware-bg-card rounded-lg shadow-sm border overflow-hidden">
         @if($tasks->isEmpty())
             <div class="text-center py-12">
-                <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="mx-auto h-12 w-12 theme-aware-text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
                 </svg>
                 <h3 class="mt-2 text-sm font-medium theme-aware-text">No tasks found</h3>
@@ -178,20 +178,20 @@
         @else
             <div class="overflow-x-auto">
                 <table class="w-full text-left">
-                    <thead class="bg-gray-50 border-b">
+                    <thead class="theme-aware-bg-secondary border-b">
                         <tr>
-                            <th class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Task</th>
-                            <th class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Project</th>
-                            <th class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Assigned To</th>
-                            <th class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Priority</th>
-                            <th class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                            <th class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Due Date</th>
-                            <th class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                            <th class="px-6 py-3 text-xs font-medium theme-aware-text-muted uppercase tracking-wider">Task</th>
+                            <th class="px-6 py-3 text-xs font-medium theme-aware-text-muted uppercase tracking-wider">Project</th>
+                            <th class="px-6 py-3 text-xs font-medium theme-aware-text-muted uppercase tracking-wider">Assigned To</th>
+                            <th class="px-6 py-3 text-xs font-medium theme-aware-text-muted uppercase tracking-wider">Priority</th>
+                            <th class="px-6 py-3 text-xs font-medium theme-aware-text-muted uppercase tracking-wider">Status</th>
+                            <th class="px-6 py-3 text-xs font-medium theme-aware-text-muted uppercase tracking-wider">Due Date</th>
+                            <th class="px-6 py-3 text-xs font-medium theme-aware-text-muted uppercase tracking-wider">Actions</th>
                         </tr>
                     </thead>
-                    <tbody class="bg-white divide-y divide-gray-200">
+                    <tbody class="theme-aware-bg-card divide-y theme-aware-border">
                         @foreach($tasks as $task)
-                            <tr class="hover:bg-gray-50">
+                            <tr class="hover:theme-aware-bg-secondary transition-colors">
                                 <td class="px-6 py-4">
                                     <div>
                                         <div class="font-medium theme-aware-text">{{ $task->title }}</div>
@@ -206,21 +206,21 @@
                                             {{ $task->project->name }}
                                         </a>
                                     @else
-                                        <span class="text-gray-400">—</span>
+                                        <span class="theme-aware-text-muted">—</span>
                                     @endif
                                 </td>
                                 <td class="px-6 py-4">
                                     @if($task->assignedTo)
                                         <div class="flex items-center">
-                                            <div class="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center mr-2">
-                                                <span class="text-xs font-medium text-gray-600">
+                                            <div class="w-8 h-8 theme-aware-bg-tertiary rounded-full flex items-center justify-center mr-2">
+                                                <span class="text-xs font-medium theme-aware-text-secondary">
                                                     {{ substr($task->assignedTo->name, 0, 2) }}
                                                 </span>
                                             </div>
                                             {{ $task->assignedTo->name }}
                                         </div>
                                     @else
-                                        <span class="text-gray-400">Unassigned</span>
+                                        <span class="theme-aware-text-muted">Unassigned</span>
                                     @endif
                                 </td>
                                 <td class="px-6 py-4">
@@ -242,7 +242,7 @@
                                             @endif
                                         </div>
                                     @else
-                                        <span class="text-gray-400">—</span>
+                                        <span class="theme-aware-text-muted">—</span>
                                     @endif
                                 </td>
                                 <td class="px-6 py-4">
@@ -257,7 +257,7 @@
 
                                         @can('tasks.edit')
                                             <a href="{{ route('tasks.edit', $task) }}" 
-                                               class="text-gray-600 hover:text-gray-900" title="Edit">
+                                               class="theme-aware-text-secondary hover:theme-aware-text" title="Edit">
                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                                                 </svg>
@@ -286,7 +286,7 @@
 
             {{-- Pagination --}}
             @if($tasks->hasPages())
-                <div class="px-6 py-4 border-t border-gray-200">
+                <div class="px-6 py-4 border-t theme-aware-border">
                     {{ $tasks->appends(request()->query())->links() }}
                 </div>
             @endif

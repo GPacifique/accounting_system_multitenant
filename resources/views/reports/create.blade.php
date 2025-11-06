@@ -10,25 +10,25 @@
         @csrf
 
         <div class="mb-4">
-            <label class="block text-gray-700 mb-1">Title</label>
+            <label class="block theme-aware-text-secondary mb-1">Title</label>
             <input type="text" name="title" value="{{ old('title') }}" class="w-full border rounded px-3 py-2">
             @error('title')<span class="text-red-600 text-sm">{{ $message }}</span>@enderror
         </div>
 
         <div class="mb-4">
-            <label class="block text-gray-700 mb-1">Type</label>
+            <label class="block theme-aware-text-secondary mb-1">Type</label>
             <input type="text" name="type" value="{{ old('type') }}" class="w-full border rounded px-3 py-2">
             @error('type')<span class="text-red-600 text-sm">{{ $message }}</span>@enderror
         </div>
 
         <div class="mb-4">
-            <label class="block text-gray-700 mb-1">Report Date</label>
+            <label class="block theme-aware-text-secondary mb-1">Report Date</label>
             <input type="date" name="report_date" value="{{ old('report_date') }}" class="w-full border rounded px-3 py-2">
             @error('report_date')<span class="text-red-600 text-sm">{{ $message }}</span>@enderror
         </div>
 
         <div class="mb-4">
-            <label class="block text-gray-700 mb-1">Description</label>
+            <label class="block theme-aware-text-secondary mb-1">Description</label>
             <textarea name="description" rows="4" class="w-full border rounded px-3 py-2">{{ old('description') }}</textarea>
         </div>
 

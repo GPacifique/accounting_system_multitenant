@@ -2,7 +2,7 @@
 <div class="relative" x-data="tenantSwitcher">
     {{-- Tenant Switcher Button --}}
     <button @click="isOpen = !isOpen" 
-            class="flex items-center space-x-3 px-4 py-3 bg-white border border-gray-200 rounded-lg shadow-sm hover:bg-gray-50 transition-colors duration-200 w-full max-w-xs">
+            class="flex items-center space-x-3 px-4 py-3 theme-aware-bg-card theme-aware-border border rounded-lg theme-aware-shadow hover:theme-aware-bg-secondary transition-colors duration-200 w-full max-w-xs">
         
         {{-- Current Tenant Icon --}}
         <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center flex-shrink-0">
@@ -13,17 +13,17 @@
         
         {{-- Current Tenant Info --}}
         <div class="flex-grow text-left min-w-0">
-            <div class="text-sm font-medium text-gray-900 truncate">
+            <div class="text-sm font-medium theme-aware-text truncate">
                 {{ Auth::user()->currentTenant() ? Auth::user()->currentTenant()->name : 'No Tenant Selected' }}
             </div>
-            <div class="text-xs text-gray-500 truncate">
+            <div class="text-xs theme-aware-text-muted truncate">
                 {{ Auth::user()->currentTenant() ? Auth::user()->currentTenant()->domain : 'Select a tenant' }}
             </div>
         </div>
         
         {{-- Dropdown Arrow --}}
         <div class="flex-shrink-0">
-            <svg class="w-5 h-5 text-gray-400 transition-transform duration-200" 
+            <svg class="w-5 h-5 theme-aware-text-muted transition-transform duration-200" 
                  :class="{ 'rotate-180': isOpen }" 
                  fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
@@ -40,12 +40,12 @@
          x-transition:leave-start="opacity-100 translate-y-0"
          x-transition:leave-end="opacity-0 translate-y-1"
          @click.away="isOpen = false"
-         class="absolute z-50 left-0 mt-2 w-80 bg-white border border-gray-200 rounded-lg shadow-lg py-2">
+         class="absolute z-50 left-0 mt-2 w-80 theme-aware-bg-card theme-aware-border border rounded-lg theme-aware-shadow py-2">
         
         {{-- Header --}}
-        <div class="px-4 py-2 border-b border-gray-100">
-            <h3 class="text-sm font-medium text-gray-900">Switch Tenant</h3>
-            <p class="text-xs text-gray-500">Select which business you want to work with</p>
+        <div class="px-4 py-2 border-b theme-aware-border">
+            <h3 class="text-sm font-medium theme-aware-text">Switch Tenant</h3>
+            <p class="text-xs theme-aware-text-muted">Select which business you want to work with</p>
         </div>
         
         {{-- Search Input --}}
@@ -54,9 +54,9 @@
                 <input type="text" 
                        x-model="searchQuery"
                        placeholder="Search tenants..."
-                       class="w-full pl-8 pr-4 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                       class="w-full pl-8 pr-4 py-2 text-sm border theme-aware-border rounded-lg focus:ring-2 focus:ring-primary focus:theme-aware-border-focus">
                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-4 h-4 theme-aware-text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                     </svg>
                 </div>
@@ -68,7 +68,7 @@
             @if(Auth::user()->tenants()->count() > 0)
                 @foreach(Auth::user()->tenants as $tenant)
                     <div x-show="!searchQuery || '{{ strtolower($tenant->name) }}'.includes(searchQuery.toLowerCase())"
-                         class="px-4 py-3 hover:bg-gray-50 cursor-pointer transition-colors duration-150"
+                         class="px-4 py-3 hover:theme-aware-bg-secondary cursor-pointer transition-colors duration-150"
                          onclick="switchTenant({{ $tenant->id }})">
                         
                         <div class="flex items-center space-x-3">
@@ -82,7 +82,7 @@
                             {{-- Tenant Info --}}
                             <div class="flex-grow min-w-0">
                                 <div class="flex items-center space-x-2">
-                                    <div class="text-sm font-medium text-gray-900 truncate">
+                                    <div class="text-sm font-medium theme-aware-text truncate">
                                         {{ $tenant->name }}
                                     </div>
                                     @if(Auth::user()->currentTenant() && Auth::user()->currentTenant()->id === $tenant->id)
@@ -94,10 +94,10 @@
                                         </span>
                                     @endif
                                 </div>
-                                <div class="text-xs text-gray-500 truncate">
+                                <div class="text-xs theme-aware-text-muted truncate">
                                     {{ $tenant->domain }} • {{ ucfirst($tenant->business_type) }}
                                 </div>
-                                <div class="text-xs text-gray-400">
+                                <div class="text-xs theme-aware-text-muted">
                                     Role: {{ Auth::user()->getRoleForTenant($tenant->id) ?? 'User' }}
                                 </div>
                             </div>
@@ -115,13 +115,13 @@
                 @endforeach
             @else
                 <div class="px-4 py-8 text-center">
-                    <div class="text-gray-400 mb-2">
+                    <div class="theme-aware-text-muted mb-2">
                         <svg class="w-12 h-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-2m-14 0h2m-2 0h-2m28 0V9a2 2 0 00-2-2h-2m-2 0h-2m-2 0h-2m-2 0h-2M7 7h10"></path>
                         </svg>
                     </div>
-                    <h3 class="text-sm font-medium text-gray-900 mb-1">No Tenants Available</h3>
-                    <p class="text-xs text-gray-500 mb-3">You don't belong to any business tenants yet.</p>
+                    <h3 class="text-sm font-medium theme-aware-text mb-1">No Tenants Available</h3>
+                    <p class="text-xs theme-aware-text-muted mb-3">You don't belong to any business tenants yet.</p>
                     @if(!Auth::user()->isSuperAdmin())
                         <button class="text-blue-600 hover:text-blue-800 text-xs font-medium">
                             Request Access
@@ -145,7 +145,7 @@
                 @endif
                 
                 <a href="{{ route('admin.tenants.index') }}" 
-                   class="text-xs text-gray-600 hover:text-gray-800 font-medium">
+                   class="text-xs theme-aware-text-secondary hover:theme-aware-text font-medium">
                     Manage Tenants →
                 </a>
             </div>

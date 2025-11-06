@@ -411,7 +411,7 @@ for ($i = 5; $i >= 0; $i--) {
                     <span class="text-2xl">✅</span>
                 </div>
                 <div class="text-2xl font-bold text-green-600">RWF {{ number_format($projectsPaidAmount, 0) }}</div>
-                <div class="w-full bg-gray-200 rounded-full h-2 mt-3">
+                <div class="w-full theme-aware-bg-tertiary rounded-full h-2 mt-3">
                     <div class="bg-green-500 h-2 rounded-full transition-all" style="width: {{ $projectsPaymentProgress }}%"></div>
                 </div>
                 <div class="mt-2 text-xs theme-aware-text-muted">{{ $projectsPaymentProgress }}% of total value</div>
@@ -425,7 +425,7 @@ for ($i = 5; $i >= 0; $i--) {
                     <span class="text-2xl">⏳</span>
                 </div>
                 <div class="text-2xl font-bold text-orange-600">RWF {{ number_format($projectsRemainingAmount, 0) }}</div>
-                <div class="w-full bg-gray-200 rounded-full h-2 mt-3">
+                <div class="w-full theme-aware-bg-tertiary rounded-full h-2 mt-3">
                     <div class="bg-orange-500 h-2 rounded-full transition-all" style="width: {{ 100 - $projectsPaymentProgress }}%"></div>
                 </div>
                 <div class="mt-2 text-xs theme-aware-text-muted">{{ round(100 - $projectsPaymentProgress, 1) }}% outstanding</div>
@@ -542,25 +542,25 @@ for ($i = 5; $i >= 0; $i--) {
     </div>
 
     {{-- QUICK ACTIONS --}}
-    <div class="mb-6 bg-gradient-to-r from-green-50 to-blue-50 rounded-lg theme-aware-shadow p-4 border border-green-200">
+    <div class="mb-6 theme-aware-bg-card rounded-lg theme-aware-shadow p-4 theme-aware-border border" style="background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);">
         <h3 class="font-semibold theme-aware-text mb-3">⚡ Quick Actions</h3>
         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2">
-            <a href="{{ route('payments.create') ?? '#' }}" class="px-3 py-2 theme-aware-bg-card border border-green-300 hover:bg-green-50 rounded-lg text-xs font-medium text-center transition">
+            <a href="{{ route('payments.create') ?? '#' }}" class="px-3 py-2 theme-aware-bg-card theme-aware-border border hover:theme-aware-bg-tertiary rounded-lg text-xs font-medium text-center transition theme-aware-text">
                 <span class="block">💳 New Payment</span>
             </a>
-            <a href="{{ route('incomes.create') ?? '#' }}" class="px-3 py-2 theme-aware-bg-card border border-blue-300 hover:bg-blue-50 rounded-lg text-xs font-medium text-center transition">
+            <a href="{{ route('incomes.create') ?? '#' }}" class="px-3 py-2 theme-aware-bg-card theme-aware-border border hover:theme-aware-bg-tertiary rounded-lg text-xs font-medium text-center transition theme-aware-text">
                 <span class="block">💰 New Income</span>
             </a>
-            <a href="{{ route('expenses.create') ?? '#' }}" class="px-3 py-2 theme-aware-bg-card border border-red-300 hover:bg-red-50 rounded-lg text-xs font-medium text-center transition">
+            <a href="{{ route('expenses.create') ?? '#' }}" class="px-3 py-2 theme-aware-bg-card theme-aware-border border hover:theme-aware-bg-tertiary rounded-lg text-xs font-medium text-center transition theme-aware-text">
                 <span class="block">📉 New Expense</span>
             </a>
-            <a href="{{ route('projects.create') ?? '#' }}" class="px-3 py-2 theme-aware-bg-card border border-yellow-300 hover:bg-yellow-50 rounded-lg text-xs font-medium text-center transition">
+            <a href="{{ route('projects.create') ?? '#' }}" class="px-3 py-2 theme-aware-bg-card theme-aware-border border hover:theme-aware-bg-tertiary rounded-lg text-xs font-medium text-center transition theme-aware-text">
                 <span class="block">📋 New Project</span>
             </a>
-            <a href="{{ route('payments.index') ?? '#' }}" class="px-3 py-2 theme-aware-bg-card border border-purple-300 hover:bg-purple-50 rounded-lg text-xs font-medium text-center transition">
+            <a href="{{ route('payments.index') ?? '#' }}" class="px-3 py-2 theme-aware-bg-card theme-aware-border border hover:theme-aware-bg-tertiary rounded-lg text-xs font-medium text-center transition theme-aware-text">
                 <span class="block">📊 View Payments</span>
             </a>
-            <a href="{{ route('reports.index') ?? '#' }}" class="px-3 py-2 theme-aware-bg-card border border-indigo-300 hover:bg-indigo-50 rounded-lg text-xs font-medium text-center transition">
+            <a href="{{ route('reports.index') ?? '#' }}" class="px-3 py-2 theme-aware-bg-card theme-aware-border border hover:theme-aware-bg-tertiary rounded-lg text-xs font-medium text-center transition theme-aware-text">
                 <span class="block">📈 Reports</span>
             </a>
         </div>
@@ -568,7 +568,7 @@ for ($i = 5; $i >= 0; $i--) {
 
     {{-- WORKFORCE & PAYROLL STATS --}}
     @if($totalWorkforce > 0)
-    <div class="bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg theme-aware-shadow p-5 mb-6 border border-purple-200">
+    <div class="theme-aware-bg-card rounded-lg theme-aware-shadow p-5 mb-6 theme-aware-border border" style="background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);">
         <h3 class="font-semibold theme-aware-text mb-4 flex items-center">
             <span class="bg-purple-500 text-white rounded-full w-7 h-7 flex items-center justify-center mr-2 text-sm">👥</span>
             Workforce & Payroll Statistics
@@ -627,7 +627,7 @@ for ($i = 5; $i >= 0; $i--) {
 
     {{-- ACCOUNTANT & ADMIN: WORKER PAYMENTS SUMMARY --}}
     @if($user->hasAnyRole(['admin', 'accountant']))
-    <div class="bg-gradient-to-r from-sky-50 to-blue-50 rounded-lg theme-aware-shadow p-5 mb-6 border border-sky-200">
+    <div class="theme-aware-bg-card rounded-lg theme-aware-shadow p-5 mb-6 theme-aware-border border" style="background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);">
         <h3 class="font-semibold theme-aware-text mb-4 flex items-center">
             <span class="bg-sky-500 text-white rounded-full w-7 h-7 flex items-center justify-center mr-2 text-sm">💼</span>
             Worker Payments — {{ $user->hasRole('admin') ? 'Admin' : 'Accountant' }} View
@@ -660,7 +660,7 @@ for ($i = 5; $i >= 0; $i--) {
                 @else
                     <div class="overflow-x-auto">
                         <table class="w-full text-sm">
-                            <thead class="bg-gray-50 border-b">
+                            <thead class="theme-aware-bg-secondary theme-aware-border-top border-b">
                                 <tr>
                                     <th class="px-3 py-2 text-left text-xs font-semibold theme-aware-text-secondary">Date</th>
                                     <th class="px-3 py-2 text-left text-xs font-semibold theme-aware-text-secondary">Worker</th>
@@ -670,8 +670,8 @@ for ($i = 5; $i >= 0; $i--) {
                             </thead>
                             <tbody class="divide-y">
                                 @foreach($recentWorkerPayments as $wp)
-                                    <tr class="hover:bg-gray-50">
-                                        <td class="px-3 py-2 text-gray-700">{{ \Carbon\Carbon::parse($wp->paid_on)->format('M d, Y') }}</td>
+                                    <tr class="hover:theme-aware-bg-secondary transition-colors">
+                                        <td class="px-3 py-2 theme-aware-text-secondary">{{ \Carbon\Carbon::parse($wp->paid_on)->format('M d, Y') }}</td>
                                         <td class="px-3 py-2 theme-aware-text">{{ trim(($wp->first_name ?? '').' '.($wp->last_name ?? '')) }}</td>
                                         <td class="px-3 py-2 theme-aware-text-secondary">{{ $wp->position ?? '—' }}</td>
                                         <td class="px-3 py-2 font-semibold text-emerald-600">RWF {{ number_format($wp->amount ?? 0, 0) }}</td>
@@ -693,10 +693,10 @@ for ($i = 5; $i >= 0; $i--) {
                         @php $totalPos = $workerPayByPositionMonth->sum('total'); @endphp
                         @foreach($workerPayByPositionMonth as $row)
                             <div class="flex items-center justify-between">
-                                <span class="text-sm text-gray-700">{{ $row->position ?? 'Unspecified' }}</span>
+                                <span class="text-sm theme-aware-text-secondary">{{ $row->position ?? 'Unspecified' }}</span>
                                 <span class="text-sm font-semibold text-sky-700">RWF {{ number_format($row->total, 0) }}</span>
                             </div>
-                            <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div class="w-full theme-aware-bg-tertiary rounded-full h-2">
                                 <div class="bg-sky-500 h-2 rounded-full" style="width: {{ $totalPos > 0 ? ($row->total / $totalPos * 100) : 0 }}%"></div>
                             </div>
                         @endforeach
@@ -715,7 +715,7 @@ for ($i = 5; $i >= 0; $i--) {
 
     {{-- ORDERS & CLIENTS STATS --}}
     @if($totalOrders > 0 || $totalClients > 0)
-    <div class="bg-gradient-to-r from-amber-50 to-yellow-50 rounded-lg theme-aware-shadow p-5 mb-6 border border-amber-200">
+    <div class="theme-aware-bg-card rounded-lg theme-aware-shadow p-5 mb-6 theme-aware-border border" style="background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);">
         <h3 class="font-semibold theme-aware-text mb-4 flex items-center">
             <span class="bg-amber-500 text-white rounded-full w-7 h-7 flex items-center justify-center mr-2 text-sm">📦</span>
             Orders & Client Statistics
@@ -814,7 +814,7 @@ for ($i = 5; $i >= 0; $i--) {
                             <span class="text-sm theme-aware-text-secondary">{{ $item->category ?? 'Uncategorized' }}</span>
                             <span class="text-sm font-semibold text-green-600">RWF {{ number_format($item->total, 0) }}</span>
                         </div>
-                        <div class="w-full bg-gray-200 rounded-full h-2">
+                        <div class="w-full theme-aware-bg-tertiary rounded-full h-2">
                             <div class="bg-green-500 h-2 rounded-full" style="width: {{ ($item->total / $incomeByCategory->sum('total') * 100) }}%"></div>
                         </div>
                     @endforeach
@@ -867,7 +867,7 @@ for ($i = 5; $i >= 0; $i--) {
         @else
             <div class="overflow-x-auto">
                 <table class="w-full text-sm">
-                    <thead class="bg-gray-50 border-b">
+                    <thead class="theme-aware-bg-secondary theme-aware-border-top border-b">
                         <tr>
                             <th class="px-4 py-2 text-left text-xs font-semibold theme-aware-text-secondary">Date</th>
                             <th class="px-4 py-2 text-left text-xs font-semibold theme-aware-text-secondary">Reference</th>
@@ -878,18 +878,18 @@ for ($i = 5; $i >= 0; $i--) {
                     </thead>
                     <tbody class="divide-y">
                         @foreach($recentPayments->take(10) as $payment)
-                            <tr class="hover:bg-gray-50">
-                                <td class="px-4 py-2 text-gray-700">{{ optional($payment->created_at)->format('M d, Y') }}</td>
-                                <td class="px-4 py-2 text-gray-700">{{ $payment->reference ?? '—' }}</td>
+                            <tr class="hover:theme-aware-bg-secondary transition-colors">
+                                <td class="px-4 py-2 theme-aware-text-secondary">{{ optional($payment->created_at)->format('M d, Y') }}</td>
+                                <td class="px-4 py-2 theme-aware-text-secondary">{{ $payment->reference ?? '—' }}</td>
                                 <td class="px-4 py-2 theme-aware-text-secondary">
-                                    <span class="text-xs px-2 py-1 rounded bg-gray-100">{{ $payment->method ?? '—' }}</span>
+                                    <span class="text-xs px-2 py-1 rounded theme-aware-bg-secondary">{{ $payment->method ?? '—' }}</span>
                                 </td>
                                 <td class="px-4 py-2 font-semibold text-green-600">RWF {{ number_format($payment->amount ?? 0, 0) }}</td>
                                 <td class="px-4 py-2">
                                     <span class="text-xs px-2 py-1 rounded 
                                         @if(($payment->status ?? '') === 'completed') bg-green-100 text-green-700
                                         @elseif(($payment->status ?? '') === 'pending') bg-yellow-100 text-yellow-700
-                                        @else bg-gray-100 theme-aware-text-secondary @endif">
+                                        @else theme-aware-bg-secondary theme-aware-text-secondary @endif">
                                         {{ ucfirst($payment->status ?? '—') }}
                                     </span>
                                 </td>
@@ -902,8 +902,8 @@ for ($i = 5; $i >= 0; $i--) {
     </div>
 
     {{-- Project Stats Section --}}
-    <div class="mb-6 theme-aware-bg-card rounded-lg theme-aware-shadow p-4 border">
-        <h2 class="text-lg font-semibold mb-3">📈 Project Payment Summary</h2>
+    <div class="mb-6 theme-aware-bg-card rounded-lg theme-aware-shadow p-4 theme-aware-border border">
+        <h2 class="text-lg font-semibold mb-3 theme-aware-text">📈 Project Payment Summary</h2>
 
         @php
             $projectStats = collect();
@@ -927,8 +927,8 @@ for ($i = 5; $i >= 0; $i--) {
             <p class="text-sm theme-aware-text-muted">No project stats available.</p>
         @else
             <div class="overflow-x-auto">
-                <table class="w-full text-sm">
-                    <thead class="bg-gray-50 border-b">
+                <table class="w-full text-sm theme-aware-table">
+                    <thead class="theme-aware-bg-secondary theme-aware-border-top border-b">
                         <tr>
                             <th class="px-4 py-2 text-left text-xs font-semibold theme-aware-text-secondary">#</th>
                             <th class="px-4 py-2 text-left text-xs font-semibold theme-aware-text-secondary">Project</th>
@@ -938,20 +938,20 @@ for ($i = 5; $i >= 0; $i--) {
                             <th class="px-4 py-2 text-left text-xs font-semibold theme-aware-text-secondary">Progress</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y">
+                    <tbody class="divide-y theme-aware-border">
                         @foreach ($projectStats as $index => $proj)
                             @php
                                 $progress = $proj->total_amount > 0 ? ($proj->amount_paid / $proj->total_amount * 100) : 0;
                             @endphp
-                            <tr class="hover:bg-gray-50">
+                            <tr class="hover:theme-aware-bg-secondary transition-colors">
                                 <td class="px-4 py-2 theme-aware-text-muted">{{ $index + 1 }}</td>
                                 <td class="px-4 py-2 font-medium theme-aware-text">{{ $proj->project_name }}</td>
-                                <td class="px-4 py-2 text-gray-700">RWF {{ number_format($proj->total_amount, 0) }}</td>
+                                <td class="px-4 py-2 theme-aware-text-secondary">RWF {{ number_format($proj->total_amount, 0) }}</td>
                                 <td class="px-4 py-2 font-semibold text-green-600">RWF {{ number_format($proj->amount_paid, 0) }}</td>
                                 <td class="px-4 py-2 font-semibold text-orange-600">RWF {{ number_format($proj->amount_remaining, 0) }}</td>
                                 <td class="px-4 py-2">
                                     <div class="flex items-center gap-2">
-                                        <div class="w-16 bg-gray-200 rounded-full h-2">
+                                        <div class="w-16 theme-aware-bg-secondary rounded-full h-2">
                                             <div class="bg-blue-500 h-2 rounded-full" style="width: {{ $progress }}%"></div>
                                         </div>
                                         <span class="text-xs font-semibold theme-aware-text-secondary">{{ round($progress) }}%</span>
@@ -968,21 +968,21 @@ for ($i = 5; $i >= 0; $i--) {
     {{-- Charts --}}
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
         <div class="theme-aware-bg-card rounded-lg theme-aware-shadow p-4 border min-h-[260px] flex flex-col">
-            <h3 class="text-sm font-medium text-gray-700 mb-2">💰 Income — Last 6 months</h3>
+            <h3 class="text-sm font-medium theme-aware-text-secondary mb-2">💰 Income — Last 6 months</h3>
             <div class="flex-1">
                 <canvas id="incomeChart" class="w-full h-48"></canvas>
             </div>
         </div>
 
         <div class="theme-aware-bg-card rounded-lg theme-aware-shadow p-4 border min-h-[260px] flex flex-col">
-            <h3 class="text-sm font-medium text-gray-700 mb-2">💳 Payments — Last 6 months</h3>
+            <h3 class="text-sm font-medium theme-aware-text-secondary mb-2">💳 Payments — Last 6 months</h3>
             <div class="flex-1">
                 <canvas id="paymentsChart" class="w-full h-48"></canvas>
             </div>
         </div>
 
         <div class="theme-aware-bg-card rounded-lg theme-aware-shadow p-4 border min-h-[260px] flex flex-col">
-            <h3 class="text-sm font-medium text-gray-700 mb-2">📉 Expenses — Last 6 months</h3>
+            <h3 class="text-sm font-medium theme-aware-text-secondary mb-2">📉 Expenses — Last 6 months</h3>
             <div class="flex-1">
                 <canvas id="expensesChart" class="w-full h-48"></canvas>
             </div>
@@ -990,8 +990,8 @@ for ($i = 5; $i >= 0; $i--) {
     </div>
 
     <!-- Creator Footer -->
-    <div class="mt-8 pt-6 border-t border-gray-200 text-center">
-        <p class="text-sm font-semibold text-gray-700 mb-2">Created by Gashumba</p>
+    <div class="mt-8 pt-6 theme-aware-border-top border-t text-center">
+        <p class="text-sm font-semibold theme-aware-text mb-2">Created by Gashumba</p>
         <p class="text-sm theme-aware-text-secondary mb-3">
             <a href="mailto:gashpaci@gmail.com" class="text-blue-600 hover:text-blue-800 hover:underline">
                 <i class="fas fa-envelope me-1"></i> gashpaci@gmail.com

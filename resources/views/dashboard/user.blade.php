@@ -90,7 +90,7 @@ use Illuminate\Support\Facades\Auth;
         @if($recentProjects->isNotEmpty())
             <div class="overflow-x-auto">
                 <table class="w-full text-left">
-                    <thead class="bg-gray-50 border-b">
+                    <thead class="theme-aware-bg-secondary border-b">
                         <tr>
                             <th class="py-3 px-4 text-sm font-medium theme-aware-text-secondary">#</th>
                             <th class="py-3 px-4 text-sm font-medium theme-aware-text-secondary">Project Name</th>
@@ -101,12 +101,12 @@ use Illuminate\Support\Facades\Auth;
                     </thead>
                     <tbody class="divide-y">
                         @foreach($recentProjects as $index => $proj)
-                            <tr class="hover:bg-gray-50">
+                            <tr class="hover:theme-aware-bg-secondary">
                                 <td class="py-3 px-4 text-sm theme-aware-text-muted">{{ $index + 1 }}</td>
                                 <td class="py-3 px-4 text-sm font-medium theme-aware-text">{{ $proj->name ?? '—' }}</td>
                                 <td class="py-3 px-4 text-sm theme-aware-text-secondary">{{ optional($proj->created_at)->format('Y-m-d') ?? '—' }}</td>
                                 <td class="py-3 px-4 text-sm theme-aware-text-secondary">
-                                    <span class="inline-block px-2 py-1 rounded bg-gray-100">
+                                    <span class="inline-block px-2 py-1 rounded theme-aware-bg-secondary">
                                         {{ number_format($proj->contract_value ?? 0, 2) }}
                                     </span>
                                 </td>

@@ -28,6 +28,8 @@ class ProductController extends Controller
             'price' => 'required|numeric|min:0',
             'stock' => 'required|integer|min:0',
         ]);
+        
+        $validated = $this->ensureTenantId($validated);
         Product::create($validated);
         return redirect()->route('products.index')->with('success', 'Product created.');
     }

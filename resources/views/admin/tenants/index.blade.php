@@ -14,7 +14,7 @@
         <div class="flex items-center justify-between">
             <div>
                 <h1 class="text-3xl font-bold flex items-center">
-                    <div class="bg-white/20 rounded-lg p-2 mr-4">
+                    <div class="theme-aware-bg-card/20 rounded-lg p-2 mr-4">
                         <i class="fas fa-building text-2xl"></i>
                     </div>
                     Tenant Management
@@ -22,7 +22,7 @@
                 <p class="text-blue-100 mt-2">Manage all business tenants in the system</p>
             </div>
             <div class="flex space-x-3">
-                <a href="{{ route('admin.tenants.create') }}" class="bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-blue-50 transition">
+                <a href="{{ route('admin.tenants.create') }}" class="theme-aware-bg-card text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-blue-50 transition">
                     <i class="fas fa-plus mr-2"></i>
                     New Tenant
                 </a>
@@ -36,10 +36,10 @@
 
     {{-- Statistics Cards --}}
     <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-green-500">
+        <div class="theme-aware-bg-card rounded-xl shadow-lg p-6 border-l-4 border-green-500">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-sm font-medium text-gray-600">Active Tenants</p>
+                    <p class="text-sm font-medium theme-aware-text-secondary">Active Tenants</p>
                     <p class="text-2xl font-bold text-green-600">{{ $tenants->where('status', 'active')->count() }}</p>
                 </div>
                 <div class="bg-green-100 rounded-full p-3">
@@ -48,10 +48,10 @@
             </div>
         </div>
 
-        <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-orange-500">
+        <div class="theme-aware-bg-card rounded-xl shadow-lg p-6 border-l-4 border-orange-500">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-sm font-medium text-gray-600">Inactive Tenants</p>
+                    <p class="text-sm font-medium theme-aware-text-secondary">Inactive Tenants</p>
                     <p class="text-2xl font-bold text-orange-600">{{ $tenants->where('status', 'inactive')->count() }}</p>
                 </div>
                 <div class="bg-orange-100 rounded-full p-3">
@@ -60,10 +60,10 @@
             </div>
         </div>
 
-        <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-blue-500">
+        <div class="theme-aware-bg-card rounded-xl shadow-lg p-6 border-l-4 border-blue-500">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-sm font-medium text-gray-600">Total Users</p>
+                    <p class="text-sm font-medium theme-aware-text-secondary">Total Users</p>
                     <p class="text-2xl font-bold text-blue-600">{{ $tenants->sum('users_count') }}</p>
                 </div>
                 <div class="bg-blue-100 rounded-full p-3">
@@ -72,10 +72,10 @@
             </div>
         </div>
 
-        <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-purple-500">
+        <div class="theme-aware-bg-card rounded-xl shadow-lg p-6 border-l-4 border-purple-500">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-sm font-medium text-gray-600">New This Month</p>
+                    <p class="text-sm font-medium theme-aware-text-secondary">New This Month</p>
                     <p class="text-2xl font-bold text-purple-600">{{ $tenants->where('created_at', '>=', now()->startOfMonth())->count() }}</p>
                 </div>
                 <div class="bg-purple-100 rounded-full p-3">
@@ -86,7 +86,7 @@
     </div>
 
     {{-- Filters and Search --}}
-    <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+    <div class="theme-aware-bg-card rounded-xl shadow-lg p-6 mb-8">
         <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div class="flex flex-col md:flex-row gap-4 flex-grow">
                 <div class="flex-grow">
@@ -94,21 +94,21 @@
                         <input type="text" 
                                id="searchTenants" 
                                placeholder="Search tenants by name, domain, or business type..."
-                               class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                               class="w-full pl-10 pr-4 py-3 border theme-aware-border rounded-lg focus:ring-2 focus:ring-primary focus:theme-aware-border-focus">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <i class="fas fa-search text-gray-400"></i>
+                            <i class="fas fa-search theme-aware-text-muted"></i>
                         </div>
                     </div>
                 </div>
                 
-                <select id="statusFilter" class="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                <select id="statusFilter" class="px-4 py-3 border theme-aware-border rounded-lg focus:ring-2 focus:ring-primary focus:theme-aware-border-focus">
                     <option value="">All Statuses</option>
                     <option value="active">Active</option>
                     <option value="inactive">Inactive</option>
                     <option value="suspended">Suspended</option>
                 </select>
 
-                <select id="businessTypeFilter" class="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                <select id="businessTypeFilter" class="px-4 py-3 border theme-aware-border rounded-lg focus:ring-2 focus:ring-primary focus:theme-aware-border-focus">
                     <option value="">All Business Types</option>
                     <option value="construction">Construction</option>
                     <option value="consulting">Consulting</option>
@@ -119,7 +119,7 @@
             </div>
 
             <div class="flex gap-3">
-                <button onclick="clearFilters()" class="px-4 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition">
+                <button onclick="clearFilters()" class="px-4 py-3 theme-aware-bg-secondary theme-aware-text-secondary rounded-lg hover:theme-aware-bg-tertiary transition">
                     <i class="fas fa-times mr-2"></i>
                     Clear
                 </button>
@@ -132,48 +132,48 @@
     </div>
 
     {{-- Tenants Table --}}
-    <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+    <div class="theme-aware-bg-card rounded-xl shadow-lg overflow-hidden">
         <div class="overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-50">
+                <thead class="theme-aware-bg-secondary">
                     <tr>
-                        <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            <input type="checkbox" id="selectAll" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                        <th class="px-6 py-4 text-left text-xs font-medium theme-aware-text-muted uppercase tracking-wider">
+                            <input type="checkbox" id="selectAll" class="rounded theme-aware-border text-blue-600 focus:ring-primary">
                         </th>
-                        <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100" onclick="sortBy('name')">
+                        <th class="px-6 py-4 text-left text-xs font-medium theme-aware-text-muted uppercase tracking-wider cursor-pointer hover:theme-aware-bg-secondary" onclick="sortBy('name')">
                             Tenant Details
                             <i class="fas fa-sort ml-1"></i>
                         </th>
-                        <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100" onclick="sortBy('business_type')">
+                        <th class="px-6 py-4 text-left text-xs font-medium theme-aware-text-muted uppercase tracking-wider cursor-pointer hover:theme-aware-bg-secondary" onclick="sortBy('business_type')">
                             Business Type
                             <i class="fas fa-sort ml-1"></i>
                         </th>
-                        <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100" onclick="sortBy('users_count')">
+                        <th class="px-6 py-4 text-left text-xs font-medium theme-aware-text-muted uppercase tracking-wider cursor-pointer hover:theme-aware-bg-secondary" onclick="sortBy('users_count')">
                             Users
                             <i class="fas fa-sort ml-1"></i>
                         </th>
-                        <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100" onclick="sortBy('subscription_plan')">
+                        <th class="px-6 py-4 text-left text-xs font-medium theme-aware-text-muted uppercase tracking-wider cursor-pointer hover:theme-aware-bg-secondary" onclick="sortBy('subscription_plan')">
                             Plan
                             <i class="fas fa-sort ml-1"></i>
                         </th>
-                        <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100" onclick="sortBy('status')">
+                        <th class="px-6 py-4 text-left text-xs font-medium theme-aware-text-muted uppercase tracking-wider cursor-pointer hover:theme-aware-bg-secondary" onclick="sortBy('status')">
                             Status
                             <i class="fas fa-sort ml-1"></i>
                         </th>
-                        <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100" onclick="sortBy('created_at')">
+                        <th class="px-6 py-4 text-left text-xs font-medium theme-aware-text-muted uppercase tracking-wider cursor-pointer hover:theme-aware-bg-secondary" onclick="sortBy('created_at')">
                             Created
                             <i class="fas fa-sort ml-1"></i>
                         </th>
-                        <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th class="px-6 py-4 text-left text-xs font-medium theme-aware-text-muted uppercase tracking-wider">
                             Actions
                         </th>
                     </tr>
                 </thead>
-                <tbody class="bg-white divide-y divide-gray-200" id="tenantsTableBody">
+                <tbody class="theme-aware-bg-card divide-y divide-gray-200" id="tenantsTableBody">
                     @forelse($tenants as $tenant)
-                        <tr class="hover:bg-gray-50 tenant-row" data-tenant-id="{{ $tenant->id }}">
+                        <tr class="hover:theme-aware-bg-secondary tenant-row" data-tenant-id="{{ $tenant->id }}">
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <input type="checkbox" class="tenant-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" value="{{ $tenant->id }}">
+                                <input type="checkbox" class="tenant-checkbox rounded theme-aware-border text-blue-600 focus:ring-primary" value="{{ $tenant->id }}">
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="flex items-center">
@@ -181,20 +181,20 @@
                                         <span class="text-white font-semibold text-sm">{{ strtoupper(substr($tenant->name, 0, 2)) }}</span>
                                     </div>
                                     <div>
-                                        <div class="text-sm font-medium text-gray-900">{{ $tenant->name }}</div>
-                                        <div class="text-sm text-gray-500">{{ $tenant->domain ?? 'No domain set' }}</div>
-                                        <div class="text-xs text-gray-400">{{ $tenant->contact_email ?? 'No email' }}</div>
+                                        <div class="text-sm font-medium theme-aware-text">{{ $tenant->name }}</div>
+                                        <div class="text-sm theme-aware-text-muted">{{ $tenant->domain ?? 'No domain set' }}</div>
+                                        <div class="text-xs theme-aware-text-muted">{{ $tenant->contact_email ?? 'No email' }}</div>
                                     </div>
                                 </div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="flex items-center">
-                                    <div class="text-sm text-gray-900">{{ ucfirst($tenant->business_type ?? 'Not specified') }}</div>
+                                    <div class="text-sm theme-aware-text">{{ ucfirst($tenant->business_type ?? 'Not specified') }}</div>
                                 </div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="flex items-center">
-                                    <span class="text-sm font-medium text-gray-900">{{ $tenant->users_count ?? 0 }}</span>
+                                    <span class="text-sm font-medium theme-aware-text">{{ $tenant->users_count ?? 0 }}</span>
                                     <a href="{{ route('admin.tenants.users', $tenant) }}" class="ml-2 text-blue-600 hover:text-blue-900">
                                         <i class="fas fa-external-link-alt text-xs"></i>
                                     </a>
@@ -203,7 +203,7 @@
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <span class="px-2 py-1 text-xs font-medium rounded-full
                                     {{ ($tenant->subscription_plan ?? 'basic') === 'premium' ? 'bg-purple-100 text-purple-800' : 
-                                       (($tenant->subscription_plan ?? 'basic') === 'professional' ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800') }}">
+                                       (($tenant->subscription_plan ?? 'basic') === 'professional' ? 'bg-blue-100 text-blue-800' : 'theme-aware-bg-secondary theme-aware-text') }}">
                                     {{ ucfirst($tenant->subscription_plan ?? 'Basic') }}
                                 </span>
                             </td>
@@ -214,9 +214,9 @@
                                     {{ ucfirst($tenant->status) }}
                                 </span>
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm theme-aware-text-muted">
                                 <div>{{ $tenant->created_at->format('M d, Y') }}</div>
-                                <div class="text-xs text-gray-400">{{ $tenant->created_at->diffForHumans() }}</div>
+                                <div class="text-xs theme-aware-text-muted">{{ $tenant->created_at->diffForHumans() }}</div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                 <div class="flex items-center space-x-2">
@@ -245,7 +245,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="8" class="px-6 py-12 text-center text-gray-500">
+                            <td colspan="8" class="px-6 py-12 text-center theme-aware-text-muted">
                                 <div class="flex flex-col items-center">
                                     <i class="fas fa-building text-4xl mb-4 text-gray-300"></i>
                                     <h3 class="text-lg font-medium mb-2">No tenants found</h3>
@@ -264,7 +264,7 @@
 
         {{-- Pagination --}}
         @if($tenants->hasPages())
-            <div class="bg-white px-6 py-4 border-t border-gray-200">
+            <div class="theme-aware-bg-card px-6 py-4 border-t theme-aware-border">
                 {{ $tenants->links() }}
             </div>
         @endif

@@ -14,7 +14,7 @@
         <div class="flex items-center justify-between">
             <div>
                 <h1 class="text-3xl font-bold flex items-center">
-                    <div class="bg-white/20 rounded-lg p-2 mr-4">
+                    <div class="theme-aware-bg-card/20 rounded-lg p-2 mr-4">
                         <i class="fas fa-shield-alt text-2xl"></i>
                     </div>
                     Audit Logs
@@ -22,11 +22,11 @@
                 <p class="text-red-100 mt-2">Monitor system activities and security events</p>
             </div>
             <div class="flex space-x-3">
-                <button onclick="exportLogs()" class="bg-white/20 text-white px-6 py-3 rounded-lg font-semibold hover:bg-white/30 transition">
+                <button onclick="exportLogs()" class="theme-aware-bg-card/20 text-white px-6 py-3 rounded-lg font-semibold hover:theme-aware-bg-card/30 transition">
                     <i class="fas fa-download mr-2"></i>
                     Export Logs
                 </button>
-                <button onclick="clearOldLogs()" class="bg-white text-red-600 px-6 py-3 rounded-lg font-semibold hover:bg-red-50 transition">
+                <button onclick="clearOldLogs()" class="theme-aware-bg-card text-red-600 px-6 py-3 rounded-lg font-semibold hover:bg-red-50 transition">
                     <i class="fas fa-trash mr-2"></i>
                     Clear Old
                 </button>
@@ -36,11 +36,11 @@
 
     {{-- Statistics Cards --}}
     <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        <div class="bg-white rounded-xl shadow-lg p-6">
+        <div class="theme-aware-bg-card rounded-xl shadow-lg p-6">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-sm font-medium text-gray-600">Total Logs (24h)</p>
-                    <p class="text-2xl font-bold text-gray-900" id="total-logs">{{ $stats['total_logs_24h'] ?? 0 }}</p>
+                    <p class="text-sm font-medium theme-aware-text-secondary">Total Logs (24h)</p>
+                    <p class="text-2xl font-bold theme-aware-text" id="total-logs">{{ $stats['total_logs_24h'] ?? 0 }}</p>
                 </div>
                 <div class="bg-blue-100 rounded-lg p-3">
                     <i class="fas fa-list text-blue-600 text-xl"></i>
@@ -54,11 +54,11 @@
             </div>
         </div>
 
-        <div class="bg-white rounded-xl shadow-lg p-6">
+        <div class="theme-aware-bg-card rounded-xl shadow-lg p-6">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-sm font-medium text-gray-600">Critical Events</p>
-                    <p class="text-2xl font-bold text-gray-900" id="critical-logs">{{ $stats['critical_logs'] ?? 0 }}</p>
+                    <p class="text-sm font-medium theme-aware-text-secondary">Critical Events</p>
+                    <p class="text-2xl font-bold theme-aware-text" id="critical-logs">{{ $stats['critical_logs'] ?? 0 }}</p>
                 </div>
                 <div class="bg-red-100 rounded-lg p-3">
                     <i class="fas fa-exclamation-triangle text-red-600 text-xl"></i>
@@ -72,11 +72,11 @@
             </div>
         </div>
 
-        <div class="bg-white rounded-xl shadow-lg p-6">
+        <div class="theme-aware-bg-card rounded-xl shadow-lg p-6">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-sm font-medium text-gray-600">Login Attempts</p>
-                    <p class="text-2xl font-bold text-gray-900" id="login-attempts">{{ $stats['login_attempts'] ?? 0 }}</p>
+                    <p class="text-sm font-medium theme-aware-text-secondary">Login Attempts</p>
+                    <p class="text-2xl font-bold theme-aware-text" id="login-attempts">{{ $stats['login_attempts'] ?? 0 }}</p>
                 </div>
                 <div class="bg-green-100 rounded-lg p-3">
                     <i class="fas fa-sign-in-alt text-green-600 text-xl"></i>
@@ -90,11 +90,11 @@
             </div>
         </div>
 
-        <div class="bg-white rounded-xl shadow-lg p-6">
+        <div class="theme-aware-bg-card rounded-xl shadow-lg p-6">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-sm font-medium text-gray-600">Failed Actions</p>
-                    <p class="text-2xl font-bold text-gray-900" id="failed-actions">{{ $stats['failed_actions'] ?? 0 }}</p>
+                    <p class="text-sm font-medium theme-aware-text-secondary">Failed Actions</p>
+                    <p class="text-2xl font-bold theme-aware-text" id="failed-actions">{{ $stats['failed_actions'] ?? 0 }}</p>
                 </div>
                 <div class="bg-yellow-100 rounded-lg p-3">
                     <i class="fas fa-times-circle text-yellow-600 text-xl"></i>
@@ -110,24 +110,24 @@
     </div>
 
     {{-- Filters and Search --}}
-    <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+    <div class="theme-aware-bg-card rounded-xl shadow-lg p-6 mb-8">
         <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
             <div>
-                <label for="search" class="block text-sm font-medium text-gray-700 mb-2">Search Logs</label>
+                <label for="search" class="block text-sm font-medium theme-aware-text-secondary mb-2">Search Logs</label>
                 <div class="relative">
                     <input type="text" 
                            id="search" 
                            placeholder="Search actions, users, IPs..."
-                           class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent">
+                           class="w-full pl-10 pr-4 py-2 border theme-aware-border rounded-lg focus:ring-2 focus:ring-red-500 focus:theme-aware-border-focus">
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <i class="fas fa-search text-gray-400"></i>
+                        <i class="fas fa-search theme-aware-text-muted"></i>
                     </div>
                 </div>
             </div>
 
             <div>
-                <label for="severity_filter" class="block text-sm font-medium text-gray-700 mb-2">Severity</label>
-                <select id="severity_filter" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent">
+                <label for="severity_filter" class="block text-sm font-medium theme-aware-text-secondary mb-2">Severity</label>
+                <select id="severity_filter" class="w-full px-3 py-2 border theme-aware-border rounded-lg focus:ring-2 focus:ring-red-500 focus:theme-aware-border-focus">
                     <option value="">All Severities</option>
                     <option value="low">Low</option>
                     <option value="medium">Medium</option>
@@ -137,8 +137,8 @@
             </div>
 
             <div>
-                <label for="tenant_filter" class="block text-sm font-medium text-gray-700 mb-2">Tenant</label>
-                <select id="tenant_filter" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent">
+                <label for="tenant_filter" class="block text-sm font-medium theme-aware-text-secondary mb-2">Tenant</label>
+                <select id="tenant_filter" class="w-full px-3 py-2 border theme-aware-border rounded-lg focus:ring-2 focus:ring-red-500 focus:theme-aware-border-focus">
                     <option value="">All Tenants</option>
                     @foreach($tenants ?? [] as $tenant)
                         <option value="{{ $tenant->id }}">{{ $tenant->name }}</option>
@@ -147,8 +147,8 @@
             </div>
 
             <div>
-                <label for="action_filter" class="block text-sm font-medium text-gray-700 mb-2">Action Type</label>
-                <select id="action_filter" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent">
+                <label for="action_filter" class="block text-sm font-medium theme-aware-text-secondary mb-2">Action Type</label>
+                <select id="action_filter" class="w-full px-3 py-2 border theme-aware-border rounded-lg focus:ring-2 focus:ring-red-500 focus:theme-aware-border-focus">
                     <option value="">All Actions</option>
                     <option value="login">Login</option>
                     <option value="logout">Logout</option>
@@ -163,8 +163,8 @@
             </div>
 
             <div>
-                <label for="date_range" class="block text-sm font-medium text-gray-700 mb-2">Date Range</label>
-                <select id="date_range" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent">
+                <label for="date_range" class="block text-sm font-medium theme-aware-text-secondary mb-2">Date Range</label>
+                <select id="date_range" class="w-full px-3 py-2 border theme-aware-border rounded-lg focus:ring-2 focus:ring-red-500 focus:theme-aware-border-focus">
                     <option value="today">Today</option>
                     <option value="yesterday">Yesterday</option>
                     <option value="last_7_days">Last 7 Days</option>
@@ -177,11 +177,11 @@
 
         <div class="flex items-center justify-between mt-4">
             <div class="flex items-center space-x-4">
-                <button onclick="clearFilters()" class="text-gray-500 hover:text-gray-700 text-sm">
+                <button onclick="clearFilters()" class="theme-aware-text-muted hover:theme-aware-text-secondary text-sm">
                     <i class="fas fa-times mr-1"></i>
                     Clear Filters
                 </button>
-                <span class="text-sm text-gray-500" id="results-count">Showing all logs</span>
+                <span class="text-sm theme-aware-text-muted" id="results-count">Showing all logs</span>
             </div>
 
             <div class="flex items-center space-x-2">
@@ -199,30 +199,30 @@
         {{-- Custom Date Range --}}
         <div id="custom-date-range" class="hidden mt-4 grid grid-cols-2 gap-4">
             <div>
-                <label for="start_date" class="block text-sm font-medium text-gray-700 mb-2">Start Date</label>
+                <label for="start_date" class="block text-sm font-medium theme-aware-text-secondary mb-2">Start Date</label>
                 <input type="datetime-local" 
                        id="start_date" 
-                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent">
+                       class="w-full px-3 py-2 border theme-aware-border rounded-lg focus:ring-2 focus:ring-red-500 focus:theme-aware-border-focus">
             </div>
             <div>
-                <label for="end_date" class="block text-sm font-medium text-gray-700 mb-2">End Date</label>
+                <label for="end_date" class="block text-sm font-medium theme-aware-text-secondary mb-2">End Date</label>
                 <input type="datetime-local" 
                        id="end_date" 
-                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent">
+                       class="w-full px-3 py-2 border theme-aware-border rounded-lg focus:ring-2 focus:ring-red-500 focus:theme-aware-border-focus">
             </div>
         </div>
     </div>
 
     {{-- Audit Logs Table --}}
-    <div class="bg-white rounded-xl shadow-lg overflow-hidden">
-        <div class="p-6 border-b border-gray-200">
+    <div class="theme-aware-bg-card rounded-xl shadow-lg overflow-hidden">
+        <div class="p-6 border-b theme-aware-border">
             <div class="flex items-center justify-between">
-                <h2 class="text-xl font-bold text-gray-800">Audit Logs</h2>
+                <h2 class="text-xl font-bold theme-aware-text">Audit Logs</h2>
                 <div class="flex items-center space-x-4">
-                    <div class="text-sm text-gray-500">
+                    <div class="text-sm theme-aware-text-muted">
                         Auto-refresh: <span id="auto-refresh-status" class="font-semibold">OFF</span>
                     </div>
-                    <div class="text-sm text-gray-500">
+                    <div class="text-sm theme-aware-text-muted">
                         Last updated: <span id="last-updated">{{ now()->format('Y-m-d H:i:s') }}</span>
                     </div>
                 </div>
@@ -231,40 +231,40 @@
 
         <div class="overflow-x-auto">
             <table class="w-full" id="logs-table">
-                <thead class="bg-gray-50">
+                <thead class="theme-aware-bg-secondary">
                     <tr>
-                        <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100" onclick="sortTable('timestamp')">
+                        <th class="text-left px-6 py-3 text-xs font-medium theme-aware-text-muted uppercase tracking-wider cursor-pointer hover:theme-aware-bg-secondary" onclick="sortTable('timestamp')">
                             Timestamp <i class="fas fa-sort ml-1"></i>
                         </th>
-                        <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100" onclick="sortTable('severity')">
+                        <th class="text-left px-6 py-3 text-xs font-medium theme-aware-text-muted uppercase tracking-wider cursor-pointer hover:theme-aware-bg-secondary" onclick="sortTable('severity')">
                             Severity <i class="fas fa-sort ml-1"></i>
                         </th>
-                        <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100" onclick="sortTable('action')">
+                        <th class="text-left px-6 py-3 text-xs font-medium theme-aware-text-muted uppercase tracking-wider cursor-pointer hover:theme-aware-bg-secondary" onclick="sortTable('action')">
                             Action <i class="fas fa-sort ml-1"></i>
                         </th>
-                        <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100" onclick="sortTable('user')">
+                        <th class="text-left px-6 py-3 text-xs font-medium theme-aware-text-muted uppercase tracking-wider cursor-pointer hover:theme-aware-bg-secondary" onclick="sortTable('user')">
                             User <i class="fas fa-sort ml-1"></i>
                         </th>
-                        <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100" onclick="sortTable('tenant')">
+                        <th class="text-left px-6 py-3 text-xs font-medium theme-aware-text-muted uppercase tracking-wider cursor-pointer hover:theme-aware-bg-secondary" onclick="sortTable('tenant')">
                             Tenant <i class="fas fa-sort ml-1"></i>
                         </th>
-                        <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th class="text-left px-6 py-3 text-xs font-medium theme-aware-text-muted uppercase tracking-wider">
                             Details
                         </th>
-                        <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th class="text-left px-6 py-3 text-xs font-medium theme-aware-text-muted uppercase tracking-wider">
                             IP Address
                         </th>
-                        <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th class="text-left px-6 py-3 text-xs font-medium theme-aware-text-muted uppercase tracking-wider">
                             Actions
                         </th>
                     </tr>
                 </thead>
-                <tbody class="bg-white divide-y divide-gray-200" id="logs-tbody">
+                <tbody class="theme-aware-bg-card divide-y divide-gray-200" id="logs-tbody">
                     @forelse($logs ?? [] as $log)
-                        <tr class="hover:bg-gray-50 log-row" data-log-id="{{ $log->id }}">
-                            <td class="px-6 py-4 text-sm text-gray-900">
+                        <tr class="hover:theme-aware-bg-secondary log-row" data-log-id="{{ $log->id }}">
+                            <td class="px-6 py-4 text-sm theme-aware-text">
                                 {{ $log->created_at->format('Y-m-d H:i:s') }}
-                                <div class="text-xs text-gray-500">
+                                <div class="text-xs theme-aware-text-muted">
                                     {{ $log->created_at->diffForHumans() }}
                                 </div>
                             </td>
@@ -280,8 +280,8 @@
                                 </span>
                             </td>
                             <td class="px-6 py-4">
-                                <div class="text-sm font-medium text-gray-900">{{ $log->action }}</div>
-                                <div class="text-xs text-gray-500">{{ Str::limit($log->description, 50) }}</div>
+                                <div class="text-sm font-medium theme-aware-text">{{ $log->action }}</div>
+                                <div class="text-xs theme-aware-text-muted">{{ Str::limit($log->description, 50) }}</div>
                             </td>
                             <td class="px-6 py-4">
                                 @if($log->user)
@@ -290,12 +290,12 @@
                                             {{ substr($log->user->name, 0, 1) }}
                                         </div>
                                         <div>
-                                            <div class="text-sm font-medium text-gray-900">{{ $log->user->name }}</div>
-                                            <div class="text-xs text-gray-500">{{ $log->user->role ?? 'user' }}</div>
+                                            <div class="text-sm font-medium theme-aware-text">{{ $log->user->name }}</div>
+                                            <div class="text-xs theme-aware-text-muted">{{ $log->user->role ?? 'user' }}</div>
                                         </div>
                                     </div>
                                 @else
-                                    <span class="text-gray-400 text-sm">System</span>
+                                    <span class="theme-aware-text-muted text-sm">System</span>
                                 @endif
                             </td>
                             <td class="px-6 py-4">
@@ -304,10 +304,10 @@
                                         {{ $log->tenant->name }}
                                     </span>
                                 @else
-                                    <span class="text-gray-400 text-xs">Global</span>
+                                    <span class="theme-aware-text-muted text-xs">Global</span>
                                 @endif
                             </td>
-                            <td class="px-6 py-4 text-sm text-gray-900">
+                            <td class="px-6 py-4 text-sm theme-aware-text">
                                 {{ Str::limit($log->description, 100) }}
                                 @if($log->metadata)
                                     <button onclick="showMetadata({{ $log->id }})" class="text-blue-600 hover:text-blue-800 text-xs ml-2">
@@ -315,10 +315,10 @@
                                     </button>
                                 @endif
                             </td>
-                            <td class="px-6 py-4 text-sm text-gray-500">
+                            <td class="px-6 py-4 text-sm theme-aware-text-muted">
                                 {{ $log->ip_address ?? 'Unknown' }}
                                 @if($log->user_agent)
-                                    <div class="text-xs text-gray-400 mt-1">
+                                    <div class="text-xs theme-aware-text-muted mt-1">
                                         {{ Str::limit($log->user_agent, 30) }}
                                     </div>
                                 @endif
@@ -340,7 +340,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="8" class="px-6 py-12 text-center text-gray-500">
+                            <td colspan="8" class="px-6 py-12 text-center theme-aware-text-muted">
                                 <i class="fas fa-clipboard-list text-4xl mb-4"></i>
                                 <p class="text-lg">No audit logs found</p>
                                 <p class="text-sm">Logs will appear here as users perform actions</p>
@@ -353,7 +353,7 @@
 
         {{-- Pagination --}}
         @if(isset($logs) && $logs->hasPages())
-            <div class="px-6 py-4 border-t border-gray-200">
+            <div class="px-6 py-4 border-t theme-aware-border">
                 {{ $logs->links() }}
             </div>
         @endif
@@ -362,11 +362,11 @@
     {{-- Log Details Modal --}}
     <div id="log-details-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden z-50">
         <div class="flex items-center justify-center min-h-screen px-4">
-            <div class="bg-white rounded-xl shadow-xl max-w-4xl w-full max-h-screen overflow-y-auto">
-                <div class="p-6 border-b border-gray-200">
+            <div class="theme-aware-bg-card rounded-xl shadow-xl max-w-4xl w-full max-h-screen overflow-y-auto">
+                <div class="p-6 border-b theme-aware-border">
                     <div class="flex items-center justify-between">
-                        <h3 class="text-lg font-bold text-gray-900">Audit Log Details</h3>
-                        <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600">
+                        <h3 class="text-lg font-bold theme-aware-text">Audit Log Details</h3>
+                        <button onclick="closeModal()" class="theme-aware-text-muted hover:theme-aware-text-secondary">
                             <i class="fas fa-times text-xl"></i>
                         </button>
                     </div>
@@ -522,7 +522,7 @@ function viewLogDetails(logId) {
             content.innerHTML = `
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        <h4 class="font-semibold text-gray-800 mb-2">Basic Information</h4>
+                        <h4 class="font-semibold theme-aware-text mb-2">Basic Information</h4>
                         <div class="space-y-2 text-sm">
                             <div><strong>ID:</strong> ${data.id}</div>
                             <div><strong>Timestamp:</strong> ${data.created_at}</div>
@@ -534,25 +534,25 @@ function viewLogDetails(logId) {
                         </div>
                     </div>
                     <div>
-                        <h4 class="font-semibold text-gray-800 mb-2">Description</h4>
-                        <p class="text-sm text-gray-600 mb-4">${data.description}</p>
+                        <h4 class="font-semibold theme-aware-text mb-2">Description</h4>
+                        <p class="text-sm theme-aware-text-secondary mb-4">${data.description}</p>
                         
                         ${data.user_agent ? `
-                        <h4 class="font-semibold text-gray-800 mb-2">User Agent</h4>
-                        <p class="text-xs text-gray-500 mb-4">${data.user_agent}</p>
+                        <h4 class="font-semibold theme-aware-text mb-2">User Agent</h4>
+                        <p class="text-xs theme-aware-text-muted mb-4">${data.user_agent}</p>
                         ` : ''}
                     </div>
                 </div>
                 
                 ${data.metadata ? `
                 <div class="mt-6">
-                    <h4 class="font-semibold text-gray-800 mb-2">Metadata</h4>
-                    <pre class="bg-gray-100 p-4 rounded-lg text-xs overflow-x-auto">${JSON.stringify(data.metadata, null, 2)}</pre>
+                    <h4 class="font-semibold theme-aware-text mb-2">Metadata</h4>
+                    <pre class="theme-aware-bg-secondary p-4 rounded-lg text-xs overflow-x-auto">${JSON.stringify(data.metadata, null, 2)}</pre>
                 </div>
                 ` : ''}
                 
                 <div class="mt-6 flex justify-end space-x-3">
-                    <button onclick="closeModal()" class="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400 transition">
+                    <button onclick="closeModal()" class="bg-gray-300 theme-aware-text-secondary px-4 py-2 rounded-lg hover:bg-gray-400 transition">
                         Close
                     </button>
                     ${data.severity === 'critical' || data.severity === 'high' ? `

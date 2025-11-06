@@ -43,6 +43,7 @@ class TransactionController extends Controller
             $validated['reference'] = $this->generateReference();
         }
 
+        $validated = $this->ensureTenantId($validated);
         Transaction::create($validated);
 
         return redirect()->route('transactions.index')

@@ -80,6 +80,7 @@ class PaymentController extends Controller
             $data['reference'] = $this->generatePaymentReference();
         }
 
+        $data = $this->ensureTenantId($data);
         Payment::create($data);
 
         return redirect()->route('payments.index')

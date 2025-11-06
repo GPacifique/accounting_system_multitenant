@@ -14,7 +14,7 @@
         <div class="flex items-center justify-between">
             <div>
                 <div class="flex items-center mb-2">
-                    <div class="bg-white/20 rounded-lg p-2 mr-4">
+                    <div class="theme-aware-bg-card/20 rounded-lg p-2 mr-4">
                         <i class="fas fa-users text-2xl"></i>
                     </div>
                     <div>
@@ -23,12 +23,12 @@
                     </div>
                 </div>
                 <div class="flex items-center space-x-4 text-sm">
-                    <span class="bg-white/20 px-3 py-1 rounded-full">{{ $users->total() }} Total Users</span>
+                    <span class="theme-aware-bg-card/20 px-3 py-1 rounded-full">{{ $users->total() }} Total Users</span>
                     <span class="bg-blue-500/20 px-3 py-1 rounded-full">{{ ucfirst($tenant->subscription_plan) }} Plan</span>
                 </div>
             </div>
             <div class="flex space-x-3">
-                <a href="{{ route('admin.tenants.show', $tenant) }}" class="bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-blue-50 transition">
+                <a href="{{ route('admin.tenants.show', $tenant) }}" class="theme-aware-bg-card text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-blue-50 transition">
                     <i class="fas fa-building mr-2"></i>
                     Tenant Details
                 </a>
@@ -41,18 +41,18 @@
     </div>
 
     {{-- Users List --}}
-    <div class="bg-white rounded-xl shadow-lg">
-        <div class="p-6 border-b border-gray-200">
+    <div class="theme-aware-bg-card rounded-xl shadow-lg">
+        <div class="p-6 border-b theme-aware-border">
             <div class="flex items-center justify-between">
                 <div>
-                    <h2 class="text-xl font-semibold text-gray-800">Tenant Users</h2>
-                    <p class="text-gray-600 mt-1">Users with access to {{ $tenant->name }}</p>
+                    <h2 class="text-xl font-semibold theme-aware-text">Tenant Users</h2>
+                    <p class="theme-aware-text-secondary mt-1">Users with access to {{ $tenant->name }}</p>
                 </div>
                 <div class="flex items-center space-x-3">
                     <div class="relative">
-                        <input type="text" placeholder="Search users..." class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <input type="text" placeholder="Search users..." class="pl-10 pr-4 py-2 border theme-aware-border rounded-lg focus:ring-2 focus:ring-primary focus:theme-aware-border-focus">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <i class="fas fa-search text-gray-400"></i>
+                            <i class="fas fa-search theme-aware-text-muted"></i>
                         </div>
                     </div>
                     <button class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
@@ -66,19 +66,19 @@
         @if($users->count() > 0)
         <div class="overflow-x-auto">
             <table class="w-full">
-                <thead class="bg-gray-50">
+                <thead class="theme-aware-bg-secondary">
                     <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tenant Role</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Admin Status</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Joined</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Last Activity</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium theme-aware-text-muted uppercase tracking-wider">User</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium theme-aware-text-muted uppercase tracking-wider">Tenant Role</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium theme-aware-text-muted uppercase tracking-wider">Admin Status</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium theme-aware-text-muted uppercase tracking-wider">Joined</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium theme-aware-text-muted uppercase tracking-wider">Last Activity</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium theme-aware-text-muted uppercase tracking-wider">Actions</th>
                     </tr>
                 </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
+                <tbody class="theme-aware-bg-card divide-y divide-gray-200">
                     @foreach($users as $user)
-                    <tr class="hover:bg-gray-50">
+                    <tr class="hover:theme-aware-bg-secondary">
                         <td class="px-6 py-4 whitespace-nowrap">
                             <div class="flex items-center">
                                 <div class="flex-shrink-0 h-10 w-10">
@@ -87,8 +87,8 @@
                                     </div>
                                 </div>
                                 <div class="ml-4">
-                                    <div class="text-sm font-medium text-gray-900">{{ $user->name }}</div>
-                                    <div class="text-sm text-gray-500">{{ $user->email }}</div>
+                                    <div class="text-sm font-medium theme-aware-text">{{ $user->name }}</div>
+                                    <div class="text-sm theme-aware-text-muted">{{ $user->email }}</div>
                                 </div>
                             </div>
                         </td>
@@ -96,7 +96,7 @@
                             <span class="px-3 py-1 text-xs font-medium rounded-full 
                                 {{ $user->pivot->role === 'admin' ? 'bg-purple-100 text-purple-800' : 
                                    ($user->pivot->role === 'manager' ? 'bg-blue-100 text-blue-800' : 
-                                   ($user->pivot->role === 'accountant' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800')) }}">
+                                   ($user->pivot->role === 'accountant' ? 'bg-green-100 text-green-800' : 'theme-aware-bg-secondary theme-aware-text')) }}">
                                 {{ ucfirst($user->pivot->role ?? 'User') }}
                             </span>
                         </td>
@@ -107,15 +107,15 @@
                                     Admin
                                 </span>
                             @else
-                                <span class="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-600 rounded-full">
+                                <span class="px-2 py-1 text-xs font-medium theme-aware-bg-secondary theme-aware-text-secondary rounded-full">
                                     Member
                                 </span>
                             @endif
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm theme-aware-text-muted">
                             {{ $user->pivot->created_at ? $user->pivot->created_at->format('M j, Y') : 'N/A' }}
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm theme-aware-text-muted">
                             {{ $user->last_login_at ? $user->last_login_at->diffForHumans() : 'Never' }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
@@ -138,7 +138,7 @@
 
         {{-- Pagination --}}
         @if($users->hasPages())
-        <div class="px-6 py-4 border-t border-gray-200">
+        <div class="px-6 py-4 border-t theme-aware-border">
             {{ $users->links() }}
         </div>
         @endif
@@ -147,12 +147,12 @@
         {{-- No Users State --}}
         <div class="text-center py-12">
             <div class="flex justify-center mb-4">
-                <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center">
-                    <i class="fas fa-users text-gray-400 text-2xl"></i>
+                <div class="w-16 h-16 theme-aware-bg-secondary rounded-full flex items-center justify-center">
+                    <i class="fas fa-users theme-aware-text-muted text-2xl"></i>
                 </div>
             </div>
-            <h3 class="text-lg font-medium text-gray-900 mb-2">No Users Found</h3>
-            <p class="text-gray-500 mb-6">This tenant doesn't have any users yet.</p>
+            <h3 class="text-lg font-medium theme-aware-text mb-2">No Users Found</h3>
+            <p class="theme-aware-text-muted mb-6">This tenant doesn't have any users yet.</p>
             <button class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition">
                 <i class="fas fa-user-plus mr-2"></i>
                 Invite First User
@@ -163,50 +163,50 @@
 
     {{-- Statistics Cards --}}
     <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mt-8">
-        <div class="bg-white rounded-xl shadow-lg p-6">
+        <div class="theme-aware-bg-card rounded-xl shadow-lg p-6">
             <div class="flex items-center">
                 <div class="p-3 rounded-full bg-blue-500 text-white mr-4">
                     <i class="fas fa-users text-xl"></i>
                 </div>
                 <div>
-                    <p class="text-2xl font-bold text-gray-900">{{ $users->total() }}</p>
-                    <p class="text-gray-600">Total Users</p>
+                    <p class="text-2xl font-bold theme-aware-text">{{ $users->total() }}</p>
+                    <p class="theme-aware-text-secondary">Total Users</p>
                 </div>
             </div>
         </div>
 
-        <div class="bg-white rounded-xl shadow-lg p-6">
+        <div class="theme-aware-bg-card rounded-xl shadow-lg p-6">
             <div class="flex items-center">
                 <div class="p-3 rounded-full bg-purple-500 text-white mr-4">
                     <i class="fas fa-crown text-xl"></i>
                 </div>
                 <div>
-                    <p class="text-2xl font-bold text-gray-900">{{ $users->where('pivot.is_admin', true)->count() }}</p>
-                    <p class="text-gray-600">Admins</p>
+                    <p class="text-2xl font-bold theme-aware-text">{{ $users->where('pivot.is_admin', true)->count() }}</p>
+                    <p class="theme-aware-text-secondary">Admins</p>
                 </div>
             </div>
         </div>
 
-        <div class="bg-white rounded-xl shadow-lg p-6">
+        <div class="theme-aware-bg-card rounded-xl shadow-lg p-6">
             <div class="flex items-center">
                 <div class="p-3 rounded-full bg-green-500 text-white mr-4">
                     <i class="fas fa-user-check text-xl"></i>
                 </div>
                 <div>
-                    <p class="text-2xl font-bold text-gray-900">{{ $users->where('last_login_at', '!=', null)->count() }}</p>
-                    <p class="text-gray-600">Active Users</p>
+                    <p class="text-2xl font-bold theme-aware-text">{{ $users->where('last_login_at', '!=', null)->count() }}</p>
+                    <p class="theme-aware-text-secondary">Active Users</p>
                 </div>
             </div>
         </div>
 
-        <div class="bg-white rounded-xl shadow-lg p-6">
+        <div class="theme-aware-bg-card rounded-xl shadow-lg p-6">
             <div class="flex items-center">
                 <div class="p-3 rounded-full bg-orange-500 text-white mr-4">
                     <i class="fas fa-clock text-xl"></i>
                 </div>
                 <div>
-                    <p class="text-2xl font-bold text-gray-900">{{ $users->where('last_login_at', null)->count() }}</p>
-                    <p class="text-gray-600">Pending</p>
+                    <p class="text-2xl font-bold theme-aware-text">{{ $users->where('last_login_at', null)->count() }}</p>
+                    <p class="theme-aware-text-secondary">Pending</p>
                 </div>
             </div>
         </div>
@@ -215,15 +215,15 @@
 
 {{-- Remove User Modal (placeholder) --}}
 <div id="removeUserModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
-    <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-lg bg-white">
+    <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-lg theme-aware-bg-card">
         <div class="mt-3 text-center">
             <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
                 <i class="fas fa-exclamation-triangle text-red-600 text-xl"></i>
             </div>
-            <h3 class="text-lg font-medium text-gray-900 mb-2">Remove User from Tenant</h3>
-            <p class="text-sm text-gray-500 mb-6">Are you sure you want to remove this user from the tenant? This action cannot be undone.</p>
+            <h3 class="text-lg font-medium theme-aware-text mb-2">Remove User from Tenant</h3>
+            <p class="text-sm theme-aware-text-muted mb-6">Are you sure you want to remove this user from the tenant? This action cannot be undone.</p>
             <div class="flex justify-center space-x-3">
-                <button type="button" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition" onclick="closeRemoveModal()">
+                <button type="button" class="px-4 py-2 bg-gray-300 theme-aware-text-secondary rounded-lg hover:bg-gray-400 transition" onclick="closeRemoveModal()">
                     Cancel
                 </button>
                 <button type="button" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition" onclick="confirmRemoveUser()">

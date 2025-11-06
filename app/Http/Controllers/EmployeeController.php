@@ -64,6 +64,7 @@ class EmployeeController extends Controller
             $data['salary'] = number_format((float) $data['salary'], 2, '.', '');
         }
 
+        $data = $this->ensureTenantId($data);
         Employee::create($data);
 
         return redirect()->route('employees.index')->with('success', 'Employee created successfully.');

@@ -14,14 +14,14 @@
         <div class="flex items-center justify-between">
             <div>
                 <h1 class="text-3xl font-bold flex items-center">
-                    <div class="bg-white/20 rounded-lg p-2 mr-4">
+                    <div class="theme-aware-bg-card/20 rounded-lg p-2 mr-4">
                         <i class="fas fa-users text-2xl"></i>
                     </div>
                     User Management
                 </h1>
                 <p class="text-indigo-100 mt-2">Manage user accounts across all tenants</p>
             </div>
-            <a href="{{ route('admin.users.create') }}" class="bg-white text-indigo-600 px-6 py-3 rounded-lg font-semibold hover:bg-indigo-50 transition">
+            <a href="{{ route('admin.users.create') }}" class="theme-aware-bg-card text-indigo-600 px-6 py-3 rounded-lg font-semibold hover:bg-indigo-50 transition">
                 <i class="fas fa-plus mr-2"></i>
                 Create User
             </a>
@@ -30,11 +30,11 @@
 
     {{-- Statistics Cards --}}
     <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        <div class="bg-white rounded-xl shadow-lg p-6">
+        <div class="theme-aware-bg-card rounded-xl shadow-lg p-6">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-sm font-medium text-gray-600">Total Users</p>
-                    <p class="text-2xl font-bold text-gray-900" id="total-users">{{ $stats['total_users'] ?? 0 }}</p>
+                    <p class="text-sm font-medium theme-aware-text-secondary">Total Users</p>
+                    <p class="text-2xl font-bold theme-aware-text" id="total-users">{{ $stats['total_users'] ?? 0 }}</p>
                 </div>
                 <div class="bg-blue-100 rounded-lg p-3">
                     <i class="fas fa-users text-blue-600 text-xl"></i>
@@ -48,11 +48,11 @@
             </div>
         </div>
 
-        <div class="bg-white rounded-xl shadow-lg p-6">
+        <div class="theme-aware-bg-card rounded-xl shadow-lg p-6">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-sm font-medium text-gray-600">Active Users</p>
-                    <p class="text-2xl font-bold text-gray-900" id="active-users">{{ $stats['active_users'] ?? 0 }}</p>
+                    <p class="text-sm font-medium theme-aware-text-secondary">Active Users</p>
+                    <p class="text-2xl font-bold theme-aware-text" id="active-users">{{ $stats['active_users'] ?? 0 }}</p>
                 </div>
                 <div class="bg-green-100 rounded-lg p-3">
                     <i class="fas fa-user-check text-green-600 text-xl"></i>
@@ -66,11 +66,11 @@
             </div>
         </div>
 
-        <div class="bg-white rounded-xl shadow-lg p-6">
+        <div class="theme-aware-bg-card rounded-xl shadow-lg p-6">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-sm font-medium text-gray-600">Pending Users</p>
-                    <p class="text-2xl font-bold text-gray-900" id="pending-users">{{ $stats['pending_users'] ?? 0 }}</p>
+                    <p class="text-sm font-medium theme-aware-text-secondary">Pending Users</p>
+                    <p class="text-2xl font-bold theme-aware-text" id="pending-users">{{ $stats['pending_users'] ?? 0 }}</p>
                 </div>
                 <div class="bg-yellow-100 rounded-lg p-3">
                     <i class="fas fa-user-clock text-yellow-600 text-xl"></i>
@@ -84,11 +84,11 @@
             </div>
         </div>
 
-        <div class="bg-white rounded-xl shadow-lg p-6">
+        <div class="theme-aware-bg-card rounded-xl shadow-lg p-6">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-sm font-medium text-gray-600">Admins</p>
-                    <p class="text-2xl font-bold text-gray-900" id="admin-users">{{ $stats['admin_users'] ?? 0 }}</p>
+                    <p class="text-sm font-medium theme-aware-text-secondary">Admins</p>
+                    <p class="text-2xl font-bold theme-aware-text" id="admin-users">{{ $stats['admin_users'] ?? 0 }}</p>
                 </div>
                 <div class="bg-purple-100 rounded-lg p-3">
                     <i class="fas fa-user-shield text-purple-600 text-xl"></i>
@@ -104,24 +104,24 @@
     </div>
 
     {{-- Filters and Search --}}
-    <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+    <div class="theme-aware-bg-card rounded-xl shadow-lg p-6 mb-8">
         <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div>
-                <label for="search" class="block text-sm font-medium text-gray-700 mb-2">Search Users</label>
+                <label for="search" class="block text-sm font-medium theme-aware-text-secondary mb-2">Search Users</label>
                 <div class="relative">
                     <input type="text" 
                            id="search" 
                            placeholder="Search by name, email, or tenant..."
-                           class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                           class="w-full pl-10 pr-4 py-2 border theme-aware-border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:theme-aware-border-focus">
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <i class="fas fa-search text-gray-400"></i>
+                        <i class="fas fa-search theme-aware-text-muted"></i>
                     </div>
                 </div>
             </div>
 
             <div>
-                <label for="tenant_filter" class="block text-sm font-medium text-gray-700 mb-2">Filter by Tenant</label>
-                <select id="tenant_filter" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                <label for="tenant_filter" class="block text-sm font-medium theme-aware-text-secondary mb-2">Filter by Tenant</label>
+                <select id="tenant_filter" class="w-full px-3 py-2 border theme-aware-border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:theme-aware-border-focus">
                     <option value="">All Tenants</option>
                     @foreach($tenants ?? [] as $tenant)
                         <option value="{{ $tenant->id }}">{{ $tenant->name }}</option>
@@ -130,8 +130,8 @@
             </div>
 
             <div>
-                <label for="role_filter" class="block text-sm font-medium text-gray-700 mb-2">Filter by Role</label>
-                <select id="role_filter" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                <label for="role_filter" class="block text-sm font-medium theme-aware-text-secondary mb-2">Filter by Role</label>
+                <select id="role_filter" class="w-full px-3 py-2 border theme-aware-border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:theme-aware-border-focus">
                     <option value="">All Roles</option>
                     <option value="admin">Admin</option>
                     <option value="manager">Manager</option>
@@ -141,8 +141,8 @@
             </div>
 
             <div>
-                <label for="status_filter" class="block text-sm font-medium text-gray-700 mb-2">Filter by Status</label>
-                <select id="status_filter" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                <label for="status_filter" class="block text-sm font-medium theme-aware-text-secondary mb-2">Filter by Status</label>
+                <select id="status_filter" class="w-full px-3 py-2 border theme-aware-border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:theme-aware-border-focus">
                     <option value="">All Status</option>
                     <option value="active">Active</option>
                     <option value="pending">Pending Verification</option>
@@ -153,11 +153,11 @@
 
         <div class="flex items-center justify-between mt-4">
             <div class="flex items-center space-x-4">
-                <button onclick="clearFilters()" class="text-gray-500 hover:text-gray-700 text-sm">
+                <button onclick="clearFilters()" class="theme-aware-text-muted hover:theme-aware-text-secondary text-sm">
                     <i class="fas fa-times mr-1"></i>
                     Clear Filters
                 </button>
-                <span class="text-sm text-gray-500" id="results-count">Showing all users</span>
+                <span class="text-sm theme-aware-text-muted" id="results-count">Showing all users</span>
             </div>
 
             <div class="flex items-center space-x-2">
@@ -174,16 +174,16 @@
     </div>
 
     {{-- Users Table --}}
-    <div class="bg-white rounded-xl shadow-lg overflow-hidden">
-        <div class="p-6 border-b border-gray-200">
+    <div class="theme-aware-bg-card rounded-xl shadow-lg overflow-hidden">
+        <div class="p-6 border-b theme-aware-border">
             <div class="flex items-center justify-between">
-                <h2 class="text-xl font-bold text-gray-800">Users List</h2>
+                <h2 class="text-xl font-bold theme-aware-text">Users List</h2>
                 <div class="flex items-center space-x-4">
                     <label class="flex items-center text-sm">
-                        <input type="checkbox" id="select-all" class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 mr-2">
+                        <input type="checkbox" id="select-all" class="rounded theme-aware-border text-indigo-600 focus:ring-indigo-500 mr-2">
                         Select All
                     </label>
-                    <div class="text-sm text-gray-500">
+                    <div class="text-sm theme-aware-text-muted">
                         <span id="selected-count">0</span> selected
                     </div>
                 </div>
@@ -192,37 +192,37 @@
 
         <div class="overflow-x-auto">
             <table class="w-full" id="users-table">
-                <thead class="bg-gray-50">
+                <thead class="theme-aware-bg-secondary">
                     <tr>
                         <th class="w-12 px-6 py-3">
-                            <input type="checkbox" class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                            <input type="checkbox" class="rounded theme-aware-border text-indigo-600 focus:ring-indigo-500">
                         </th>
-                        <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100" onclick="sortTable('name')">
+                        <th class="text-left px-6 py-3 text-xs font-medium theme-aware-text-muted uppercase tracking-wider cursor-pointer hover:theme-aware-bg-secondary" onclick="sortTable('name')">
                             User <i class="fas fa-sort ml-1"></i>
                         </th>
-                        <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100" onclick="sortTable('tenant')">
+                        <th class="text-left px-6 py-3 text-xs font-medium theme-aware-text-muted uppercase tracking-wider cursor-pointer hover:theme-aware-bg-secondary" onclick="sortTable('tenant')">
                             Tenant <i class="fas fa-sort ml-1"></i>
                         </th>
-                        <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100" onclick="sortTable('role')">
+                        <th class="text-left px-6 py-3 text-xs font-medium theme-aware-text-muted uppercase tracking-wider cursor-pointer hover:theme-aware-bg-secondary" onclick="sortTable('role')">
                             Role <i class="fas fa-sort ml-1"></i>
                         </th>
-                        <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100" onclick="sortTable('status')">
+                        <th class="text-left px-6 py-3 text-xs font-medium theme-aware-text-muted uppercase tracking-wider cursor-pointer hover:theme-aware-bg-secondary" onclick="sortTable('status')">
                             Status <i class="fas fa-sort ml-1"></i>
                         </th>
-                        <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100" onclick="sortTable('last_login')">
+                        <th class="text-left px-6 py-3 text-xs font-medium theme-aware-text-muted uppercase tracking-wider cursor-pointer hover:theme-aware-bg-secondary" onclick="sortTable('last_login')">
                             Last Login <i class="fas fa-sort ml-1"></i>
                         </th>
-                        <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th class="text-left px-6 py-3 text-xs font-medium theme-aware-text-muted uppercase tracking-wider">
                             Actions
                         </th>
                     </tr>
                 </thead>
-                <tbody class="bg-white divide-y divide-gray-200" id="users-tbody">
+                <tbody class="theme-aware-bg-card divide-y divide-gray-200" id="users-tbody">
                     @forelse($users ?? [] as $user)
-                        <tr class="hover:bg-gray-50 user-row" data-user-id="{{ $user->id }}">
+                        <tr class="hover:theme-aware-bg-secondary user-row" data-user-id="{{ $user->id }}">
                             <td class="px-6 py-4">
                                 <input type="checkbox" 
-                                       class="user-checkbox rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" 
+                                       class="user-checkbox rounded theme-aware-border text-indigo-600 focus:ring-indigo-500" 
                                        value="{{ $user->id }}">
                             </td>
                             <td class="px-6 py-4">
@@ -231,8 +231,8 @@
                                         {{ substr($user->name, 0, 1) }}
                                     </div>
                                     <div>
-                                        <p class="font-semibold text-gray-900">{{ $user->name }}</p>
-                                        <p class="text-sm text-gray-500">{{ $user->email }}</p>
+                                        <p class="font-semibold theme-aware-text">{{ $user->name }}</p>
+                                        <p class="text-sm theme-aware-text-muted">{{ $user->email }}</p>
                                     </div>
                                 </div>
                             </td>
@@ -244,7 +244,7 @@
                                         </span>
                                     </div>
                                 @else
-                                    <span class="text-gray-400 text-sm">No tenant</span>
+                                    <span class="theme-aware-text-muted text-sm">No tenant</span>
                                 @endif
                             </td>
                             <td class="px-6 py-4">
@@ -263,7 +263,7 @@
                                     </span>
                                 @endif
                             </td>
-                            <td class="px-6 py-4 text-sm text-gray-500">
+                            <td class="px-6 py-4 text-sm theme-aware-text-muted">
                                 {{ $user->last_login_at ? $user->last_login_at->diffForHumans() : 'Never' }}
                             </td>
                             <td class="px-6 py-4">
@@ -291,7 +291,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="px-6 py-12 text-center text-gray-500">
+                            <td colspan="7" class="px-6 py-12 text-center theme-aware-text-muted">
                                 <i class="fas fa-users text-4xl mb-4"></i>
                                 <p class="text-lg">No users found</p>
                                 <p class="text-sm">Start by creating your first user account</p>
@@ -304,7 +304,7 @@
 
         {{-- Pagination --}}
         @if(isset($users) && $users->hasPages())
-            <div class="px-6 py-4 border-t border-gray-200">
+            <div class="px-6 py-4 border-t theme-aware-border">
                 {{ $users->links() }}
             </div>
         @endif
@@ -313,8 +313,8 @@
     {{-- Bulk Actions Modal --}}
     <div id="bulk-actions-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden z-50">
         <div class="flex items-center justify-center min-h-screen px-4">
-            <div class="bg-white rounded-xl shadow-xl max-w-md w-full p-6">
-                <h3 class="text-lg font-bold text-gray-900 mb-4">Bulk Actions</h3>
+            <div class="theme-aware-bg-card rounded-xl shadow-xl max-w-md w-full p-6">
+                <h3 class="text-lg font-bold theme-aware-text mb-4">Bulk Actions</h3>
                 
                 <div class="space-y-3">
                     <button onclick="bulkVerify()" class="w-full bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition">
@@ -334,7 +334,7 @@
                 </div>
                 
                 <div class="flex justify-end space-x-3 mt-6">
-                    <button onclick="closeBulkModal()" class="bg-gray-300 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-400 transition">
+                    <button onclick="closeBulkModal()" class="bg-gray-300 theme-aware-text-secondary py-2 px-4 rounded-lg hover:bg-gray-400 transition">
                         Cancel
                     </button>
                 </div>

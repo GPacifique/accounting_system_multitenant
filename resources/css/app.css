@@ -8,15 +8,20 @@
     --color-primary: #2563eb;
     --color-primary-dark: #1d4ed8;
     --color-primary-light: #3b82f6;
+    --color-primary-rgb: 37, 99, 235;
     
     --color-secondary: #64748b;
     --color-secondary-dark: #475569;
     --color-secondary-light: #94a3b8;
     
     --color-success: #059669;
+    --color-success-rgb: 5, 150, 105;
     --color-warning: #d97706;
+    --color-warning-rgb: 217, 119, 6;
     --color-danger: #dc2626;
+    --color-danger-rgb: 220, 38, 38;
     --color-info: #0891b2;
+    --color-info-rgb: 8, 145, 178;
     
     /* Background colors */
     --bg-primary: #ffffff;
@@ -25,6 +30,7 @@
     --bg-card: #ffffff;
     --bg-sidebar: #1e293b;
     --bg-header: #ffffff;
+    --bg-page: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 50%, #a5d6a7 100%);
     
     /* Text colors */
     --text-primary: #0f172a;
@@ -48,15 +54,20 @@
     --color-primary: #3b82f6;
     --color-primary-dark: #2563eb;
     --color-primary-light: #60a5fa;
+    --color-primary-rgb: 59, 130, 246;
     
     --color-secondary: #94a3b8;
     --color-secondary-dark: #64748b;
     --color-secondary-light: #cbd5e1;
     
     --color-success: #10b981;
+    --color-success-rgb: 16, 185, 129;
     --color-warning: #f59e0b;
+    --color-warning-rgb: 245, 158, 11;
     --color-danger: #ef4444;
+    --color-danger-rgb: 239, 68, 68;
     --color-info: #06b6d4;
+    --color-info-rgb: 6, 182, 212;
     
     /* Background colors */
     --bg-primary: #0f172a;
@@ -65,6 +76,7 @@
     --bg-card: #1e293b;
     --bg-sidebar: #0f172a;
     --bg-header: #1e293b;
+    --bg-page: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
     
     /* Text colors */
     --text-primary: #f8fafc;
@@ -83,9 +95,47 @@
     --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
 }
 
+/* Global page background application */
+html {
+    background: var(--bg-page);
+    background-attachment: fixed;
+    min-height: 100%;
+    width: 100%;
+}
+
+body {
+    background: var(--bg-page);
+    background-attachment: fixed;
+    min-height: 100vh;
+    width: 100%;
+}
+
+/* Theme-specific overrides for complete coverage */
+html.theme-light,
+.theme-light {
+    background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 50%, #a5d6a7 100%) !important;
+    background-attachment: fixed !important;
+}
+
+html.theme-dark,
+.theme-dark {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%) !important;
+    background-attachment: fixed !important;
+}
+
+/* Ensure all containers inherit proper background */
+#app, .main-wrapper, main {
+    background: transparent;
+    min-height: inherit;
+}
+
 /* Theme transition effects */
 * {
     transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+html, body {
+    transition: background 0.3s ease, color 0.3s ease;
 }
 
 /* Base theme classes */
@@ -93,8 +143,16 @@
     background-color: var(--bg-primary);
 }
 
+.theme-aware-bg-primary {
+    background-color: var(--bg-primary);
+}
+
 .theme-aware-bg-secondary {
     background-color: var(--bg-secondary);
+}
+
+.theme-aware-bg-tertiary {
+    background-color: var(--bg-tertiary);
 }
 
 .theme-aware-bg-card {
@@ -102,6 +160,10 @@
 }
 
 .theme-aware-text {
+    color: var(--text-primary);
+}
+
+.theme-aware-text-primary {
     color: var(--text-primary);
 }
 
@@ -113,12 +175,207 @@
     color: var(--text-muted);
 }
 
+.theme-aware-text-success {
+    color: var(--color-success);
+}
+
+.theme-aware-text-warning {
+    color: var(--color-warning);
+}
+
+.theme-aware-text-danger {
+    color: var(--color-danger);
+}
+
+.theme-aware-text-info {
+    color: var(--color-info);
+}
+
 .theme-aware-border {
     border-color: var(--border-primary);
 }
 
+.theme-aware-border-top {
+    border-top-color: var(--border-primary);
+}
+
+.theme-aware-border-secondary {
+    border-color: var(--border-secondary);
+}
+
 .theme-aware-shadow {
     box-shadow: var(--shadow-md);
+}
+
+/* Hover variants */
+.hover\:theme-aware-bg-secondary:hover {
+    background-color: var(--bg-secondary);
+}
+
+.hover\:theme-aware-bg-tertiary:hover {
+    background-color: var(--bg-tertiary);
+}
+
+/* Utility classes for common patterns */
+.theme-aware-table {
+    background-color: var(--bg-card);
+    color: var(--text-primary);
+    border-color: var(--border-primary);
+}
+
+.theme-aware-table thead th {
+    background-color: var(--bg-tertiary);
+    color: var(--text-secondary);
+    border-color: var(--border-primary);
+}
+
+.theme-aware-table tbody tr {
+    border-color: var(--border-primary);
+}
+
+.theme-aware-table tbody tr:hover {
+    background-color: var(--bg-secondary);
+}
+
+/* Enhanced theme-aware patterns */
+.theme-aware-container {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+}
+
+.theme-aware-card-container {
+    background-color: var(--bg-card);
+    color: var(--text-primary);
+    border: 1px solid var(--border-primary);
+    box-shadow: var(--shadow-md);
+}
+
+/* Force theme application for common Bootstrap/Tailwind classes */
+.card, .bg-white {
+    background-color: var(--bg-card) !important;
+    color: var(--text-primary) !important;
+    border-color: var(--border-primary) !important;
+}
+
+.table {
+    background-color: var(--bg-card) !important;
+    color: var(--text-primary) !important;
+}
+
+.table thead th {
+    background-color: var(--bg-tertiary) !important;
+    color: var(--text-secondary) !important;
+    border-color: var(--border-primary) !important;
+}
+
+.table tbody tr {
+    border-color: var(--border-primary) !important;
+}
+
+.table tbody tr:hover {
+    background-color: var(--bg-secondary) !important;
+}
+
+/* Container overrides */
+.container, .container-fluid {
+    background: transparent !important;
+}
+
+/* Main layout elements */
+.main-wrapper {
+    background: transparent !important;
+    color: var(--text-primary) !important;
+}
+
+.main-content {
+    background: transparent !important;
+    color: var(--text-primary) !important;
+}
+
+body.bg-light {
+    background: var(--bg-page) !important;
+    color: var(--text-primary) !important;
+}
+
+/* Common container classes */
+.py-6 {
+    background: transparent !important;
+}
+
+/* Force override for common patterns */
+.max-w-4xl, .max-w-7xl, .w-full {
+    background: transparent !important;
+}
+
+/* Content sections */
+.overflow-x-auto {
+    background: transparent !important;
+}
+
+/* Ensure all divs inherit theme colors properly */
+div {
+    color: inherit;
+}
+
+/* Main layout elements */
+.main-wrapper {
+    background: transparent !important;
+    color: var(--text-primary) !important;
+}
+
+.main-content {
+    background: transparent !important;
+    color: var(--text-primary) !important;
+}
+
+body.bg-light {
+    background: var(--bg-page) !important;
+    color: var(--text-primary) !important;
+}
+
+/* Alert components */
+.alert {
+    background-color: var(--bg-card) !important;
+    color: var(--text-primary) !important;
+    border-color: var(--border-primary) !important;
+}
+
+.alert-success {
+    background-color: rgba(var(--color-success-rgb, 5, 150, 105), 0.1) !important;
+    color: var(--color-success) !important;
+    border-color: var(--color-success) !important;
+}
+
+.alert-danger {
+    background-color: rgba(var(--color-danger-rgb, 220, 38, 38), 0.1) !important;
+    color: var(--color-danger) !important;
+    border-color: var(--color-danger) !important;
+}
+
+.alert-warning {
+    background-color: rgba(var(--color-warning-rgb, 217, 119, 6), 0.1) !important;
+    color: var(--color-warning) !important;
+    border-color: var(--color-warning) !important;
+}
+
+.alert-info {
+    background-color: rgba(var(--color-info-rgb, 8, 145, 178), 0.1) !important;
+    color: var(--color-info) !important;
+    border-color: var(--color-info) !important;
+}
+
+/* Form elements */
+.form-control, .form-select, input, textarea, select {
+    background-color: var(--bg-card) !important;
+    color: var(--text-primary) !important;
+    border-color: var(--border-primary) !important;
+}
+
+.form-control:focus, .form-select:focus, input:focus, textarea:focus, select:focus {
+    background-color: var(--bg-card) !important;
+    color: var(--text-primary) !important;
+    border-color: var(--color-primary) !important;
+    box-shadow: 0 0 0 0.2rem rgba(var(--color-primary-rgb), 0.25) !important;
 }
 
 /* ===== ANIMATIONS ===== */
@@ -1212,7 +1469,7 @@ body {
 main.main-content {
     margin-left: 0;
     padding: 24px;
-    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    background: transparent;
     min-height: calc(100vh - 280px);
     transition: all 0.3s ease;
 }
@@ -1494,7 +1751,7 @@ main.main-content {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    background: transparent;
     transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -1503,6 +1760,7 @@ main.main-content {
     flex: 1;
     padding: 24px;
     max-width: 100%;
+    background: transparent;
 }
 
 /* ===== ENHANCED PAGE STYLING ===== */
@@ -1535,16 +1793,17 @@ main.main-content {
 
 /* Enhanced Cards */
 .enhanced-card {
-    background: rgba(255, 255, 255, 0.95);
+    background: var(--bg-card);
     backdrop-filter: blur(10px);
     border-radius: 12px;
     padding: 24px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(22, 101, 52, 0.05);
+    box-shadow: var(--shadow-md);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    border: 1px solid rgba(22, 101, 52, 0.1);
+    border: 1px solid var(--border-primary);
     position: relative;
     overflow: hidden;
     animation: fadeIn 0.6s ease;
+    color: var(--text-primary);
 }
 
 .enhanced-card::before {
@@ -1554,7 +1813,7 @@ main.main-content {
     left: 0;
     right: 0;
     height: 4px;
-    background: linear-gradient(90deg, #166534 0%, #15803d 50%, #166534 100%);
+    background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-primary-light) 50%, var(--color-primary) 100%);
     background-size: 200% 100%;
     opacity: 0;
     transition: opacity 0.3s ease;
@@ -1562,7 +1821,7 @@ main.main-content {
 
 .enhanced-card:hover {
     transform: translateY(-4px);
-    box-shadow: 0 8px 24px rgba(22, 101, 52, 0.15);
+    box-shadow: var(--shadow-lg);
 }
 
 .enhanced-card:hover::before {
@@ -1572,16 +1831,17 @@ main.main-content {
 
 /* Stat Cards */
 .stat-card {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(249, 250, 251, 0.9) 100%);
+    background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-secondary) 100%);
     backdrop-filter: blur(10px);
     border-radius: 12px;
     padding: 20px;
-    box-shadow: 0 4px 12px rgba(22, 101, 52, 0.1);
+    box-shadow: var(--shadow-md);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    border: 1px solid rgba(22, 101, 52, 0.1);
+    border: 1px solid var(--border-primary);
     position: relative;
     overflow: hidden;
     animation: fadeIn 0.6s ease;
+    color: var(--text-primary);
 }
 
 .stat-card::before {
@@ -1597,8 +1857,8 @@ main.main-content {
 
 .stat-card:hover {
     transform: translateY(-4px) scale(1.02);
-    box-shadow: 0 12px 28px rgba(22, 101, 52, 0.2);
-    border-color: rgba(22, 101, 52, 0.2);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--border-secondary);
 }
 
 .stat-card-icon {
@@ -1637,17 +1897,18 @@ main.main-content {
 .enhanced-table {
     width: 100%;
     border-collapse: collapse;
-    background: rgba(255, 255, 255, 0.95);
+    background: var(--bg-card);
     backdrop-filter: blur(10px);
     border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0 4px 12px rgba(22, 101, 52, 0.1);
-    border: 1px solid rgba(22, 101, 52, 0.1);
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--border-primary);
+    color: var(--text-primary);
 }
 
 .enhanced-table thead {
-    background: linear-gradient(135deg, #166534 0%, #15803d 100%);
-    color: #ffffff;
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
+    color: var(--text-inverse);
 }
 
 .enhanced-table thead th {
@@ -1657,21 +1918,22 @@ main.main-content {
     font-size: 14px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    color: var(--text-inverse);
 }
 
 .enhanced-table tbody tr {
-    border-bottom: 1px solid #e5e7eb;
+    border-bottom: 1px solid var(--border-primary);
     transition: all 0.2s ease;
 }
 
 .enhanced-table tbody tr:hover {
-    background: linear-gradient(90deg, rgba(22, 101, 52, 0.05) 0%, transparent 100%);
+    background: var(--bg-secondary);
     transform: scale(1.01);
 }
 
 .enhanced-table tbody td {
     padding: 16px 20px;
-    color: #4b5563;
+    color: var(--text-primary);
     font-size: 14px;
 }
 
@@ -2346,4 +2608,64 @@ main.main-content {
 /* Border Top Theme Aware */
 .theme-aware-border-top {
     border-top: 1px solid var(--color-border);
+}
+
+/* ===== AUTOMATIC DARK MODE TEXT COLOR MAPPINGS ===== */
+/* Map common gray text colors to theme-aware equivalents */
+[data-theme="dark"] .text-gray-900,
+[data-theme="dark"] .text-gray-800 {
+    color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] .text-gray-700,
+[data-theme="dark"] .text-gray-600 {
+    color: var(--text-secondary) !important;
+}
+
+[data-theme="dark"] .text-gray-500,
+[data-theme="dark"] .text-gray-400 {
+    color: var(--text-muted) !important;
+}
+
+/* Map background colors to theme-aware equivalents */
+[data-theme="dark"] .bg-white {
+    background-color: var(--bg-card) !important;
+}
+
+[data-theme="dark"] .bg-gray-50,
+[data-theme="dark"] .bg-gray-100 {
+    background-color: var(--bg-secondary) !important;
+}
+
+[data-theme="dark"] .bg-gray-200 {
+    background-color: var(--bg-tertiary) !important;
+}
+
+/* Map border colors */
+[data-theme="dark"] .border-gray-200,
+[data-theme="dark"] .border-gray-300 {
+    border-color: var(--border-primary) !important;
+}
+
+[data-theme="dark"] .border-gray-100 {
+    border-color: var(--border-light) !important;
+}
+
+[data-theme="dark"] .divide-gray-200 > * + * {
+    border-color: var(--border-primary) !important;
+}
+
+/* Hover states */
+[data-theme="dark"] .hover\:bg-gray-50:hover,
+[data-theme="dark"] .hover\:bg-gray-100:hover {
+    background-color: var(--bg-tertiary) !important;
+}
+
+[data-theme="dark"] .hover\:text-gray-900:hover {
+    color: var(--text-primary) !important;
+}
+
+/* Focus states */
+[data-theme="dark"] .focus\:ring-gray-500:focus {
+    --tw-ring-color: var(--color-secondary) !important;
 }

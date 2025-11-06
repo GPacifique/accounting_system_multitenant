@@ -36,15 +36,15 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {{-- Contact Information --}}
                     <div>
-                        <h3 class="text-lg font-semibold text-gray-700 border-b pb-2 mb-4">Contact Information</h3>
+                        <h3 class="text-lg font-semibold theme-aware-text-secondary border-b pb-2 mb-4">Contact Information</h3>
                         <dl class="space-y-4">
                             <div class="flex flex-col">
                                 <dt class="text-sm font-medium theme-aware-text-muted">Contact Person</dt>
-                                <dd class="mt-1 text-md text-gray-900">{{ $client->contact_person }}</dd>
+                                <dd class="mt-1 text-md theme-aware-text">{{ $client->contact_person }}</dd>
                             </div>
                             <div class="flex flex-col">
                                 <dt class="text-sm font-medium theme-aware-text-muted">Email Address</dt>
-                                <dd class="mt-1 text-md text-gray-900">
+                                <dd class="mt-1 text-md theme-aware-text">
                                     @if($client->email)
                                         <a href="mailto:{{ $client->email }}" class="text-indigo-600 hover:underline">{{ $client->email }}</a>
                                     @else
@@ -54,30 +54,30 @@
                             </div>
                             <div class="flex flex-col">
                                 <dt class="text-sm font-medium theme-aware-text-muted">Phone Number</dt>
-                                <dd class="mt-1 text-md text-gray-900">{{ $client->phone }}</dd>
+                                <dd class="mt-1 text-md theme-aware-text">{{ $client->phone }}</dd>
                             </div>
                             <div class="flex flex-col">
                                 <dt class="text-sm font-medium theme-aware-text-muted">Address</dt>
-                                <dd class="mt-1 text-md text-gray-900">{{ $client->address ?? 'N/A' }}</dd>
+                                <dd class="mt-1 text-md theme-aware-text">{{ $client->address ?? 'N/A' }}</dd>
                             </div>
                         </dl>
                     </div>
 
                     {{-- Metadata --}}
                     <div>
-                        <h3 class="text-lg font-semibold text-gray-700 border-b pb-2 mb-4">System Information</h3>
+                        <h3 class="text-lg font-semibold theme-aware-text-secondary border-b pb-2 mb-4">System Information</h3>
                         <dl class="space-y-4">
                             <div class="flex flex-col">
                                 <dt class="text-sm font-medium theme-aware-text-muted">Client ID</dt>
-                                <dd class="mt-1 text-md text-gray-900">#{{ str_pad($client->id, 5, '0', STR_PAD_LEFT) }}</dd>
+                                <dd class="mt-1 text-md theme-aware-text">#{{ str_pad($client->id, 5, '0', STR_PAD_LEFT) }}</dd>
                             </div>
                             <div class="flex flex-col">
                                 <dt class="text-sm font-medium theme-aware-text-muted">Date Created</dt>
-                                <dd class="mt-1 text-md text-gray-900">{{ $client->created_at->format('d M Y, H:i A') }}</dd>
+                                <dd class="mt-1 text-md theme-aware-text">{{ $client->created_at->format('d M Y, H:i A') }}</dd>
                             </div>
                             <div class="flex flex-col">
                                 <dt class="text-sm font-medium theme-aware-text-muted">Last Updated</dt>
-                                <dd class="mt-1 text-md text-gray-900">{{ $client->updated_at->format('d M Y, H:i A') }}</dd>
+                                <dd class="mt-1 text-md theme-aware-text">{{ $client->updated_at->format('d M Y, H:i A') }}</dd>
                             </div>
                         </dl>
                     </div>
@@ -106,7 +106,7 @@
         @apply inline-flex items-center px-4 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700 active:bg-red-900 focus:outline-none focus:border-red-900 focus:ring ring-red-300 disabled:opacity-25 transition ease-in-out duration-150;
     }
     .btn-secondary {
-        @apply inline-flex items-center px-4 py-2 bg-gray-200 border border-gray-300 rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest hover:bg-gray-300 active:bg-gray-400 focus:outline-none focus:border-gray-400 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150;
+        @apply inline-flex items-center px-4 py-2 theme-aware-bg-tertiary border theme-aware-border rounded-md font-semibold text-xs theme-aware-text-secondary uppercase tracking-widest hover:bg-gray-300 active:bg-gray-400 focus:outline-none focus:theme-aware-border-secondary focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150;
     }
 </style>
 @endpush
