@@ -209,7 +209,6 @@
                             @php $cur = old('contract_currency', 'RWF'); @endphp
                             <option value="RWF" {{ $cur === 'RWF' ? 'selected' : '' }}>🇷🇼 RWF</option>
                             <option value="USD" {{ $cur === 'USD' ? 'selected' : '' }}>💵 USD</option>
-                            <option value="RWF" {{ $cur === 'RWF' ? 'selected' : '' }}>🇷🇼 RWF</option>
                             <option value="EUR" {{ $cur === 'EUR' ? 'selected' : '' }}>💶 EUR</option>
                         </select>
                     </div>
@@ -242,7 +241,6 @@
                                 @php $paidCur = old('amount_paid_currency', $cur ?? 'RWF'); @endphp
                                 <option value="RWF" {{ $paidCur === 'RWF' ? 'selected' : '' }}>🇷🇼 RWF</option>
                                 <option value="USD" {{ $paidCur === 'USD' ? 'selected' : '' }}>💵 USD</option>
-                                <option value="RWF" {{ $paidCur === 'RWF' ? 'selected' : '' }}>🇷🇼 RWF</option>
                                 <option value="EUR" {{ $paidCur === 'EUR' ? 'selected' : '' }}>💶 EUR</option>
                             </select>
                         </div>
@@ -269,7 +267,6 @@
                                 @php $remCur = old('amount_remaining_currency', $cur ?? 'RWF'); @endphp
                                 <option value="RWF" {{ $remCur === 'RWF' ? 'selected' : '' }}>🇷🇼 RWF</option>
                                 <option value="USD" {{ $remCur === 'USD' ? 'selected' : '' }}>💵 USD</option>
-                                <option value="RWF" {{ $remCur === 'RWF' ? 'selected' : '' }}>🇷🇼 RWF</option>
                                 <option value="EUR" {{ $remCur === 'EUR' ? 'selected' : '' }}>💶 EUR</option>
                             </select>
                         </div>
@@ -367,6 +364,37 @@
     /* Hover effects */
     select option {
         padding: 8px;
+    }
+    
+    /* Currency dropdown improvements */
+    select[id*="currency"] {
+        min-width: 85px;
+        max-width: 110px;
+        z-index: 10;
+        background: white;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    /* Ensure input text doesn't get covered by dropdown */
+    input[type="number"] {
+        padding-right: 8rem !important;
+    }
+    
+    /* Mobile responsive adjustments for currency dropdowns */
+    @media (max-width: 640px) {
+        select[id*="currency"] {
+            position: static !important;
+            margin-top: 0.5rem;
+            width: 100%;
+        }
+        
+        input[type="number"] {
+            padding-right: 1rem !important;
+        }
+        
+        .relative {
+            display: block;
+        }
     }
     
     /* Custom scrollbar for textarea */
