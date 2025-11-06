@@ -228,40 +228,56 @@
             }
         }
     </style>
+<!-- jQuery (keep for other components) -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
 <!-- DataTables CSS -->
 <link rel="stylesheet" href="https://cdn.datatables.net/2.0.7/css/dataTables.dataTables.min.css">
-<!-- jQuery (required for DataTables) -->
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
 <!-- DataTables JS -->
 <script src="https://cdn.datatables.net/2.0.7/js/dataTables.min.js"></script>
 
 <script>
     $(document).ready(function () {
-        $('#myTable').DataTable({
-            pageLength: 5,
-            responsive: true,
+        // Initialize DataTable for any tables with the 'data-table' class
+        $('.data-table').each(function() {
+            if (!$.fn.DataTable.isDataTable(this)) {
+                $(this).DataTable({
+                    pageLength: 10,
+                    responsive: true,
+                    language: {
+                        search: "Search:",
+                        lengthMenu: "Show _MENU_ entries",
+                        info: "Showing _START_ to _END_ of _TOTAL_ entries",
+                        paginate: {
+                            first: "First",
+                            last: "Last",
+                            next: "Next",
+                            previous: "Previous"
+                        }
+                    }
+                });
+            }
         });
+        
+        // Initialize specific tables by ID with safety checks
+        if ($('#accountsTable').length && !$.fn.DataTable.isDataTable('#accountsTable')) {
+            $('#accountsTable').DataTable({
+                pageLength: 10,
+                responsive: true
+            });
+        }
+        
+        if ($('#myTable').length && !$.fn.DataTable.isDataTable('#myTable')) {
+            $('#myTable').DataTable({
+                pageLength: 5,
+                responsive: true
+            });
+        }
     });
 </script>
-<!-- CSS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-datatables@9.0.0/dist/style.css">
 
-<!-- JS -->
-<script src="https://cdn.jsdelivr.net/npm/simple-datatables@9.0.0" defer></script>
 @vite(['resources/css/app.css', 'resources/js/app.js'])
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-    const table = document.querySelector("#myTable");
-    if (table) {
-        new simpleDatatables.DataTable(table, {
-            searchable: true,
-            fixedHeight: true,
-            perPage: 5
-        });
-    }
-});
-</script>
 
 
     @stack('styles')

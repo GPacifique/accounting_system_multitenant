@@ -139,7 +139,7 @@
         </div>
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <table class="table table-bordered" id="accountsTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
                             <th>Code</th>
@@ -267,14 +267,34 @@
 @push('scripts')
 <script>
 $(document).ready(function() {
-    // Initialize DataTable features if needed
-    $('#dataTable').DataTable({
-        "paging": false,
-        "searching": false,
-        "ordering": true,
-        "info": false,
-        "responsive": true
-    });
+    // Only initialize DataTable if there are rows with data
+    var tableBody = $('#accountsTable tbody tr');
+    var hasData = tableBody.length > 0 && !tableBody.first().find('td[colspan]').length;
+    
+    if (hasData) {
+        // Initialize DataTable features
+        $('#accountsTable').DataTable({
+            "paging": false,           // Disable DataTables pagination (using Laravel pagination)
+            "searching": false,        // Disable DataTables search (using custom search form)
+            "ordering": true,          // Enable column sorting
+            "info": false,            // Disable DataTables info (using custom info)
+            "responsive": true,       // Enable responsive design
+            "autoWidth": false,       // Prevent auto width calculation issues
+            "columnDefs": [
+                { "orderable": false, "targets": [8] }, // Disable sorting on Actions column
+                { "className": "text-center", "targets": [6, 7] }, // Center align status and date columns
+                { "className": "text-end", "targets": [4] } // Right align balance column
+            ],
+            "order": [[1, "asc"]], // Default sort by Account Name
+            "language": {
+                "emptyTable": "No accounts available",
+                "zeroRecords": "No accounts found matching your criteria"
+            }
+        });
+    } else {
+        // If no data, just add some basic styling without DataTables
+        console.log('No data available for DataTables initialization');
+    }
 });
 </script>
 @endpush

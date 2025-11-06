@@ -362,4 +362,36 @@ class DashboardController extends Controller
             'projectsCount', 'projectsThisMonth', 'recentProjects'
         ));
     }
+
+    /**
+     * Display advanced analytics dashboard
+     */
+    public function analytics()
+    {
+        $user = Auth::user();
+        
+        // Check if user has permissions to view analytics
+        if (!$user->hasRole(['super-admin', 'admin', 'manager']) && 
+            !$user->hasPermission('analytics.view')) {
+            return redirect()->route('dashboard')
+                ->with('error', 'You do not have permission to view analytics.');
+        }
+        
+        // Get enhanced analytics data
+        $analyticsData = [
+            'financialSummary' => $this->statsService->getFinancialSummary(),
+            'quickStats' => $this->statsService->getQuickStats(),
+            'dailyStats' => $this->statsService->getDailyStats(30),
+            'weeklyStats' => $this->statsService->getWeeklyStats(12),
+            'cashFlowAnalysis' => $this->statsService->getCashFlowAnalysis(6),
+            'topProjects' => $this->statsService->getTopProjects(10),
+            'incomeByCategory' => $this->statsService->getIncomeByCategory(),
+            'expenseByCategory' => $this->statsService->getExpenseByCategory(),
+            'expenseByMethod' => $this->statsService->getExpenseByMethod(),
+            'paymentStatusBreakdown' => $this->statsService->getPaymentStatusBreakdown(),
+            'outstandingReceivables' => $this->statsService->getOutstandingReceivables(),
+        ];
+        
+        return view('dashboard.analytics', $analyticsData);
+    }
 }
