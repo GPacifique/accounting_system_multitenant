@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Income;
 use App\Models\Project;
 use App\Traits\Downloadable;
@@ -102,6 +103,11 @@ class IncomeController extends Controller
      */
     public function exportCsv(Request $request)
     {
+        // Check permission for income export
+        if (!Auth::user()->can('incomes.export')) {
+            abort(403, 'You do not have permission to export incomes.');
+        }
+        
         $filename = $request->get('filename', 'incomes');
         
         $incomes = Income::with('project')->latest()->get();
@@ -139,6 +145,11 @@ class IncomeController extends Controller
      */
     public function exportPdf(Request $request)
     {
+        // Check permission for income export
+        if (!Auth::user()->can('incomes.export')) {
+            abort(403, 'You do not have permission to export incomes.');
+        }
+        
         $filename = $request->get('filename', 'incomes');
         
         $incomes = Income::with('project')->latest()->get();

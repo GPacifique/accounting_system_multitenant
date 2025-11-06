@@ -87,6 +87,11 @@ Route::middleware(['auth', 'tenant.data'])->group(function () {
     // Financial Management
     Route::resource('payments', PaymentController::class);
     Route::resource('incomes', IncomeController::class);
+    
+    // Incomes export routes
+    Route::get('/incomes/export/csv', [IncomeController::class, 'exportCsv'])->name('incomes.export.csv');
+    Route::get('/incomes/export/pdf', [IncomeController::class, 'exportPdf'])->name('incomes.export.pdf');
+    
     Route::resource('expenses', ExpenseController::class);
     
     // Project Management with role-based access
@@ -121,6 +126,14 @@ Route::middleware(['auth', 'tenant.data'])->group(function () {
     
     // Human Resources Management
     Route::resource('workers', WorkerController::class);
+    
+    // Workers export routes
+    Route::get('/workers/export/csv', [WorkerController::class, 'exportCsv'])->name('workers.export.csv');
+    Route::get('/workers/export/pdf', [WorkerController::class, 'exportPdf'])->name('workers.export.pdf');
+    
+    // Workers bulk payments route
+    Route::post('/workers/payments/bulk', [WorkerController::class, 'bulkStorePayments'])->name('workers.payments.bulk');
+    
     Route::resource('employees', EmployeeController::class);
     
     // User management within tenant

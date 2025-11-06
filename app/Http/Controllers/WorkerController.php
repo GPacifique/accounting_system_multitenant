@@ -8,6 +8,7 @@ use App\Models\Worker;
 use App\Traits\Downloadable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
+use Illuminate\Support\Facades\Auth;
 
 
 class WorkerController extends Controller
@@ -102,6 +103,11 @@ return view('workers.edit', compact('worker'));
 // BULK store daily payments for selected workers
 public function bulkStorePayments(Request $request)
 {
+    // Check permission for worker payments
+    if (!Auth::user()->can('workers.payments')) {
+        abort(403, 'You do not have permission to process worker payments.');
+    }
+    
 	$data = $request->validate([
 		'paid_on' => 'required|date',
 		'worker_ids' => 'required|array',
@@ -181,6 +187,11 @@ return redirect()->route('workers.index')->with('success', 'Worker deleted.');
  */
 public function exportCsv(Request $request)
 {
+    // Check permission for worker export
+    if (!Auth::user()->can('workers.export')) {
+        abort(403, 'You do not have permission to export workers.');
+    }
+    
     $filename = $request->get('filename', 'workers');
     
     $workers = Worker::latest()->get();
@@ -216,6 +227,11 @@ public function exportCsv(Request $request)
  */
 public function exportPdf(Request $request)
 {
+    // Check permission for worker export
+    if (!Auth::user()->can('workers.export')) {
+        abort(403, 'You do not have permission to export workers.');
+    }
+    
     $filename = $request->get('filename', 'workers');
     
     $workers = Worker::latest()->get();
