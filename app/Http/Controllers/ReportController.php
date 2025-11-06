@@ -265,6 +265,11 @@ class ReportController extends Controller
      */
     public function exportCsv(Request $request)
     {
+        // Check permission for report export
+        if (!Auth::user()->can('reports.export')) {
+            abort(403, 'You do not have permission to export reports.');
+        }
+        
         $filename = $request->get('filename', 'financial_reports');
         $date = $request->get('date', Carbon::today()->toDateString());
         
@@ -349,6 +354,11 @@ class ReportController extends Controller
      */
     public function exportPdf(Request $request)
     {
+        // Check permission for report export
+        if (!Auth::user()->can('reports.export')) {
+            abort(403, 'You do not have permission to export reports.');
+        }
+        
         $filename = $request->get('filename', 'financial_reports');
         $date = $request->get('date', Carbon::today()->toDateString());
         
