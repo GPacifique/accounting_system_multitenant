@@ -95,6 +95,10 @@ Route::middleware(['auth', 'tenant.data'])->group(function () {
         // Task management routes
     Route::resource('tasks', TaskController::class);
     
+    // Task export routes
+    Route::get('/tasks/export/csv', [TaskController::class, 'exportCsv'])->name('tasks.export.csv');
+    Route::get('/tasks/export/pdf', [TaskController::class, 'exportPdf'])->name('tasks.export.pdf');
+    
     // Order management routes  
     Route::resource('orders', OrderController::class);
     

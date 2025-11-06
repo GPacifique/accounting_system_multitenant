@@ -174,6 +174,11 @@ class TaskController extends Controller
      */
     public function exportCsv(Request $request)
     {
+        // Check permission for task export (using tasks.view)
+        if (!Auth::user()->can('tasks.view')) {
+            abort(403, 'You do not have permission to export tasks.');
+        }
+        
         $filename = $request->get('filename', 'tasks');
         
         $tasks = Task::with(['project', 'assignedTo', 'createdBy'])->get();
@@ -218,6 +223,11 @@ class TaskController extends Controller
      */
     public function exportPdf(Request $request)
     {
+        // Check permission for task export (using tasks.view)
+        if (!Auth::user()->can('tasks.view')) {
+            abort(403, 'You do not have permission to export tasks.');
+        }
+        
         $filename = $request->get('filename', 'tasks');
         
         $tasks = Task::with(['project', 'assignedTo', 'createdBy'])->get();
