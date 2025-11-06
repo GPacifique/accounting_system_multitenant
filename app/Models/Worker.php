@@ -4,13 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\BelongsToTenant;
 
 class Worker extends Model
 {
-    use HasFactory;
+    use HasFactory, BelongsToTenant;
 
     // Fillable fields for mass assignment
     protected $fillable = [
+        'tenant_id',
         // base identity fields (actual controller uses these extensively)
         'first_name','last_name','email','phone','position','status','notes',
         // monetary fields (stored as cents + currency)

@@ -13,6 +13,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
+$user = Auth::user();
 $today = Carbon::today();
 $yesterday = $today->copy()->subDay();
 $startOfWeek = $today->copy()->startOfWeek();
@@ -302,6 +303,31 @@ for ($i = 5; $i >= 0; $i--) {
         <div>
             <h1 class="text-2xl md:text-3xl font-semibold leading-tight theme-aware-text">Dashboard</h1>
             <p class="text-sm theme-aware-text-muted mt-1">Financial overview, payments & quick actions</p>
+        </div>
+        <div class="flex items-center gap-3">
+            <div class="text-right">
+                <div class="text-sm theme-aware-text-muted">Welcome back,</div>
+                <div class="font-semibold theme-aware-text">{{ Auth::user()->name }}</div>
+                <div class="text-xs px-2 py-1 rounded theme-aware-bg-secondary theme-aware-text-muted">
+                    @if(Auth::user()->hasRole('super-admin'))
+                        Super Administrator
+                    @elseif(Auth::user()->hasRole('admin'))
+                        Administrator
+                    @elseif(Auth::user()->hasRole('manager'))
+                        Manager
+                    @elseif(Auth::user()->hasRole('accountant'))
+                        Accountant
+                    @elseif(Auth::user()->hasRole('employee'))
+                        Employee
+                    @elseif(Auth::user()->hasRole('client'))
+                        Client
+                    @elseif(Auth::user()->hasRole('viewer'))
+                        Viewer
+                    @else
+                        User
+                    @endif
+                </div>
+            </div>
         </div>
     </div>
 
@@ -599,12 +625,12 @@ for ($i = 5; $i >= 0; $i--) {
     </div>
     @endif
 
-    {{-- ACCOUNTANT: WORKER PAYMENTS SUMMARY --}}
-    @role('accountant')
+    {{-- ACCOUNTANT & ADMIN: WORKER PAYMENTS SUMMARY --}}
+    @if($user->hasAnyRole(['admin', 'accountant']))
     <div class="bg-gradient-to-r from-sky-50 to-blue-50 rounded-lg theme-aware-shadow p-5 mb-6 border border-sky-200">
         <h3 class="font-semibold theme-aware-text mb-4 flex items-center">
             <span class="bg-sky-500 text-white rounded-full w-7 h-7 flex items-center justify-center mr-2 text-sm">💼</span>
-            Worker Payments — Accountant View
+            Worker Payments — {{ $user->hasRole('admin') ? 'Admin' : 'Accountant' }} View
         </h3>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
@@ -685,7 +711,7 @@ for ($i = 5; $i >= 0; $i--) {
             </div>
         </div>
     </div>
-    @endrole
+    @endif
 
     {{-- ORDERS & CLIENTS STATS --}}
     @if($totalOrders > 0 || $totalClients > 0)

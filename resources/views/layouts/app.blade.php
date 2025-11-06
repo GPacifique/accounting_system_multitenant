@@ -428,6 +428,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
 <!-- Theme Management Script -->
 <script src="{{ asset('js/theme.js') }}"></script>
+
+<!-- Enhanced Sidebar Script -->
+<script src="{{ asset('js/enhanced-sidebar.js') }}"></script>
 <!-- Chart.js Theme Script -->
 <script src="{{ asset('js/chart-theme.js') }}"></script>
 </body>

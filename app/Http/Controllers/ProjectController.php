@@ -4,113 +4,256 @@ namespace App\Http\Controllers;
 
 use App\Models\Client;
 use App\Models\Project;
+use App\Services\BusinessQueryService;
 use App\Traits\Downloadable;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProjectController extends Controller
 {
     use Downloadable;
-    // List projects
+    
+    protected BusinessQueryService $queryService;
+
+    public function __construct(BusinessQueryService $queryService)
+    {
+        $this->middleware('auth');
+        $this->middleware('tenant.data');
+        $this->queryService = $queryService;
+    }
+
+    // List projects with role-based filtering
     public function index(Request $request)
     {
         $q = trim((string) $request->get('q'));
 
-        $projectsQuery = Project::with('client');
+        // Use BusinessQueryService for role-based filtering
+        $projectsQuery = $this->queryService->buildRoleBasedQuery('projects');
+        
         if ($q !== '') {
-            $projectsQuery->where(function ($p) use ($q) {
-                $p->where('name', 'like', "%{$q}%")
-                  ->orWhere('start_date', 'like', "%{$q}%")
-                  ->orWhere('end_date', 'like', "%{$q}%");
-            })->orWhereHas('client', function ($c) use ($q) {
-                $c->where('name', 'like', "%{$q}%");
+            $projectsQuery->where(function ($query) use ($q) {
+                $query->where('name', 'like', "%{$q}%")
+                      ->orWhere('description', 'like', "%{$q}%")
+                      ->orWhere('project_code', 'like', "%{$q}%");
             });
         }
 
+        // Apply additional filters
+        if ($request->filled('status')) {
+            $projectsQuery->where('status', $request->status);
+        }
+
+        if ($request->filled('client_id')) {
+            $projectsQuery->where('client_id', $request->client_id);
+        }
+
+        if ($request->filled('manager_id')) {
+            $projectsQuery->where('manager_id', $request->manager_id);
+        }
+
         $projects = $projectsQuery->latest()->paginate(15)->appends($request->query());
-        return view('projects.index', compact('projects'));
+
+        // Get statistics with role-based access
+        $stats = $this->queryService->getDashboardStats()['projects'] ?? [];
+        
+        // Get clients for filter dropdown (role-based)
+        $clients = $this->queryService->buildRoleBasedQuery('clients')->get();
+        
+        // Get managers for filter dropdown (if user has access)
+        $managers = [];
+        if ($this->queryService->canAccessUserData()) {
+            $managers = $this->queryService->buildRoleBasedQuery('users')
+                             ->whereHas('roles', function($q) {
+                                 $q->whereIn('name', ['manager', 'admin']);
+                             })
+                             ->get();
+        }
+
+        return view('projects.index', compact('projects', 'stats', 'clients', 'managers'));
     }
 
     // Show create form
     public function create()
     {
-        $clients = Client::orderBy('name')->get();
-        return view('projects.create', compact('clients'));
+        // Get clients with role-based access
+        $clients = $this->queryService->buildRoleBasedQuery('clients')->orderBy('name')->get();
+        
+        // Get potential managers (if user has access)
+        $managers = [];
+        if ($this->queryService->canAccessUserData()) {
+            $managers = $this->queryService->buildRoleBasedQuery('users')
+                             ->whereHas('roles', function($q) {
+                                 $q->whereIn('name', ['manager', 'admin']);
+                             })
+                             ->orderBy('name')
+                             ->get();
+        }
+        
+        return view('projects.create', compact('clients', 'managers'));
     }
 
-    // Store new project
+    // Store new project with tenant awareness
     public function store(Request $request)
     {
         $validated = $request->validate([
             'client_id'      => 'required|exists:clients,id',
             'name'           => 'required|string|max:255',
+            'project_code'   => 'nullable|string|max:50|unique:projects,project_code,NULL,id,tenant_id,' . app('currentTenant')->id,
+            'description'    => 'nullable|string',
             'start_date'     => 'nullable|date',
             'end_date'       => 'nullable|date|after_or_equal:start_date',
+            'budget'         => 'nullable|numeric|min:0',
             'contract_value' => 'nullable|numeric|min:0',
-            'amount_paid'    => 'nullable|numeric|min:0',
-            'amount_remaining' => 'nullable|numeric|min:0',
-            'status'         => 'nullable|string|in:planned,active,completed,on-hold',
-            'notes'          => 'nullable|string|max:1000',
+            'manager_id'     => 'nullable|exists:users,id',
+            'status'         => 'nullable|string|in:planned,active,completed,on-hold,cancelled',
+            'priority'       => 'nullable|string|in:low,medium,high,urgent',
+            'client_visible' => 'boolean',
+            'notes'          => 'nullable|string',
         ]);
 
-        // Set default values for nullable numeric fields
-        $validated['contract_value'] = $validated['contract_value'] ?? 0;
-        $validated['amount_paid'] = $validated['amount_paid'] ?? 0;
-        $validated['amount_remaining'] = $validated['amount_remaining'] ?? 0;
+        // Add tenant and creator information
+        $validated['tenant_id'] = app('currentTenant')->id;
+        $validated['created_by'] = Auth::id();
         $validated['status'] = $validated['status'] ?? 'planned';
+        $validated['priority'] = $validated['priority'] ?? 'medium';
+
+        // Validate client belongs to current tenant
+        $clientExists = $this->queryService->buildRoleBasedQuery('clients')
+                             ->where('id', $validated['client_id'])
+                             ->exists();
+
+        if (!$clientExists) {
+            return back()->withErrors(['client_id' => 'Invalid client selected.']);
+        }
 
         Project::create($validated);
 
         return redirect()->route('projects.index')
-                         ->with('success', 'Project created successfully.');
+            ->with('success', 'Project created successfully.');
     }
 
-    // Display the specified project.
+    // Display the specified project with role-based access
     public function show(Project $project)
     {
-        $project->load('client', 'incomes');
-        return view('projects.show', compact('project'));
+        // Ensure project belongs to current tenant and user has access
+        $projectData = $this->queryService->buildRoleBasedQuery('projects')
+                            ->where('id', $project->id)
+                            ->first();
+
+        if (!$projectData) {
+            abort(404, 'Project not found or access denied.');
+        }
+
+        $project->load('client');
+
+        // Get project statistics with role-based access
+        $stats = [
+            'total_tasks' => $this->queryService->buildRoleBasedQuery('tasks')
+                                  ->where('project_id', $project->id)
+                                  ->count(),
+            'completed_tasks' => $this->queryService->buildRoleBasedQuery('tasks')
+                                      ->where('project_id', $project->id)
+                                      ->where('status', 'completed')
+                                      ->count(),
+            'total_time' => $this->queryService->buildRoleBasedQuery('time_entries')
+                                 ->where('project_id', $project->id)
+                                 ->sum('hours'),
+            'total_expenses' => $this->queryService->buildRoleBasedQuery('expenses')
+                                     ->where('project_id', $project->id)
+                                     ->sum('amount'),
+        ];
+
+        return view('projects.show', compact('project', 'stats'));
     }
 
-    // Show the form for editing the specified project.
+    // Show the form for editing the specified project
     public function edit(Project $project)
     {
-        $clients = Client::orderBy('name')->get();
-        return view('projects.edit', compact('project', 'clients'));
+        // Ensure project belongs to current tenant and user has access
+        $projectData = $this->queryService->buildRoleBasedQuery('projects')
+                            ->where('id', $project->id)
+                            ->first();
+
+        if (!$projectData) {
+            abort(404, 'Project not found or access denied.');
+        }
+
+        $clients = $this->queryService->buildRoleBasedQuery('clients')->orderBy('name')->get();
+        
+        // Get managers if user has access
+        $managers = [];
+        if ($this->queryService->canAccessUserData()) {
+            $managers = $this->queryService->buildRoleBasedQuery('users')
+                             ->whereHas('roles', function($q) {
+                                 $q->whereIn('name', ['manager', 'admin']);
+                             })
+                             ->orderBy('name')
+                             ->get();
+        }
+
+        return view('projects.edit', compact('project', 'clients', 'managers'));
     }
 
-    // Update the specified project in storage.
+    // Update the specified project with role-based validation
     public function update(Request $request, Project $project)
     {
+        // Ensure project belongs to current tenant and user has access
+        $projectData = $this->queryService->buildRoleBasedQuery('projects')
+                            ->where('id', $project->id)
+                            ->first();
+
+        if (!$projectData) {
+            abort(404, 'Project not found or access denied.');
+        }
+
         $validated = $request->validate([
             'client_id'      => 'required|exists:clients,id',
             'name'           => 'required|string|max:255',
+            'project_code'   => 'nullable|string|max:50|unique:projects,project_code,' . $project->id . ',id,tenant_id,' . app('currentTenant')->id,
+            'description'    => 'nullable|string',
             'start_date'     => 'nullable|date',
             'end_date'       => 'nullable|date|after_or_equal:start_date',
+            'budget'         => 'nullable|numeric|min:0',
             'contract_value' => 'nullable|numeric|min:0',
-            'amount_paid'    => 'nullable|numeric|min:0',
-            'amount_remaining' => 'nullable|numeric|min:0',
-            'notes'          => 'nullable|string|max:1000',
-            'status'         => 'nullable|string|in:planned,active,completed,on-hold',
+            'manager_id'     => 'nullable|exists:users,id',
+            'status'         => 'nullable|string|in:planned,active,completed,on-hold,cancelled',
+            'priority'       => 'nullable|string|in:low,medium,high,urgent',
+            'client_visible' => 'boolean',
+            'notes'          => 'nullable|string',
         ]);
 
-        // Set default values for nullable numeric fields
-        $validated['contract_value'] = $validated['contract_value'] ?? 0;
-        $validated['amount_paid'] = $validated['amount_paid'] ?? 0;
-        $validated['amount_remaining'] = $validated['amount_remaining'] ?? 0;
-
+        $validated['updated_by'] = Auth::id();
         $project->update($validated);
 
-        return redirect()->route('projects.show', $project)
-                         ->with('success', 'Project updated successfully.');
+        return redirect()->route('projects.index')
+            ->with('success', 'Project updated successfully.');
     }
 
-    // Remove the specified project from storage.
+    // Remove the specified project
     public function destroy(Project $project)
     {
+        // Ensure project belongs to current tenant and user has access
+        $projectData = $this->queryService->buildRoleBasedQuery('projects')
+                            ->where('id', $project->id)
+                            ->first();
+
+        if (!$projectData) {
+            abort(404, 'Project not found or access denied.');
+        }
+
+        // Check for dependencies
+        $hasTasks = $this->queryService->buildRoleBasedQuery('tasks')
+                         ->where('project_id', $project->id)
+                         ->exists();
+
+        if ($hasTasks) {
+            return back()->with('error', 'Cannot delete project with existing tasks.');
+        }
+
         $project->delete();
 
         return redirect()->route('projects.index')
-                         ->with('success', 'Project deleted successfully.');
+            ->with('success', 'Project deleted successfully.');
     }
     
     /**

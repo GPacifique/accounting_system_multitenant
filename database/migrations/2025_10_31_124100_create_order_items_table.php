@@ -13,7 +13,7 @@ return new class extends Migration
             Schema::create('order_items', function (Blueprint $table) {
                 $table->id();
                 $table->foreignId('order_id')->constrained()->onDelete('cascade');
-                $table->foreignId('product_id')->nullable()->constrained('products')->onDelete('set null');
+                $table->unsignedBigInteger('product_id')->nullable(); // Create without foreign key first
                 $table->integer('quantity')->default(1);
                 $table->decimal('price', 15, 2)->default(0);
                 $table->timestamps();

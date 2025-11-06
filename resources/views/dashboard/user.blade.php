@@ -40,7 +40,25 @@ use Illuminate\Support\Facades\Auth;
                 <div>
                     <div class="text-sm theme-aware-text-muted">Welcome</div>
                     <div class="text-2xl font-bold mt-1">{{ Auth::user()->name }}</div>
-                    <div class="text-xs theme-aware-text-muted mt-1">Regular User</div>
+                    <div class="text-xs theme-aware-text-muted mt-1">
+                        @if(Auth::user()->hasRole('super-admin'))
+                            Super Administrator
+                        @elseif(Auth::user()->hasRole('admin'))
+                            Administrator
+                        @elseif(Auth::user()->hasRole('manager'))
+                            Manager
+                        @elseif(Auth::user()->hasRole('accountant'))
+                            Accountant
+                        @elseif(Auth::user()->hasRole('employee'))
+                            Employee
+                        @elseif(Auth::user()->hasRole('client'))
+                            Client
+                        @elseif(Auth::user()->hasRole('viewer'))
+                            Viewer
+                        @else
+                            User
+                        @endif
+                    </div>
                 </div>
                 <div class="flex-shrink-0 text-indigo-600 bg-indigo-50 rounded-full p-3">
                     <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/></svg>

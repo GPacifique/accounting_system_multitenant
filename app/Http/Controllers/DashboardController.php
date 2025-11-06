@@ -28,14 +28,14 @@ class DashboardController extends Controller
         $user = Auth::user();
         
         // Check if user has any meaningful permissions
-        if (!$user->hasRole(['admin', 'manager', 'accountant']) && 
+        if (!$user->hasRole(['super-admin', 'admin', 'manager', 'accountant']) && 
             !$user->hasAnyPermission(['projects.create', 'expenses.create', 'users.view', 'payments.create', 'reports.generate'])) {
             // Redirect users with no permissions to welcome page
-            return redirect()->route('welcome.index');
+            return redirect('/')->with('error', 'You need proper permissions to access the dashboard.');
         }
         
-        // Route to appropriate dashboard based on role
-        if ($user->hasRole('admin')) {
+        // Route to appropriate dashboard based on role (prioritize highest privilege)
+        if ($user->hasRole(['super-admin', 'admin'])) {
             return $this->adminDashboard();
         } elseif ($user->hasRole('accountant')) {
             return $this->accountantDashboard();
@@ -79,12 +79,32 @@ class DashboardController extends Controller
         $dailyTotals = [];
         $categories = [];
 
-        // Workers
+        // Workers and Employees
         $totalWorkers = $has('workers') ? Worker::count() : 0;
+        $totalEmployees = class_exists('App\Models\Employee') ? \App\Models\Employee::count() : 0;
+        $totalWorkforce = $totalWorkers + $totalEmployees;
         $activeWorkers = $has('workers', 'status')
             ? Worker::where('status', 'active')->count()
             : $totalWorkers;
         $recentWorkers = $has('workers') ? Worker::latest()->limit(6)->get() : collect();
+
+        // Payroll calculations
+        $totalPayroll = $has('workers', 'salary') ? Worker::sum('salary') : 0;
+        $workersAvgSalary = $totalWorkers > 0 ? $totalPayroll / $totalWorkers : 0;
+        $employeesAvgSalary = class_exists('App\Models\Employee') && $totalEmployees > 0 
+            ? \App\Models\Employee::avg('salary') ?? 0 
+            : 0;
+
+        // Worker payments (using employee_id to identify worker-related payments)
+        $workerPaymentsToday = $has('payments', 'employee_id') 
+            ? Payment::whereDate('created_at', $today)->whereNotNull('employee_id')->sum('amount')
+            : 0;
+        $workerPaymentsThisMonth = $has('payments', 'employee_id')
+            ? Payment::whereBetween('created_at', [$startOfMonth, $endOfToday])->whereNotNull('employee_id')->sum('amount')
+            : 0;
+        $recentWorkerPayments = $has('payments', 'employee_id')
+            ? Payment::whereNotNull('employee_id')->latest()->limit(7)->get()
+            : collect();
 
         // Payments
         $paymentsTotal = $has('payments', 'amount') ? Payment::sum('amount') : 0;
@@ -120,6 +140,18 @@ class DashboardController extends Controller
             : 0;
         $projectsTotal = $has('projects', 'contract_value') ? Project::sum('contract_value') : 0;
         $recentProjects = $has('projects') ? Project::latest()->limit(7)->get() : collect();
+
+        // Clients (using clients table)
+        $totalClients = $has('clients') ? \App\Models\Client::count() : 0;
+        $activeClients = $has('clients', 'status')
+            ? \App\Models\Client::where('status', 'active')->count()
+            : $totalClients;
+        $clientsThisMonth = $has('clients')
+            ? \App\Models\Client::whereBetween('created_at', [$startOfMonth, $endOfToday])->count()
+            : 0;
+
+        // Orders (placeholder - no orders table exists)
+        $totalOrders = 0;
 
         // Project Stats
         $projectStats = collect();
@@ -163,16 +195,19 @@ class DashboardController extends Controller
                 : 0;
         }
 
-        return view('dashboard.admin', compact(
+        return view('dashboard', compact(
             'financialSummary', 'quickStats', 'dailyStats', 'weeklyStats', 'cashFlowAnalysis',
             'incomeByCategory', 'expenseByCategory', 'expenseByMethod', 'topProjects',
             'paymentStatusBreakdown', 'outstandingReceivables', 'dailyTotals', 'categories',
-            'totalWorkers', 'activeWorkers', 'recentWorkers',
+            'totalWorkers', 'totalEmployees', 'totalWorkforce', 'activeWorkers', 'recentWorkers',
+            'totalPayroll', 'workersAvgSalary', 'employeesAvgSalary',
+            'workerPaymentsToday', 'workerPaymentsThisMonth', 'recentWorkerPayments',
             'paymentsTotal', 'paymentsThisMonth', 'recentPayments',
             'recentTransactions', 'transactionsThisMonth',
             'incomesTotal', 'incomesThisMonth', 'recentIncomes',
             'expensesTotal', 'expensesThisMonth', 'recentExpenses',
             'projectsCount', 'projectsThisMonth', 'projectsTotal', 'recentProjects',
+            'totalClients', 'activeClients', 'clientsThisMonth', 'totalOrders',
             'projectStats', 'months', 'paymentsMonthly', 'expensesMonthly', 'incomeMonthly'
         ));
     }

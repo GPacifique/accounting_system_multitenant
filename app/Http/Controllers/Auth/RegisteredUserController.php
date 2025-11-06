@@ -50,21 +50,41 @@ class RegisteredUserController extends Controller
 
         event(new Registered($user));
 
-        // Send welcome email to the new user (if enabled)
-        if (config('notifications.send_welcome_email', true)) {
-            $user->notify(new UserRegistered($user));
-        }
-
-        // Notify all admin users about the new registration (if enabled)
-        if (config('notifications.notify_admins_new_user', true)) {
-            $adminUsers = User::role('admin')->get();
-            if ($adminUsers->isNotEmpty()) {
-                Notification::send($adminUsers, new UserRegistered($user));
+        // Check if there's a current tenant context
+        $currentTenant = app()->bound('currentTenant') ? app('currentTenant') : null;
+        
+        if ($currentTenant) {
+            // Add user to the current tenant with basic user role
+            $user->addToTenant($currentTenant->id, 'user', false);
+            
+            // Send welcome email for this tenant
+            if (config('notifications.send_welcome_email', true)) {
+                $user->notify(new UserRegistered($user));
+            }
+            
+            // Notify tenant admins about the new registration
+            if (config('notifications.notify_admins_new_user', true)) {
+                $tenantAdmins = $currentTenant->users()->wherePivot('is_admin', true)->get();
+                if ($tenantAdmins->isNotEmpty()) {
+                    Notification::send($tenantAdmins, new UserRegistered($user));
+                }
+            }
+        } else {
+            // No tenant context - this might be a super admin or system-level registration
+            // Send welcome email to the new user (if enabled)
+            if (config('notifications.send_welcome_email', true)) {
+                $user->notify(new UserRegistered($user));
             }
         }
 
         Auth::login($user);
 
-        return redirect()->route('welcome.index');
+        // Redirect based on tenant context
+        if ($currentTenant) {
+            return redirect()->route('dashboard');
+        } else {
+            // No tenant context - redirect to tenant selection or welcome page
+            return redirect()->route('welcome.index');
+        }
     }
 }

@@ -19,6 +19,9 @@ class Kernel extends HttpKernel
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             // Baseline security headers
             \App\Http\Middleware\SecurityHeaders::class,
+            // Multitenancy middleware
+            \Spatie\Multitenancy\Http\Middleware\NeedsTenant::class,
+            \App\Http\Middleware\EnsureTenantAccess::class,
         ],
 
         'api' => [
@@ -48,5 +51,13 @@ class Kernel extends HttpKernel
         'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
         'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
         'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
+        
+        // Enhanced Multi-tenant middleware
+        'resolve.tenant' => \App\Http\Middleware\ResolveTenantMiddleware::class,
+        'tenant.scope' => \App\Http\Middleware\TenantDatabaseScopeMiddleware::class,
+        'tenant.security' => \App\Http\Middleware\TenantSecurityMiddleware::class,
+        'tenant.access' => \App\Http\Middleware\EnsureTenantAccess::class,
+        'tenant.auth' => \App\Http\Middleware\TenantAwareAuthentication::class,
+        'tenant.data' => \App\Http\Middleware\TenantDataMiddleware::class,
     ];
 }

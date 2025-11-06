@@ -4,12 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\BelongsToTenant;
 
 class Employee extends Model
 {
-    use HasFactory;
+    use HasFactory, BelongsToTenant;
 
     protected $fillable = [
+        'tenant_id',
         'first_name',
         'last_name',
         'email',
@@ -39,5 +41,13 @@ class Employee extends Model
     public function payments()
     {
         return $this->hasMany(Payment::class);
+    }
+
+    /**
+     * Tenant relationship
+     */
+    public function tenant()
+    {
+        return $this->belongsTo(Tenant::class);
     }
 }

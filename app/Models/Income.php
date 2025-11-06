@@ -7,15 +7,17 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
+use App\Traits\BelongsToTenant;
 
 class Income extends Model
 {
-    use HasFactory;
+    use HasFactory, BelongsToTenant;
 
     /**
      * The attributes that are mass assignable.
      */
     protected $fillable = [
+        'tenant_id',
         'project_id',
         'invoice_number',
         'amount_received',
@@ -94,6 +96,14 @@ class Income extends Model
     public function project(): BelongsTo
     {
         return $this->belongsTo(Project::class, 'project_id', 'id');
+    }
+
+    /**
+     * Income belongs to a Tenant.
+     */
+    public function tenant(): BelongsTo
+    {
+        return $this->belongsTo(Tenant::class);
     }
 
     /**

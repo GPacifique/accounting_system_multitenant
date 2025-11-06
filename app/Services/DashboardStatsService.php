@@ -250,27 +250,32 @@ class DashboardStatsService
             return [];
         }
 
-        return DB::table('projects')
-            ->leftJoin('incomes', 'projects.id', '=', 'incomes.project_id')
-            ->select(
-                'projects.id',
-                'projects.name',
-                DB::raw('COALESCE(SUM(incomes.amount_received), 0) as income'),
-                DB::raw('COALESCE(projects.contract_value, 0) as target'),
-                DB::raw('CASE WHEN projects.contract_value > 0 THEN ROUND((COALESCE(SUM(incomes.amount_received), 0) / projects.contract_value) * 100, 2) ELSE 0 END as completion_percent')
-            )
-            ->groupBy('projects.id', 'projects.name', 'projects.contract_value')
-            ->orderByDesc('income')
-            ->limit($limit)
-            ->get()
-            ->map(fn($item) => [
-                'id' => $item->id,
-                'name' => $item->name,
-                'income' => (float) $item->income,
-                'target' => (float) $item->target,
-                'completion_percent' => (float) $item->completion_percent,
-            ])
-            ->toArray();
+        try {
+            // Use Eloquent models to ensure tenant scoping
+            return \App\Models\Project::withSum('incomes', 'amount_received')
+                ->select('id', 'name', 'contract_value')
+                ->orderByDesc('incomes_sum_amount_received')
+                ->limit($limit)
+                ->get()
+                ->map(function($project) {
+                    $income = (float) ($project->incomes_sum_amount_received ?? 0);
+                    $target = (float) ($project->contract_value ?? 0);
+                    $completion_percent = $target > 0 ? round(($income / $target) * 100, 2) : 0;
+                    
+                    return [
+                        'id' => $project->id,
+                        'name' => $project->name,
+                        'income' => $income,
+                        'target' => $target,
+                        'completion_percent' => $completion_percent,
+                    ];
+                })
+                ->toArray();
+        } catch (\Exception $e) {
+            // Fallback to empty array if there's an error
+            \Log::warning('Error getting top projects: ' . $e->getMessage());
+            return [];
+        }
     }
 
     /**
