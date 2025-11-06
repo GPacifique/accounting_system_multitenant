@@ -20,15 +20,28 @@ return new class extends Migration
         try {
             echo "🚨 EMERGENCY TENANT MIGRATION FIX STARTING...\n";
             
-            // 1. CRITICAL: Remove the problematic migration record
-            $oldMigrationName = '2025_11_05_095510_add_tenant_id_to_business_tables';
-            $deleted = DB::table('migrations')->where('migration', $oldMigrationName)->delete();
+            // 1. CRITICAL: Remove the problematic migration records
+            $oldMigrationNames = [
+                '2025_11_05_095510_add_tenant_id_to_business_tables',
+                '2025_11_05_111121_fix_incomes_table_structure',
+                '2025_11_05_111307_recreate_incomes_table_with_correct_structure',
+                '2025_11_05_111607_fix_projects_table_structure',
+                '2025_11_05_114028_fix_expenses_table_structure',
+                '2025_11_05_115422_create_audit_logs_table'
+            ];
             
-            if ($deleted > 0) {
-                echo "✅ CRITICAL FIX: Removed problematic migration record: {$oldMigrationName}\n";
-            } else {
-                echo "ℹ️ Old migration record not found (this is good): {$oldMigrationName}\n";
+            $totalDeleted = 0;
+            foreach ($oldMigrationNames as $oldMigrationName) {
+                $deleted = DB::table('migrations')->where('migration', $oldMigrationName)->delete();
+                if ($deleted > 0) {
+                    echo "✅ CRITICAL FIX: Removed problematic migration record: {$oldMigrationName}\n";
+                    $totalDeleted += $deleted;
+                } else {
+                    echo "ℹ️ Old migration record not found (this is good): {$oldMigrationName}\n";
+                }
             }
+            
+            echo "📊 Total problematic migration records removed: {$totalDeleted}\n";
             
             // 2. Check if tenants table exists
             if (!Schema::hasTable('tenants')) {
@@ -67,24 +80,34 @@ return new class extends Migration
                 }
             }
             
-            // 4. Mark the new migration as completed if it exists in filesystem but not in DB
-            $newMigrationName = '2025_11_05_164000_add_tenant_id_to_business_tables';
-            $newMigrationExists = DB::table('migrations')->where('migration', $newMigrationName)->exists();
+            // 4. Mark the corrected migrations as completed if they exist in filesystem but not in DB
+            $newMigrationNames = [
+                '2025_11_05_164000_add_tenant_id_to_business_tables',
+                '2025_11_05_165000_fix_incomes_table_structure',
+                '2025_11_05_165100_recreate_incomes_table_with_correct_structure',
+                '2025_11_05_165200_fix_projects_table_structure',
+                '2025_11_05_165300_fix_expenses_table_structure',
+                '2025_11_05_165400_create_audit_logs_table'
+            ];
             
-            if (!$newMigrationExists) {
-                // Only add if the file actually exists
-                $migrationFile = database_path("migrations/{$newMigrationName}.php");
-                if (file_exists($migrationFile)) {
-                    DB::table('migrations')->insert([
-                        'migration' => $newMigrationName,
-                        'batch' => DB::table('migrations')->max('batch') + 1
-                    ]);
-                    echo "✅ Marked corrected migration as completed: {$newMigrationName}\n";
+            foreach ($newMigrationNames as $newMigrationName) {
+                $newMigrationExists = DB::table('migrations')->where('migration', $newMigrationName)->exists();
+                
+                if (!$newMigrationExists) {
+                    // Only add if the file actually exists
+                    $migrationFile = database_path("migrations/{$newMigrationName}.php");
+                    if (file_exists($migrationFile)) {
+                        DB::table('migrations')->insert([
+                            'migration' => $newMigrationName,
+                            'batch' => DB::table('migrations')->max('batch') + 1
+                        ]);
+                        echo "✅ Marked corrected migration as completed: {$newMigrationName}\n";
+                    } else {
+                        echo "ℹ️ New migration file doesn't exist yet: {$newMigrationName}\n";
+                    }
                 } else {
-                    echo "ℹ️ New migration file doesn't exist yet: {$newMigrationName}\n";
+                    echo "✅ New migration already recorded: {$newMigrationName}\n";
                 }
-            } else {
-                echo "✅ New migration already recorded: {$newMigrationName}\n";
             }
             
             echo "🎉 EMERGENCY FIX COMPLETED SUCCESSFULLY!\n";
