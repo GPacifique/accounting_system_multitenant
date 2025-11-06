@@ -11,7 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('employees', function (Blueprint $table) {
+        // Only create the table if it doesn't exist
+        if (!Schema::hasTable('employees')) {
+            Schema::create('employees', function (Blueprint $table) {
             $table->id(); // ID (auto-increment primary key)
             $table->string('first_name'); // First Name
             $table->string('last_name');  // Last Name
@@ -22,7 +24,8 @@ return new class extends Migration
             $table->date('date_of_joining')->nullable(); // Date of Joining
             $table->string('department')->nullable(); // Department
             $table->timestamps(); // Created At & Updated At
-        });
+            });
+        }
     }
 
     /**

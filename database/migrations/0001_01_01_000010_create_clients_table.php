@@ -11,15 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('clients', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('contact_person')->nullable(false);
-            $table->string('email')->unique()->nullable();  
-            $table->string('phone')->nullable(false);
-            $table->string('address')->nullable();
-            $table->timestamps();
-        });
+        // Only create the table if it doesn't exist
+        if (!Schema::hasTable('clients')) {
+            Schema::create('clients', function (Blueprint $table) {
+                $table->id();
+                $table->string('name');
+                $table->string('contact_person')->nullable(false);
+                $table->string('email')->unique()->nullable();  
+                $table->string('phone')->nullable(false);
+                $table->string('address')->nullable();
+                $table->timestamps();
+            });
+        }
     }
 
     /**
