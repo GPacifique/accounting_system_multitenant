@@ -180,6 +180,9 @@ Route::middleware(['auth', 'role:super-admin'])->prefix('admin')->name('admin.')
     // Tenant Management
     Route::resource('tenants', TenantController::class);
     
+    // Additional Tenant routes
+    Route::get('tenants/{tenant}/users', [TenantController::class, 'users'])->name('tenants.users');
+    
     // Tenant Subscription Management
     Route::resource('tenant-subscriptions', TenantSubscriptionController::class);
     Route::post('tenant-subscriptions/{subscription}/activate', [TenantSubscriptionController::class, 'activate'])->name('tenant-subscriptions.activate');

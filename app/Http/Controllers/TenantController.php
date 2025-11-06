@@ -254,7 +254,7 @@ class TenantController extends Controller
      */
     public function users(Tenant $tenant)
     {
-        $this->authorize('view', $tenant);
+        // Authorization is handled by the super-admin middleware
         
         $users = $tenant->users()
                        ->withPivot('role', 'is_admin', 'created_at')
@@ -269,7 +269,7 @@ class TenantController extends Controller
      */
     public function inviteUser(Request $request, Tenant $tenant)
     {
-        $this->authorize('update', $tenant);
+        // Authorization is handled by the super-admin middleware
         
         $request->validate([
             'email' => 'required|email',
@@ -495,7 +495,7 @@ class TenantController extends Controller
      */
     public function settings(Tenant $tenant)
     {
-        $this->authorize('update', $tenant);
+        // Authorization is handled by the super-admin middleware
         
         return view('admin.tenants.settings', compact('tenant'));
     }
@@ -505,7 +505,7 @@ class TenantController extends Controller
      */
     public function updateSettings(Request $request, Tenant $tenant)
     {
-        $this->authorize('update', $tenant);
+        // Authorization is handled by the super-admin middleware
         
         $request->validate([
             'name' => 'required|string|max:255',
@@ -555,7 +555,7 @@ class TenantController extends Controller
      */
     public function backup(Tenant $tenant)
     {
-        $this->authorize('update', $tenant);
+        // Authorization is handled by the super-admin middleware
         
         try {
             // This would implement actual backup functionality
