@@ -124,6 +124,10 @@ Route::middleware(['auth', 'tenant.data'])->group(function () {
     Route::get('/reports/financial', [ReportController::class, 'financial'])->name('reports.financial');
     Route::get('/reports/tenant', [ReportController::class, 'tenant'])->name('reports.tenant');
     
+    // Report export routes
+    Route::get('/reports/export/csv', [ReportController::class, 'exportCsv'])->name('reports.export.csv');
+    Route::get('/reports/export/pdf', [ReportController::class, 'exportPdf'])->name('reports.export.pdf');
+    
     // Tenant settings (placeholder for future implementation)
     Route::get('/settings', function() { return view('settings.index'); })->name('settings.index');
     Route::post('/settings', function() { return back()->with('success', 'Settings updated successfully.'); })->name('settings.update');
