@@ -261,6 +261,11 @@ class ProjectController extends Controller
      */
     public function exportCsv(Request $request)
     {
+        // Check permission for project export
+        if (!Auth::user()->can('projects.export')) {
+            abort(403, 'You do not have permission to export projects.');
+        }
+        
         $filename = $request->get('filename', 'projects');
         
         $projects = Project::with('client')->get();
@@ -300,6 +305,11 @@ class ProjectController extends Controller
      */
     public function exportPdf(Request $request)
     {
+        // Check permission for project export
+        if (!Auth::user()->can('projects.export')) {
+            abort(403, 'You do not have permission to export projects.');
+        }
+        
         $filename = $request->get('filename', 'projects');
         
         $projects = Project::with('client')->get();

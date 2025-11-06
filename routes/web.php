@@ -92,6 +92,10 @@ Route::middleware(['auth', 'tenant.data'])->group(function () {
     // Project Management with role-based access
     Route::resource('projects', ProjectController::class);
     
+    // Project export routes
+    Route::get('/projects/export/csv', [ProjectController::class, 'exportCsv'])->name('projects.export.csv');
+    Route::get('/projects/export/pdf', [ProjectController::class, 'exportPdf'])->name('projects.export.pdf');
+    
         // Task management routes
     Route::resource('tasks', TaskController::class);
     
