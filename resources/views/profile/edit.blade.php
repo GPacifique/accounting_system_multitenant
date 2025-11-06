@@ -14,6 +14,7 @@
 
     <form action="{{ route('profile.update') }}" method="POST" class="theme-aware-bg-card p-6 rounded shadow">
         @csrf
+        @method('PATCH')
 
         <div class="mb-4">
             <label for="name" class="block text-gray-700 font-medium mb-1">Name</label>
