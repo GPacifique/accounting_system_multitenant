@@ -151,6 +151,7 @@ Route::middleware(['auth', 'tenant.data'])->group(function () {
     // Reports with tenant isolation
     Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
     Route::get('/reports/create', [ReportController::class, 'create'])->name('reports.create');
+    Route::post('/reports', [ReportController::class, 'store'])->name('reports.store');
     Route::get('/reports/financial', [ReportController::class, 'financial'])->name('reports.financial');
     Route::get('/reports/tenant', [ReportController::class, 'tenant'])->name('reports.tenant');
     
