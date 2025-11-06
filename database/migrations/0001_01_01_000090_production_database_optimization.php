@@ -302,41 +302,17 @@ return new class extends Migration
         }
 
         // =========================================
-        // 12. OPTIMIZE REPORTS TABLE
+        // 12. REPORTS TABLE - SKIP (already optimized in creation)
         // =========================================
         if (Schema::hasTable('reports')) {
-            echo "📈 Optimizing reports table...\n";
-            Schema::table('reports', function (Blueprint $table) {
-                // Performance indexes
-                if (!$this->hasIndex('reports', 'reports_tenant_id_index')) {
-                    $table->index(['tenant_id'], 'reports_tenant_id_index');
-                }
-                if (!$this->hasIndex('reports', 'reports_tenant_id_project_id_index')) {
-                    $table->index(['tenant_id', 'project_id'], 'reports_tenant_id_project_id_index');
-                }
-                if (!$this->hasIndex('reports', 'reports_created_at_index')) {
-                    $table->index(['created_at'], 'reports_created_at_index');
-                }
-            });
+            echo "📈 Reports table already optimized during creation.\n";
         }
 
         // =========================================
-        // 13. OPTIMIZE SETTINGS TABLE
+        // 13. SETTINGS TABLE - SKIP (already optimized in creation)
         // =========================================
         if (Schema::hasTable('settings')) {
-            echo "⚙️ Optimizing settings table...\n";
-            Schema::table('settings', function (Blueprint $table) {
-                // Performance indexes
-                if (!$this->hasIndex('settings', 'settings_tenant_id_index')) {
-                    $table->index(['tenant_id'], 'settings_tenant_id_index');
-                }
-                if (!$this->hasIndex('settings', 'settings_tenant_id_key_index')) {
-                    $table->index(['tenant_id', 'key'], 'settings_tenant_id_key_index');
-                }
-            });
-            
-            // Add unique constraint for tenant-scoped settings keys
-            $this->addUniqueConstraintSafely('settings', ['tenant_id', 'key'], 'settings_tenant_key_unique');
+            echo "⚙️ Settings table already optimized during creation.\n";
         }
 
         // =========================================
