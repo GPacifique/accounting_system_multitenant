@@ -11,7 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tasks', function (Blueprint $table) {
+        // Only create the table if it doesn't exist
+        if (!Schema::hasTable('tasks')) {
+            Schema::create('tasks', function (Blueprint $table) {
             $table->id();
             $table->foreignId('tenant_id')->nullable()->constrained()->onDelete('cascade');
             $table->foreignId('project_id')->nullable()->constrained()->onDelete('cascade');
@@ -41,7 +43,8 @@ return new class extends Migration
             $table->index(['assigned_to']);
             $table->index(['status']);
             $table->index(['priority']);
-        });
+            });
+        }
     }
 
     /**
