@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Payment;
 use App\Traits\Downloadable;
 
@@ -103,6 +104,11 @@ class PaymentController extends Controller
      */
     public function exportCsv(Request $request)
     {
+        // Check permission for payment export
+        if (!Auth::user()->can('payments.export')) {
+            abort(403, 'You do not have permission to export payments.');
+        }
+        
         $filename = $request->get('filename', 'payments');
         
         $payments = Payment::with('employee')->latest()->get();
@@ -138,6 +144,11 @@ class PaymentController extends Controller
      */
     public function exportPdf(Request $request)
     {
+        // Check permission for payment export
+        if (!Auth::user()->can('payments.export')) {
+            abort(403, 'You do not have permission to export payments.');
+        }
+        
         $filename = $request->get('filename', 'payments');
         
         $payments = Payment::with('employee')->latest()->get();

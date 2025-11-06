@@ -86,6 +86,11 @@ Route::middleware(['auth', 'tenant.data'])->group(function () {
     
     // Financial Management
     Route::resource('payments', PaymentController::class);
+    
+    // Payments export routes
+    Route::get('/payments/export/csv', [PaymentController::class, 'exportCsv'])->name('payments.export.csv');
+    Route::get('/payments/export/pdf', [PaymentController::class, 'exportPdf'])->name('payments.export.pdf');
+    
     Route::resource('incomes', IncomeController::class);
     
     // Incomes export routes
@@ -93,6 +98,10 @@ Route::middleware(['auth', 'tenant.data'])->group(function () {
     Route::get('/incomes/export/pdf', [IncomeController::class, 'exportPdf'])->name('incomes.export.pdf');
     
     Route::resource('expenses', ExpenseController::class);
+    
+    // Expenses export routes
+    Route::get('/expenses/export/csv', [ExpenseController::class, 'exportCsv'])->name('expenses.export.csv');
+    Route::get('/expenses/export/pdf', [ExpenseController::class, 'exportPdf'])->name('expenses.export.pdf');
     
     // Project Management with role-based access
     Route::resource('projects', ProjectController::class);

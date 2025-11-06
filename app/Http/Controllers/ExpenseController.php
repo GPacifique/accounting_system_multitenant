@@ -8,6 +8,7 @@ use App\Models\Client;
 use App\Traits\Downloadable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class ExpenseController extends Controller
 {
@@ -178,6 +179,11 @@ class ExpenseController extends Controller
      */
     public function exportCsv(Request $request)
     {
+        // Check permission for expense export
+        if (!Auth::user()->can('expenses.export')) {
+            abort(403, 'You do not have permission to export expenses.');
+        }
+        
         $filename = $request->get('filename', 'expenses');
         
         $expenses = Expense::with(['project', 'client'])->latest()->get();
@@ -217,6 +223,11 @@ class ExpenseController extends Controller
      */
     public function exportPdf(Request $request)
     {
+        // Check permission for expense export
+        if (!Auth::user()->can('expenses.export')) {
+            abort(403, 'You do not have permission to export expenses.');
+        }
+        
         $filename = $request->get('filename', 'expenses');
         
         $expenses = Expense::with(['project', 'client'])->latest()->get();
