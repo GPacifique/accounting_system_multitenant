@@ -10,7 +10,9 @@ return new class extends Migration
 {
 public function up()
 {
-Schema::create('workers', function (Blueprint $table) {
+    // Only create the table if it doesn't exist
+    if (!Schema::hasTable('workers')) {
+        Schema::create('workers', function (Blueprint $table) {
 $table->id();
 $table->string('first_name', 100);
 $table->string('last_name', 100);
@@ -27,7 +29,8 @@ $table->softDeletes();
 
 
 $table->index(['last_name', 'position']);
-});
+        });
+    }
 }
 
 
