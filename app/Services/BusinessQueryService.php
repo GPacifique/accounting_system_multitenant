@@ -5,7 +5,8 @@ namespace App\Services;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Collection;
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
+use Illuminate\Database\Query\Builder as QueryBuilder;
 use App\Models\User;
 use App\Models\Tenant;
 
@@ -32,7 +33,7 @@ class BusinessQueryService
     /**
      * Get SQL query with role and tenant conditions
      */
-    public function buildRoleBasedQuery(string $table, array $conditions = [], array $select = ['*']): Builder
+    public function buildRoleBasedQuery(string $table, array $conditions = [], array $select = ['*']): QueryBuilder
     {
         $query = DB::table($table);
 
@@ -59,7 +60,7 @@ class BusinessQueryService
     /**
      * Apply role-based data access conditions
      */
-    protected function applyRoleBasedConditions(Builder $query, string $table): void
+    protected function applyRoleBasedConditions(QueryBuilder $query, string $table): void
     {
         switch ($this->userRole) {
             case 'super-admin':
@@ -106,7 +107,7 @@ class BusinessQueryService
     /**
      * Apply manager-specific conditions
      */
-    protected function applyManagerConditions(Builder $query, string $table): void
+    protected function applyManagerConditions(QueryBuilder $query, string $table): void
     {
         $managedProjects = $this->getManagedProjectIds();
         $managedTeams = $this->getManagedTeamIds();
@@ -162,7 +163,7 @@ class BusinessQueryService
     /**
      * Apply accountant-specific conditions
      */
-    protected function applyAccountantConditions(Builder $query, string $table): void
+    protected function applyAccountantConditions(QueryBuilder $query, string $table): void
     {
         switch ($table) {
             case 'accounts':
@@ -200,7 +201,7 @@ class BusinessQueryService
     /**
      * Apply employee-specific conditions
      */
-    protected function applyEmployeeConditions(Builder $query, string $table): void
+    protected function applyEmployeeConditions(QueryBuilder $query, string $table): void
     {
         switch ($table) {
             case 'projects':
@@ -256,7 +257,7 @@ class BusinessQueryService
     /**
      * Apply client-specific conditions
      */
-    protected function applyClientConditions(Builder $query, string $table): void
+    protected function applyClientConditions(QueryBuilder $query, string $table): void
     {
         $clientProjectIds = $this->getClientProjectIds();
 
@@ -295,7 +296,7 @@ class BusinessQueryService
     /**
      * Apply viewer-specific conditions
      */
-    protected function applyViewerConditions(Builder $query, string $table): void
+    protected function applyViewerConditions(QueryBuilder $query, string $table): void
     {
         switch ($table) {
             case 'projects':
@@ -468,7 +469,7 @@ class BusinessQueryService
                  ->toArray();
     }
 
-    protected function applyGenericManagerConditions(Builder $query): void
+    protected function applyGenericManagerConditions(QueryBuilder $query): void
     {
         $query->where(function ($q) {
             $q->where('created_by', $this->user->id)
@@ -477,7 +478,7 @@ class BusinessQueryService
         });
     }
 
-    protected function applyGenericFinancialConditions(Builder $query): void
+    protected function applyGenericFinancialConditions(QueryBuilder $query): void
     {
         // Accountants can see most data for financial purposes
         $query->where('status', '!=', 'draft');
