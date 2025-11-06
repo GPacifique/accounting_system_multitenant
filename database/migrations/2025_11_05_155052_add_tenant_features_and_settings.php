@@ -11,6 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // Check if tenants table exists before trying to modify it
+        if (!Schema::hasTable('tenants')) {
+            // Table doesn't exist yet, skip this migration
+            // The columns will be created by the create_tenants_table migration
+            return;
+        }
+
         Schema::table('tenants', function (Blueprint $table) {
             // Add missing tenant management columns only if they don't exist
             if (!Schema::hasColumn('tenants', 'features')) {
