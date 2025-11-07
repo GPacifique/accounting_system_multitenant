@@ -35,7 +35,6 @@ return new class extends Migration
 
                 // Indexes for performance
                 $table->index(['tenant_id', 'status']);
-                $table->index(['tenant_id', 'specializations']);
                 $table->index('hire_date');
 
                 // Unique constraints for tenant-scoped data

@@ -1,0 +1,24 @@
+<!-- Simple SVG logo for Gym Monitor -->
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="80" viewBox="0 0 360 80" role="img" aria-label="Gym Monitor logo">
+  <title>Gym Monitor</title>
+  <defs>
+    <linearGradient id="g1" x1="0" x2="1">
+      <stop offset="0%" stop-color="#4ecdc4" />
+      <stop offset="100%" stop-color="#667eea" />
+    </linearGradient>
+  </defs>
+  <!-- Dumbbell icon -->
+  <g transform="translate(8,8)">
+    <rect x="0" y="18" width="12" height="12" rx="2" fill="#1f2937" />
+    <rect x="40" y="18" width="12" height="12" rx="2" fill="#1f2937" />
+    <rect x="12" y="22" width="28" height="4" rx="2" fill="url(#g1)" />
+    <rect x="-6" y="10" width="6" height="28" rx="2" fill="#111827" />
+    <rect x="58" y="10" width="6" height="28" rx="2" fill="#111827" />
+  </g>
+
+  <!-- Text -->
+  <g transform="translate(80,52)">
+    <text x="0" y="0" font-family="Inter, Arial, sans-serif" font-weight="700" font-size="28" fill="#0f172a">Gym</text>
+    <text x="62" y="0" font-family="Inter, Arial, sans-serif" font-weight="600" font-size="28" fill="url(#g1)">Monitor</text>
+  </g>
+</svg>

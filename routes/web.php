@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\GymDashboardController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\IncomeController;
@@ -64,6 +65,82 @@ Route::middleware(['auth', 'tenant.data'])->group(function () {
     // Dashboard routes
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/dashboard/analytics', [DashboardController::class, 'analytics'])->name('dashboard.analytics');
+    
+    // Gym Dashboard routes
+    Route::get('/gym/dashboard', [GymDashboardController::class, 'index'])->name('gym.dashboard');
+    Route::get('/gym/dashboard/analytics', [GymDashboardController::class, 'analytics'])->name('gym.analytics');
+    
+    // Gym Management Routes (placeholder - will need proper controllers)
+    Route::prefix('gym')->name('gym.')->group(function () {
+        Route::get('/members', function() { return view('gym.members.index'); })->name('members.index');
+        Route::get('/members/create', function() { return view('gym.members.create'); })->name('members.create');
+        Route::post('/members', function() {
+            // Placeholder: handle member creation logic here
+            return redirect()->route('gym.members.index')->with('success', 'Member created (placeholder).');
+        })->name('members.store');
+        // Trainers resourceful routes (controller implemented)
+        Route::resource('trainers', \App\Http\Controllers\Gym\TrainerController::class);
+        Route::get('/fitness-classes', function() { return view('gym.classes.index'); })->name('fitness-classes.index');
+        Route::get('/fitness-classes/create', function() { return view('gym.classes.create'); })->name('fitness-classes.create');
+        Route::post('/fitness-classes', function() {
+            // Placeholder: handle fitness class creation logic here
+            return redirect()->route('gym.fitness-classes.index')->with('success', 'Class created (placeholder).');
+        })->name('fitness-classes.store');
+        Route::get('/equipment', function() { return view('gym.equipment.index'); })->name('equipment.index');
+        Route::get('/gym-revenues', function() { return view('gym.revenues.index'); })->name('gym-revenues.index');
+        Route::get('/gym-revenues/create', function() { return view('gym.revenues.create'); })->name('gym-revenues.create');
+        Route::post('/gym-revenues', function (\Illuminate\Http\Request $request) {
+            $data = $request->validate([
+                'transaction_date' => 'required|date',
+                'amount' => 'required|numeric',
+                'revenue_type' => 'required|string',
+                'description' => 'nullable|string',
+                'payment_method' => 'nullable|string',
+                'payment_status' => 'nullable|string',
+                'receipt' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:5120',
+            ]);
+
+            // Attach tenant id from current tenant context if available
+            $tenant = app('currentTenant');
+            if ($tenant) {
+                $data['tenant_id'] = $tenant->id;
+            }
+
+            // Handle receipt upload if provided
+            if ($request->hasFile('receipt')) {
+                $path = $request->file('receipt')->store('receipts', 'public');
+                $data['receipt_path'] = $path;
+            }
+
+            // Default payment status
+            if (empty($data['payment_status'])) {
+                $data['payment_status'] = \App\Models\GymRevenue::STATUS_COMPLETED;
+            }
+
+            \App\Models\GymRevenue::create($data);
+
+            return redirect()->route('gym.gym-revenues.index')->with('success', 'Revenue recorded successfully.');
+        })->name('gym-revenues.store');
+        Route::get('/reports', function() { return view('gym.reports.index'); })->name('reports');
+        // Membership Plans
+        Route::get('/membership-plans', function() { return view('gym.membership_plans.index'); })->name('membership-plans.index');
+        Route::get('/membership-plans/create', function() { return view('gym.membership_plans.create'); })->name('membership-plans.create');
+        Route::post('/membership-plans', function(\Illuminate\Http\Request $request) {
+            // Placeholder - implement persistence to MembershipPlan or settings later
+            return redirect()->route('gym.membership-plans.index')->with('success', 'Membership plan saved (placeholder).');
+        })->name('membership-plans.store');
+        
+        // Attendance tracking
+        Route::get('/attendances', [\App\Http\Controllers\Gym\AttendanceController::class, 'index'])->name('attendances.index');
+        Route::get('/attendances/create', [\App\Http\Controllers\Gym\AttendanceController::class, 'create'])->name('attendances.create');
+        Route::post('/attendances', [\App\Http\Controllers\Gym\AttendanceController::class, 'store'])->name('attendances.store');
+    });
+    
+    // Backward compatibility routes
+    Route::get('/members', function() { return redirect()->route('gym.members.index'); });
+    Route::get('/trainers', function() { return redirect()->route('gym.trainers.index'); });
+    Route::get('/fitness-classes', function() { return redirect()->route('gym.fitness-classes.index'); });
+    Route::get('/equipment', function() { return redirect()->route('gym.equipment.index'); });
     
     // Account management with tenant awareness
     Route::resource('accounts', AccountController::class);
@@ -170,6 +247,12 @@ Route::middleware(['auth', 'tenant.data'])->group(function () {
     // Role switching functionality
     Route::post('/switch-role/{role}', [RoleSwitcherController::class, 'switch'])->name('role.switch');
     Route::post('/clear-role', [RoleSwitcherController::class, 'clear'])->name('role.clear');
+    
+    // Gym-specific reports and additional routes
+    Route::get('/gym/reports', [\App\Http\Controllers\Gym\ReportsController::class, 'index'])->name('gym.reports');
+    Route::get('/gym/reports/financial', [\App\Http\Controllers\Gym\ReportsController::class, 'financial'])->name('gym.reports.financial');
+    Route::get('/gym/reports/membership', [\App\Http\Controllers\Gym\ReportsController::class, 'membership'])->name('gym.reports.membership');
+    Route::get('/gym/reports/attendance', [\App\Http\Controllers\Gym\ReportsController::class, 'attendance'])->name('gym.reports.attendance');
 });
 
 // Super Admin routes - requires super admin role

@@ -13,6 +13,7 @@ class Member extends Model
 
     protected $fillable = [
         'tenant_id',
+        'member_id',
         'first_name',
         'last_name',
         'email',

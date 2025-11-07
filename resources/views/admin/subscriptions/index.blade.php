@@ -127,7 +127,7 @@
                             </span>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm theme-aware-text">
-                            ${{ number_format($subscription->amount, 2) }}
+                            {{ currency($subscription->amount) }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm theme-aware-text">
                             {{ ucfirst($subscription->billing_cycle) }}

@@ -3,32 +3,32 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>@yield('title', 'SiteLedger - Construction Finance Management System | Track Projects & Payments')</title>
+    <title>@yield('title', 'GymPro - Gym Management System | Track Members, Classes & Revenue')</title>
     
     <!-- Theme color for mobile browsers -->
     <meta name="theme-color" content="#ffffff" id="theme-color-meta">
     
     <!-- Favicon and App Icons -->
-    <link rel="icon" type="image/svg+xml" href="{{ asset('images/logo/siteledger-favicon.svg') }}">
-    <link rel="icon" type="image/x-icon" href="{{ asset('images/logo/siteledger-favicon.svg') }}">
-    <link rel="apple-touch-icon" href="{{ asset('images/logo/siteledger-icon.svg') }}">
+    <link rel="icon" type="image/svg+xml" href="{{ asset('images/logo/gym-favicon.svg') }}">
+    <link rel="icon" type="image/x-icon" href="{{ asset('images/logo/gym-favicon.svg') }}">
+    <link rel="apple-touch-icon" href="{{ asset('images/logo/gym-icon.svg') }}">
     
     <!-- Meta Information -->
-    <meta name="description" content="@yield('meta_description', 'Professional construction finance management software for Rwanda. Track projects, monitor income/expenses, manage worker payments, and generate comprehensive financial reports in RWF currency.')">
-    <meta name="keywords" content="@yield('meta_keywords', 'construction finance management, project management Rwanda, construction accounting, worker payments, expense tracking, financial reports, RWF, construction ledger, project budgeting, construction analytics')"
-    <meta name="author" content="SiteLedger">
+    <meta name="description" content="@yield('meta_description', 'Professional gym management software for fitness centers. Track members, schedule classes, manage trainer assignments, monitor revenue, and generate comprehensive fitness reports.')">
+    <meta name="keywords" content="@yield('meta_keywords', 'gym management system, fitness center software, member management, class scheduling, trainer management, fitness analytics, gym revenue tracking, membership management, workout scheduling, fitness reports')"
+    <meta name="author" content="GymPro">
     <link rel="canonical" href="@yield('canonical', url()->current())">
     
     <!-- Open Graph / Social Media -->
-    <meta property="og:title" content="@yield('og_title', 'SiteLedger - Construction Finance Management System')">
-    <meta property="og:description" content="@yield('og_description', 'Professional construction finance management software for Rwanda. Track projects, monitor expenses, and manage worker payments with comprehensive reporting.')">
-    <meta property="og:image" content="@yield('og_image', asset('images/logo/siteledger-logo.svg'))">
+    <meta property="og:title" content="@yield('og_title', 'GymPro - Gym Management System')">
+    <meta property="og:description" content="@yield('og_description', 'Professional gym management software for fitness centers. Track members, schedule classes, manage trainers and monitor revenue with comprehensive reporting.')">
+    <meta property="og:image" content="@yield('og_image', asset('images/logo/gym-logo.svg'))">
     <meta property="og:url" content="{{ url()->current() }}">
     <meta property="og:type" content="website">
-    <meta property="og:site_name" content="{{ config('app.name', 'SiteLedger') }}">
+    <meta property="og:site_name" content="{{ config('app.name', 'GymPro') }}">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="@yield('twitter_title', 'SiteLedger - Construction Finance Management System')">
-    <meta name="twitter:description" content="@yield('twitter_description', 'Professional construction finance management software for Rwanda. Track projects, monitor expenses, and manage worker payments.')">
+    <meta name="twitter:title" content="@yield('twitter_title', 'GymPro - Gym Management System')">
+    <meta name="twitter:description" content="@yield('twitter_description', 'Professional gym management software for fitness centers. Track members, schedule classes, and manage trainers.')">
 
     <!-- Fontawesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -41,6 +41,11 @@
 
     
     <style>
+        :root {
+            --sidebar-width: 220px;
+            --navbar-height: 56px;
+        }
+
         /* Global page background for dark mode */
         html {
             background: var(--bg-primary);
@@ -103,11 +108,13 @@
         nav.navbar {
             position: fixed !important;
             top: 0 !important;
-            left: 220px !important;
+            left: var(--sidebar-width) !important;
             right: 0 !important;
             z-index: 1030 !important;
             margin: 0 !important;
-            width: calc(100% - 220px) !important;
+            width: calc(100% - var(--sidebar-width)) !important;
+            height: var(--navbar-height);
+            line-height: var(--navbar-height);
         }
         
         @media (max-width: 768px) {
@@ -115,6 +122,49 @@
                 left: 0 !important;
                 width: 100% !important;
             }
+        }
+
+        /* Sidebar fixed layout: ensure main content is offset and does not overlap */
+        .sidebar-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: var(--sidebar-width);
+            overflow-y: auto;
+            z-index: 1040;
+            padding-top: var(--navbar-height); /* leave space for the fixed navbar */
+            background: inherit; /* preserve theme background from sidebar styles */
+        }
+
+        /* Main wrapper/content should be offset to the right of the sidebar */
+        .main-wrapper {
+            margin-left: var(--sidebar-width);
+            transition: margin-left 0.2s ease;
+        }
+
+        /* Ensure the main content has top padding so it doesn't hide under the fixed navbar */
+        .main-content {
+            padding: calc(var(--navbar-height) + 24px) 20px 40px 20px; /* top accounts for navbar height */
+            min-height: calc(100vh - calc(var(--navbar-height) + 24px));
+        }
+
+        /* Mobile: collapse sidebar to normal flow so it doesn't cover content */
+        @media (max-width: 992px) {
+            .sidebar-wrapper {
+                position: relative;
+                width: 100%;
+                padding-top: 0;
+                z-index: auto;
+            }
+            .main-wrapper {
+                margin-left: 0;
+            }
+            nav.navbar {
+                left: 0 !important;
+                width: 100% !important;
+            }
+            .main-content { padding-top: calc(var(--navbar-height) + 64px); }
         }
         
         /* Adjust body padding for fixed navbar */
@@ -302,10 +352,8 @@
 <!-- Navigation Bar -->
 @include('layouts.navigation')
 
-<!-- Include the new polished sidebar -->
-@include('layouts.sidebar')
-
-<!-- Main Content Wrapper -->
+        <!-- Include the gym management sidebar -->
+        @include('layouts.gym-sidebar')<!-- Main Content Wrapper -->
 <div class="main-wrapper">
     <!-- Flash Messages -->
     @if(session('success'))

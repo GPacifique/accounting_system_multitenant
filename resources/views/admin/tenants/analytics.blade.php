@@ -77,7 +77,7 @@
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm font-medium theme-aware-text-secondary">Monthly Revenue</p>
-                    <p class="text-3xl font-bold text-purple-600" id="totalRevenue">${{ number_format($analytics['monthly_revenue'] ?? 0) }}</p>
+                    <p class="text-3xl font-bold text-purple-600" id="totalRevenue">{{ currency($analytics['monthly_revenue'] ?? 0) }}</p>
                     <p class="text-xs text-green-600 mt-1">
                         <i class="fas fa-arrow-up mr-1"></i>
                         +{{ $analytics['revenue_growth'] ?? 0 }}% vs last month
@@ -341,7 +341,7 @@
                                         <span class="text-sm theme-aware-text">{{ $tenant['activity'] ?? rand(60, 95) }}%</span>
                                     </div>
                                 </td>
-                                <td class="px-4 py-3 whitespace-nowrap text-sm font-medium theme-aware-text">${{ number_format($tenant['revenue'] ?? rand(500, 2000)) }}</td>
+                                <td class="px-4 py-3 whitespace-nowrap text-sm font-medium theme-aware-text">{{ currency($tenant['revenue'] ?? rand(500, 2000)) }}</td>
                             </tr>
                         @endforeach
                         
@@ -370,7 +370,7 @@
                                             <span class="text-sm theme-aware-text">{{ $activity }}%</span>
                                         </div>
                                     </td>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-medium theme-aware-text">${{ number_format(rand(500, 2000)) }}</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm font-medium theme-aware-text">{{ currency(rand(500, 2000)) }}</td>
                                 </tr>
                             @endfor
                         @endif

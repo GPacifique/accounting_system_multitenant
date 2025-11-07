@@ -34,16 +34,8 @@ class DashboardController extends Controller
             return redirect('/')->with('error', 'You need proper permissions to access the dashboard.');
         }
         
-        // Route to appropriate dashboard based on role (prioritize highest privilege)
-        if ($user->hasRole(['super-admin', 'admin'])) {
-            return $this->adminDashboard();
-        } elseif ($user->hasRole('accountant')) {
-            return $this->accountantDashboard();
-        } elseif ($user->hasRole('manager')) {
-            return $this->managerDashboard();
-        }
-        
-        return $this->userDashboard();
+        // Redirect to gym dashboard for gym management system
+        return redirect()->route('gym.dashboard');
     }
 
     /**

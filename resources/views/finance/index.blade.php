@@ -33,7 +33,7 @@
                                 Total Income (Monthly)
                             </div>
                             <div class="h5 mb-0 font-weight-bold theme-aware-text">
-                                ${{ number_format(0, 2) }}
+                                {{ currency(0) }}
                             </div>
                         </div>
                         <div class="col-auto">
@@ -53,7 +53,7 @@
                                 Total Expenses (Monthly)
                             </div>
                             <div class="h5 mb-0 font-weight-bold theme-aware-text">
-                                ${{ number_format(0, 2) }}
+                                {{ currency(0) }}
                             </div>
                         </div>
                         <div class="col-auto">
@@ -73,7 +73,7 @@
                                 Net Profit (Monthly)
                             </div>
                             <div class="h5 mb-0 font-weight-bold theme-aware-text">
-                                ${{ number_format(0, 2) }}
+                                {{ currency(0) }}
                             </div>
                         </div>
                         <div class="col-auto">
@@ -93,7 +93,7 @@
                                 Outstanding Payments
                             </div>
                             <div class="h5 mb-0 font-weight-bold theme-aware-text">
-                                ${{ number_format(0, 2) }}
+                                {{ currency(0) }}
                             </div>
                         </div>
                         <div class="col-auto">
