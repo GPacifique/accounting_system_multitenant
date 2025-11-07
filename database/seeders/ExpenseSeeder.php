@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\Expense;
 use App\Models\Project;
+use App\Models\Tenant;
 
 class ExpenseSeeder extends Seeder
 {
@@ -14,13 +15,19 @@ class ExpenseSeeder extends Seeder
     public function run(): void
     {
         $projects = Project::with('client')->get();
-        
+
         if ($projects->isEmpty()) {
             $this->command->warn('No projects found. Please run ProjectSeeder first.');
             return;
         }
 
-        // Get actual projects
+        // Get the first tenant
+        $tenant = Tenant::first();
+        
+        if (!$tenant) {
+            $this->command->warn('No tenant found. Please ensure tenants are created first.');
+            return;
+        }        // Get actual projects
         $project1 = $projects->where('name', 'Kigali Heights Apartment Complex')->first();
         $project2 = $projects->where('name', 'Nyarugenge Commercial Center')->first();
         $project3 = $projects->where('name', 'Kimihurura Villa Project')->first();
@@ -168,6 +175,7 @@ class ExpenseSeeder extends Seeder
         ];
 
         foreach ($expenses as $expense) {
+            $expense['tenant_id'] = $tenant->id;
             Expense::create($expense);
         }
 

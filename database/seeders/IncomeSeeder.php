@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\Income;
 use App\Models\Project;
+use App\Models\Tenant;
 
 class IncomeSeeder extends Seeder
 {
@@ -17,6 +18,14 @@ class IncomeSeeder extends Seeder
         
         if ($projects->isEmpty()) {
             $this->command->warn('No projects found. Please run ProjectSeeder first.');
+            return;
+        }
+
+        // Get the first tenant
+        $tenant = Tenant::first();
+        
+        if (!$tenant) {
+            $this->command->warn('No tenant found. Please ensure tenants are created first.');
             return;
         }
 
@@ -114,7 +123,11 @@ class IncomeSeeder extends Seeder
         ];
 
         foreach ($incomes as $income) {
-            Income::create($income);
+            $income['tenant_id'] = $tenant->id;
+            Income::firstOrCreate(
+                ['invoice_number' => $income['invoice_number'], 'tenant_id' => $income['tenant_id']],
+                $income
+            );
         }
 
         $this->command->info('Incomes seeded successfully!');

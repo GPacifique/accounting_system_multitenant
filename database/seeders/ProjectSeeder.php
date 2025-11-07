@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\Project;
 use App\Models\Client;
+use App\Models\Tenant;
 
 class ProjectSeeder extends Seeder
 {
@@ -20,6 +21,14 @@ class ProjectSeeder extends Seeder
             return;
         }
 
+        // Get the first tenant (created by ClientSeeder)
+        $tenant = Tenant::first();
+        
+        if (!$tenant) {
+            $this->command->warn('No tenant found. Please ensure tenants are created first.');
+            return;
+        }
+
         $projects = [
             [
                 'name' => 'Kigali Heights Apartment Complex',
@@ -30,6 +39,7 @@ class ProjectSeeder extends Seeder
                 'start_date' => now()->subMonths(3),
                 'end_date' => now()->addMonths(9),
                 'status' => 'active',
+                'tenant_id' => $tenant->id,
             ],
             [
                 'name' => 'Nyarugenge Commercial Center',
@@ -40,6 +50,7 @@ class ProjectSeeder extends Seeder
                 'start_date' => now()->subMonths(6),
                 'end_date' => now()->addMonths(12),
                 'status' => 'active',
+                'tenant_id' => $tenant->id,
             ],
             [
                 'name' => 'Kimihurura Villa Project',
@@ -50,6 +61,7 @@ class ProjectSeeder extends Seeder
                 'start_date' => now()->subMonths(12),
                 'end_date' => now()->subMonth(),
                 'status' => 'completed',
+                'tenant_id' => $tenant->id,
             ],
             [
                 'name' => 'Gacuriro Housing Estate',
@@ -60,6 +72,7 @@ class ProjectSeeder extends Seeder
                 'start_date' => now()->subMonth(),
                 'end_date' => now()->addMonths(18),
                 'status' => 'active',
+                'tenant_id' => $tenant->id,
             ],
             [
                 'name' => 'Kacyiru Office Complex',
@@ -70,6 +83,7 @@ class ProjectSeeder extends Seeder
                 'start_date' => now()->addMonth(),
                 'end_date' => now()->addMonths(24),
                 'status' => 'pending',
+                'tenant_id' => $tenant->id,
             ],
             [
                 'name' => 'Remera Market Renovation',
@@ -80,6 +94,7 @@ class ProjectSeeder extends Seeder
                 'start_date' => now()->subMonths(2),
                 'end_date' => now()->addMonths(4),
                 'status' => 'active',
+                'tenant_id' => $tenant->id,
             ],
         ];
 
@@ -87,7 +102,7 @@ class ProjectSeeder extends Seeder
             $projectData['client_id'] = $clients[$index % $clients->count()]->id;
             
             Project::firstOrCreate(
-                ['name' => $projectData['name']],
+                ['name' => $projectData['name'], 'tenant_id' => $projectData['tenant_id']],
                 $projectData
             );
         }

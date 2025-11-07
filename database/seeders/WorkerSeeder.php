@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\Worker;
+use App\Models\Tenant;
 
 class WorkerSeeder extends Seeder
 {
@@ -12,6 +13,14 @@ class WorkerSeeder extends Seeder
      */
     public function run(): void
     {
+        // Get the first tenant
+        $tenant = Tenant::first();
+        
+        if (!$tenant) {
+            $this->command->warn('No tenant found. Please ensure tenants are created first.');
+            return;
+        }
+
         $workers = [
             [
                 'first_name' => 'Jean Baptiste',
@@ -126,7 +135,11 @@ class WorkerSeeder extends Seeder
         ];
 
         foreach ($workers as $worker) {
-            Worker::create($worker);
+            $worker['tenant_id'] = $tenant->id;
+            Worker::firstOrCreate(
+                ['email' => $worker['email'], 'tenant_id' => $worker['tenant_id']],
+                $worker
+            );
         }
 
         $this->command->info('Workers seeded successfully!');

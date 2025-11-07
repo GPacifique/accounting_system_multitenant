@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use App\Models\Task;
 use App\Models\Project;
 use App\Models\User;
+use App\Models\Tenant;
 
 class SampleTasksSeeder extends Seeder
 {
@@ -21,6 +22,14 @@ class SampleTasksSeeder extends Seeder
 
         if (!Schema::hasTable('tasks')) {
             $this->command->error('Tasks table does not exist. Please run migrations first.');
+            return;
+        }
+
+        // Get the first tenant
+        $tenant = Tenant::first();
+        
+        if (!$tenant) {
+            $this->command->warn('No tenant found. Please ensure tenants are created first.');
             return;
         }
 
@@ -210,6 +219,7 @@ class SampleTasksSeeder extends Seeder
         ];
 
         foreach ($tasks as $taskData) {
+            $taskData['tenant_id'] = $tenant->id;
             Task::create($taskData);
         }
 
