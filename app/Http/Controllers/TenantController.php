@@ -164,6 +164,37 @@ class TenantController extends Controller
                 $tenant->auditLogs()->delete();
             }
 
+            // Extra explicit cleanup for models that reference tenant_id but may lack cascade rules
+            $modelsToClean = [
+                \App\Models\Member::class,
+                \App\Models\Trainer::class,
+                \App\Models\FitnessClass::class,
+                \App\Models\ClassBooking::class,
+                \App\Models\Membership::class,
+                \App\Models\Equipment::class,
+                \App\Models\GymRevenue::class,
+                \App\Models\Expense::class,
+                \App\Models\Attendance::class,
+                \App\Models\Payment::class,
+                \App\Models\RateLimit::class,
+                \App\Models\UserInvitation::class,
+                \App\Models\BusinessAdminPermission::class,
+                \App\Models\AuditLog::class,
+                \App\Models\Project::class,
+                \App\Models\Task::class,
+            ];
+
+            foreach ($modelsToClean as $mClass) {
+                if (class_exists($mClass)) {
+                    try {
+                        $mClass::where('tenant_id', $tenant->id)->delete();
+                    } catch (\Exception $e) {
+                        // Log and continue — we'll catch and report after attempting full cleanup
+                        logger()->warning('Failed to clean model records during tenant delete', ['model' => $mClass, 'tenant_id' => $tenant->id, 'error' => $e->getMessage()]);
+                    }
+                }
+            }
+
             // If the Tenant model uses any casts/relations storing settings or features as JSON
             // we don't need to delete those explicitly. Now delete the tenant record.
             $tenant->delete();
