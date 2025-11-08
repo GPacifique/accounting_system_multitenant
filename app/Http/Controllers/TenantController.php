@@ -146,14 +146,48 @@ class TenantController extends Controller
      */
     public function destroy(Tenant $tenant)
     {
-        // Remove all users from tenant
-        $tenant->users()->detach();
-        
-        // Delete tenant
-        $tenant->delete();
+        // Attempt safe delete within a transaction. Provide a helpful error message
+        try {
+            \DB::beginTransaction();
 
-        return redirect()->route('admin.tenants.index')
-                        ->with('success', 'Tenant deleted successfully!');
+            // Remove pivot associations to users
+            $tenant->users()->detach();
+
+            // Delete related one-to-many records that may not be auto-cascading
+            if (method_exists($tenant, 'invitations')) {
+                $tenant->invitations()->delete();
+            }
+            if (method_exists($tenant, 'businessAdminPermissions')) {
+                $tenant->businessAdminPermissions()->delete();
+            }
+            if (method_exists($tenant, 'auditLogs')) {
+                $tenant->auditLogs()->delete();
+            }
+
+            // If the Tenant model uses any casts/relations storing settings or features as JSON
+            // we don't need to delete those explicitly. Now delete the tenant record.
+            $tenant->delete();
+
+            \DB::commit();
+
+            return redirect()->route('admin.tenants.index')
+                            ->with('success', 'Tenant deleted successfully!');
+        } catch (\Exception $e) {
+            \DB::rollBack();
+
+            // Log exception for diagnostics
+            logger()->error('Failed to delete tenant', [
+                'tenant_id' => $tenant->id,
+                'error' => $e->getMessage(),
+                'exception' => $e,
+            ]);
+
+            // If it's a foreign key constraint issue, return a clear message to the admin
+            $message = 'Failed to delete tenant. ' . ($e->getMessage() ?: 'Please check related records or DB constraints.');
+
+            return redirect()->route('admin.tenants.index')
+                             ->with('error', $message);
+        }
     }
 
     /**
