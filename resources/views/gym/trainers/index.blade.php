@@ -156,6 +156,13 @@
                                         <li><a class="dropdown-item" href="{{ route('gym.trainers.edit', $trainer) }}"><i class="fas fa-edit me-2"></i>Edit</a></li>
                                         <li><a class="dropdown-item" href="#"><i class="fas fa-calendar me-2"></i>Schedule</a></li>
                                         <li><a class="dropdown-item" href="#"><i class="fas fa-chart-line me-2"></i>Performance</a></li>
+                                        <li>
+                                            <form action="{{ route('gym.trainers.destroy', $trainer) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this trainer?');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="dropdown-item text-danger"><i class="fas fa-trash me-2"></i>Delete</button>
+                                            </form>
+                                        </li>
                                     </ul>
                                 </div>
                             </td>

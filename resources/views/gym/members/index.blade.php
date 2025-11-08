@@ -257,7 +257,13 @@
                                             </li>
                                             <li><hr class="dropdown-divider"></li>
                                             <li><a class="dropdown-item text-warning" href="#"><i class="fas fa-ban me-2"></i>Suspend</a></li>
-                                            <li><a class="dropdown-item text-danger" href="#"><i class="fas fa-trash me-2"></i>Delete</a></li>
+                                            <li>
+                                                <form action="{{ route('gym.members.destroy', 1) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this member?');">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="dropdown-item text-danger"><i class="fas fa-trash me-2"></i>Delete</button>
+                                                </form>
+                                            </li>
                                         </ul>
                                     </div>
                                 </td>
@@ -327,7 +333,13 @@
                                             </li>
                                             <li><hr class="dropdown-divider"></li>
                                             <li><a class="dropdown-item text-warning" href="#"><i class="fas fa-ban me-2"></i>Suspend</a></li>
-                                            <li><a class="dropdown-item text-danger" href="#"><i class="fas fa-trash me-2"></i>Delete</a></li>
+                                            <li>
+                                                <form action="{{ route('gym.members.destroy', 2) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this member?');">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="dropdown-item text-danger"><i class="fas fa-trash me-2"></i>Delete</button>
+                                                </form>
+                                            </li>
                                         </ul>
                                     </div>
                                 </td>
@@ -385,6 +397,11 @@
                                             <input type="hidden" name="action" value="checkout">
                                             <button type="submit" class="btn btn-sm btn-danger ms-1">Check Out</button>
                                         </form>
+                                        <form action="{{ route('gym.members.destroy', 1) }}" method="POST" class="d-inline ms-1" onsubmit="return confirm('Delete this member? This action cannot be undone.');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                                        </form>
                                     </div>
                                     <span class="badge bg-success">Active</span>
                                 </div>
@@ -418,6 +435,11 @@
                                             <input type="hidden" name="member_id" value="2">
                                             <input type="hidden" name="action" value="checkout">
                                             <button type="submit" class="btn btn-sm btn-danger ms-1">Check Out</button>
+                                        </form>
+                                        <form action="{{ route('gym.members.destroy', 2) }}" method="POST" class="d-inline ms-1" onsubmit="return confirm('Delete this member? This action cannot be undone.');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
                                         </form>
                                     </div>
                                     <span class="badge bg-success">Active</span>

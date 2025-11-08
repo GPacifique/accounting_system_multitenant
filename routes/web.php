@@ -78,6 +78,20 @@ Route::middleware(['auth', 'tenant.data'])->group(function () {
             // Placeholder: handle member creation logic here
             return redirect()->route('gym.members.index')->with('success', 'Member created (placeholder).');
         })->name('members.store');
+        // Delete member (simple placeholder route) - supports deleting by numeric id or member_id
+        Route::delete('/members/{member}', function (\Illuminate\Http\Request $request, $member) {
+            $found = \App\Models\Member::where('member_id', $member)->orWhere('id', $member)->first();
+            if (!$found) {
+                return redirect()->route('gym.members.index')->with('error', 'Member not found.');
+            }
+            try {
+                $found->delete();
+            } catch (\Exception $e) {
+                return redirect()->route('gym.members.index')->with('error', 'Failed to delete member.');
+            }
+
+            return redirect()->route('gym.members.index')->with('success', 'Member deleted successfully.');
+        })->name('members.destroy');
         // Trainers resourceful routes (controller implemented)
         Route::resource('trainers', \App\Http\Controllers\Gym\TrainerController::class);
         Route::get('/fitness-classes', function() { return view('gym.classes.index'); })->name('fitness-classes.index');
