@@ -26,7 +26,7 @@
             height: 100%;
             margin: 0;
             font-family: "Segoe UI", Roboto, Arial, sans-serif;
-            background: url('{{ asset('images/logo_gym.png') }}') no-repeat center center fixed;
+            background: url('{{ asset('images/logo_gymmate.png') }}') no-repeat center center fixed;
             background-size: cover;
             display: flex;
             justify-content: center;
