@@ -130,7 +130,7 @@
 
     <div class="auth-container">
         <!-- Logo -->
-        <img src="{{ asset('images/logo-gym-ms.svg') }}" alt="gym ms Logo" class="logo">
+        <img src="{{ asset('images/logo_gymmate.png') }}" alt="gym ms Logo" class="logo">
 
         <h2>Welcome to GymMaster</h2>
         <div class="gym-benefits">
