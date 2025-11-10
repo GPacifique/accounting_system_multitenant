@@ -11,13 +11,13 @@
     <!-- Open Graph -->
     <meta property="og:title" content="GymMaster - Fitness Club & Workout Tracker">
     <meta property="og:description" content="Access your personalized dashboard, book sessions, and manage your gym membership online with GymMaster.">
-    <meta property="og:image" content="{{ asset('images/logo-gym-ms.svg') }}">
+    <meta property="og:image" content="{{ asset('images/logo_gymmate.png') }}">
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ url()->current() }}">
     
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="GymMaster - Fitness Club & Gym Management">
+    <meta name="twitter:title" content="GymMate - Fitness Club & Gym Management">
     <meta name="twitter:description" content="Join GymMaster to track your workouts, book classes, and manage your gym experience all in one place.">
     
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
@@ -26,7 +26,7 @@
             height: 100%;
             margin: 0;
             font-family: "Segoe UI", Roboto, Arial, sans-serif;
-            background: url('{{ asset('images/background-gym.jpg') }}') no-repeat center center fixed;
+            background: url('{{ asset('images/logo_gym.png') }}') no-repeat center center fixed;
             background-size: cover;
             display: flex;
             justify-content: center;
