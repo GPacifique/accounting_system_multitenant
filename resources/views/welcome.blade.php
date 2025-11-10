@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GymMaster - Fitness Club Login</title>
+    <title>Avancia- Fitness Club Login</title>
     <meta name="description" content="Sign in to GymMaster to book classes, track workouts, and manage your fitness journey online.">
     <meta name="keywords" content="gym, fitness, club, membership, classes, workout, health, login, exercise">
     <link rel="canonical" href="{{ url()->current() }}">
