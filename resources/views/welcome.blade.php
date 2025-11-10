@@ -11,7 +11,7 @@
     <!-- Open Graph -->
     <meta property="og:title" content="GymMaster - Fitness Club & Workout Tracker">
     <meta property="og:description" content="Access your personalized dashboard, book sessions, and manage your gym membership online with GymMaster.">
-    <meta property="og:image" content="{{ asset('images/logo-gym.svg') }}">
+    <meta property="og:image" content="{{ asset('images/logo-gym-ms.svg') }}">
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ url()->current() }}">
     
@@ -130,7 +130,7 @@
 
     <div class="auth-container">
         <!-- Logo -->
-        <img src="{{ asset('images/logo-gym.svg') }}" alt="GymMaster Logo" class="logo">
+        <img src="{{ asset('images/logo-gym-ms.svg') }}" alt="gym ms Logo" class="logo">
 
         <h2>Welcome to GymMaster</h2>
         <div class="gym-benefits">
