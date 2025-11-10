@@ -3,22 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SiteLedger - Construction Finance Management System | Sign In</title>
-    <meta name="description" content="Sign in to SiteLedger to manage construction finances: track projects, incomes, expenses, worker payments, and comprehensive reports. Professional construction finance management software for Rwanda.">
-    <meta name="keywords" content="siteledger, sign in, construction finance, projects, expenses, incomes, worker payments, accounting, Rwanda construction management">
+    <title>GymMaster - Fitness Club Login</title>
+    <meta name="description" content="Sign in to GymMaster to book classes, track workouts, and manage your fitness journey online.">
+    <meta name="keywords" content="gym, fitness, club, membership, classes, workout, health, login, exercise">
     <link rel="canonical" href="{{ url()->current() }}">
-    
+
     <!-- Open Graph -->
-    <meta property="og:title" content="SiteLedger - Construction Finance Management System">
-    <meta property="og:description" content="Manage your construction company's finances with SiteLedger: projects, invoices, expenses, and worker payments in one place.">
-    <meta property="og:image" content="{{ asset('images/logo/siteledger-logo.svg') }}">
+    <meta property="og:title" content="GymMaster - Fitness Club & Workout Tracker">
+    <meta property="og:description" content="Access your personalized dashboard, book sessions, and manage your gym membership online with GymMaster.">
+    <meta property="og:image" content="{{ asset('images/logo-gym.svg') }}">
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ url()->current() }}">
     
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="SiteLedger - Construction Finance Management">
-    <meta name="twitter:description" content="Professional construction finance management software for tracking projects, expenses, and worker payments.">
+    <meta name="twitter:title" content="GymMaster - Fitness Club & Gym Management">
+    <meta name="twitter:description" content="Join GymMaster to track your workouts, book classes, and manage your gym experience all in one place.">
     
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <style>
@@ -26,7 +26,7 @@
             height: 100%;
             margin: 0;
             font-family: "Segoe UI", Roboto, Arial, sans-serif;
-            background: url('{{ asset('images/background.png') }}') no-repeat center center fixed;
+            background: url('{{ asset('images/background-gym.jpg') }}') no-repeat center center fixed;
             background-size: cover;
             display: flex;
             justify-content: center;
@@ -34,22 +34,38 @@
         }
 
         .auth-container {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 2rem;
-            border-radius: 12px;
-            width: 350px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            background: rgba(255, 255, 255, 0.97);
+            padding: 2.2rem;
+            border-radius: 16px;
+            width: 370px;
+            box-shadow: 0 8px 28px rgba(0,0,0,0.13);
             text-align: center;
         }
 
         .auth-container img.logo {
-            width: 100px;
+            width: 106px;
             margin-bottom: 1rem;
         }
 
         .auth-container h2 {
-            margin-bottom: 1rem;
-            color: #2563eb;
+            margin-bottom: 0.7rem;
+            color: #059669;
+        }
+
+        .gym-benefits {
+            font-size: 1rem;
+            text-align: left;
+            margin: 0.8rem 0 1.2rem;
+            color: #4B5563;
+        }
+        .gym-benefits ul {
+            list-style: none;
+            padding: 0;
+        }
+        .gym-benefits li {
+            margin: 0.3rem 0;
+            padding-left: 1.2em;
+            text-indent: -1em;
         }
 
         .auth-container form {
@@ -58,43 +74,44 @@
         }
 
         .auth-container input {
-            padding: 0.8rem;
+            padding: 0.83rem;
             margin-bottom: 1rem;
-            border-radius: 6px;
+            border-radius: 8px;
             border: 1px solid #d1d5db;
             font-size: 1rem;
         }
 
         .auth-container input:focus {
             outline: none;
-            border-color: #2563eb;
-            box-shadow: 0 0 0 2px rgba(37,99,235,0.2);
+            border-color: #059669;
+            box-shadow: 0 0 0 2px rgba(5,150,105,0.11);
         }
 
         .auth-container button {
-            padding: 0.8rem;
+            padding: 0.85rem;
             border: none;
-            border-radius: 6px;
-            background-color: #2563eb;
+            border-radius: 7px;
+            background-color: #059669;
             color: white;
-            font-size: 1rem;
+            font-size: 1.02rem;
+            font-weight: 500;
             cursor: pointer;
             transition: background 0.3s;
         }
 
         .auth-container button:hover {
-            background-color: #1e40af;
+            background-color: #047857;
         }
 
         .auth-links {
-            margin-top: 1rem;
+            margin-top: 1.2rem;
         }
 
         .auth-links a {
             text-decoration: none;
-            color: #2563eb;
-            margin: 0 0.5rem;
-            font-size: 0.9rem;
+            color: #059669;
+            margin: 0 0.6rem;
+            font-size: 0.94rem;
         }
 
         .auth-links a:hover {
@@ -103,8 +120,8 @@
 
         @media(max-width: 400px) {
             .auth-container {
-                width: 90%;
-                padding: 1.5rem;
+                width: 96%;
+                padding: 1.6rem;
             }
         }
     </style>
@@ -113,10 +130,17 @@
 
     <div class="auth-container">
         <!-- Logo -->
-        <img src="{{ asset('images/logo.png') }}" alt="Logo" class="logo">
+        <img src="{{ asset('images/logo-gym.svg') }}" alt="GymMaster Logo" class="logo">
 
-        <h2>Welcome to Siteledger</h2>
-
+        <h2>Welcome to GymMaster</h2>
+        <div class="gym-benefits">
+            <ul>
+                <li>🏋️ Track your workouts & progress</li>
+                <li>🧘 Book group classes instantly</li>
+                <li>💪 Manage your gym membership online</li>
+                <li>📆 Reserve equipment or sessions</li>
+            </ul>
+        </div>
         <!-- Login Form -->
         <form method="POST" action="{{ route('login') }}">
             @csrf
@@ -124,10 +148,9 @@
             <input type="password" name="password" placeholder="Password" required>
             <button type="submit">Login</button>
         </form>
-
         <!-- Links -->
         <div class="auth-links">
-            <a href="{{('register')}}">Register</a> |
+            <a href="{{ route('register') }}">Register</a> |
             <a href="{{ route('password.request') }}">Forgot Password?</a>
         </div>
     </div>
